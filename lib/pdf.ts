@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import PDFDocument from "pdfkit";
+import "pdfkit/standard-fonts/Helvetica";
+import "pdfkit/standard-fonts/HelveticaBold";
 import { LeadRecord } from "@/lib/leads";
 import { vehiclesData } from "@/data/vehicles";
 import { siteConfig } from "@/data/site";
@@ -9,11 +11,71 @@ export interface GeneratePdfOptions {
   type: "customer" | "company";
 }
 
+function generateFallbackPdf(lead: LeadRecord, options: GeneratePdfOptions): Buffer {
+  const isCompany = options.type === "company";
+  const lines = [
+    "BALAJI MOTORS - JALANDHAR",
+    "Commercial Electric Mobility Solutions",
+    "-------------------------------------------------------",
+    isCompany ? "INTERNAL SALES LEAD & ENQUIRY DOSSIER" : "COMMERCIAL VEHICLE ENQUIRY & QUOTE REQUEST",
+    `Reference ID: ${lead.referenceId}`,
+    `Date: ${new Date(lead.createdAt).toLocaleDateString("en-IN")}`,
+    `Customer Name: ${lead.fullName}`,
+    `Mobile Contact: ${lead.phone}`,
+    `Email: ${lead.email || "Not Provided"}`,
+    `Location / City: ${lead.city}`,
+    `Vehicle: ${lead.vehicle}`,
+    `Enquiry Type: ${lead.enquiryType}`,
+    `Quantity: ${lead.quantity || 1} Unit(s)`,
+    `Preferred Contact: ${lead.preferredContact}`,
+    `Company / Firm: ${lead.companyName || "Individual Operator"}`,
+    `Notes: ${lead.notes || "Standard showroom quotation requested."}`,
+    "-------------------------------------------------------",
+    "Dealership Notice: Final on-road pricing and state EV subsidies",
+    "are finalized upon physical showroom consultation.",
+    "Balaji Motors, Avtar Nagar Road, Near Hotel Regent Park, Jalandhar",
+    `Phone: ${siteConfig.displayPhone}`
+  ];
+
+  let stream = "BT\n/F1 12 Tf\n14.4 TL\n50 780 Td\n";
+  for (const line of lines) {
+    const escaped = line.replace(/[()\\]/g, "\\$&");
+    stream += `(${escaped}) '\n`;
+  }
+  stream += "ET";
+  const streamBuf = Buffer.from(stream, "utf-8");
+
+  let pdf = "%PDF-1.4\n";
+  const offsets: number[] = [];
+
+  function addObj(content: string) {
+    offsets.push(pdf.length);
+    pdf += content + "\n";
+  }
+
+  addObj("1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj");
+  addObj("2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj");
+  addObj("3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj");
+  addObj(`4 0 obj\n<< /Length ${streamBuf.length} >>\nstream\n${stream}\nendstream\nendobj`);
+  addObj("5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj");
+
+  const startXref = pdf.length;
+  pdf += `xref\n0 ${offsets.length + 1}\n`;
+  pdf += "0000000000 65535 f \n";
+  for (const off of offsets) {
+    pdf += `${String(off).padStart(10, "0")} 00000 n \n`;
+  }
+  pdf += `trailer\n<< /Size ${offsets.length + 1} /Root 1 0 R >>\n`;
+  pdf += `startxref\n${startXref}\n%%EOF`;
+
+  return Buffer.from(pdf, "binary");
+}
+
 export function generateEnquiryPdf(
   lead: LeadRecord,
   options: GeneratePdfOptions = { type: "customer" }
 ): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     try {
       const doc = new PDFDocument({
         size: "A4",
@@ -28,7 +90,7 @@ export function generateEnquiryPdf(
       const buffers: Buffer[] = [];
       doc.on("data", (chunk: Buffer) => buffers.push(chunk));
       doc.on("end", () => resolve(Buffer.concat(buffers)));
-      doc.on("error", (err: Error) => reject(err));
+      doc.on("error", () => resolve(generateFallbackPdf(lead, options)));
 
       const isCompany = options.type === "company";
       const vehicleObj = vehiclesData.find(
@@ -209,8 +271,8 @@ export function generateEnquiryPdf(
       );
 
       doc.end();
-    } catch (error) {
-      reject(error);
+    } catch {
+      resolve(generateFallbackPdf(lead, options));
     }
   });
 }
