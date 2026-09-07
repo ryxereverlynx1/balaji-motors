@@ -40,6 +40,24 @@ export default function QuoteModal() {
   const [serverError, setServerError] = useState("");
   const [referenceId, setReferenceId] = useState("");
   const [pdfBase64, setPdfBase64] = useState<string | null>(null);
+  const [availableVehicles, setAvailableVehicles] = useState(vehiclesData);
+
+  useEffect(() => {
+    async function loadDynamic() {
+      try {
+        const res = await fetch("/api/products");
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.vehicles) && data.vehicles.length > 0) {
+            setAvailableVehicles(data.vehicles);
+          }
+        }
+      } catch {}
+    }
+    if (isOpen) {
+      loadDynamic();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (preselectedVehicle) {
@@ -348,7 +366,7 @@ export default function QuoteModal() {
                     onChange={(e) => setVehicle(e.target.value)}
                     className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal focus:outline-none focus:border-brand-red transition-colors"
                   >
-                    {vehiclesData.map((v) => {
+                    {availableVehicles.map((v) => {
                       const loc = getLocalizedVehicle(v, language);
                       return (
                         <option key={v.id} value={loc.name}>

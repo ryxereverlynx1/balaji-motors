@@ -1,0 +1,68 @@
+[
+  {
+    "id": "cat_passenger",
+    "name": "Passenger Vehicle",
+    "nameHi": "पैसेंजर ई-रिक्शा",
+    "slug": "passenger-vehicle",
+    "description": "Battery powered electric three-wheelers designed for urban and suburban passenger commute.",
+    "displayOrder": 1,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat_cargo",
+    "name": "Cargo / Loader",
+    "nameHi": "लोडर / मालवाहक",
+    "slug": "cargo-loader",
+    "description": "Heavy-duty electric cargo loaders and delivery vans with reinforced flatbeds and containers.",
+    "displayOrder": 2,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat_erickshaw",
+    "name": "E-Rickshaw",
+    "nameHi": "ई-रिक्शा",
+    "slug": "e-rickshaw",
+    "description": "Standard passenger electric three wheelers with CMVR compliance.",
+    "displayOrder": 3,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat_ecart",
+    "name": "E-Cart",
+    "nameHi": "ई-कार्ट",
+    "slug": "e-cart",
+    "description": "Utility electric carts for campus, warehouse and short-distance municipal handling.",
+    "displayOrder": 4,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat_eloader",
+    "name": "Electric Loader",
+    "nameHi": "इलेक्ट्रिक लोडर",
+    "slug": "electric-loader",
+    "description": "High payload electric three wheelers for transport of industrial and agricultural loads.",
+    "displayOrder": 5,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat_other",
+    "name": "Other",
+    "nameHi": "अन्य",
+    "slug": "other",
+    "description": "Specialized electric mobility solutions and custom commercial builds.",
+    "displayOrder": 6,
+    "enabled": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  }
+]

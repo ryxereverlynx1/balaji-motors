@@ -118,3 +118,13 @@ export function getLeadByReferenceId(refId: string): LeadRecord | null {
   syncFromStorage();
   return memoryLeads.get(refId) || null;
 }
+
+export function updateLeadStatus(refId: string, status: "new" | "contacted" | "closed"): LeadRecord | null {
+  syncFromStorage();
+  const lead = memoryLeads.get(refId);
+  if (!lead) return null;
+  lead.status = status;
+  memoryLeads.set(refId, lead);
+  persistLeads(getAllLeads());
+  return lead;
+}

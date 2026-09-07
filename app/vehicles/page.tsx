@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { vehiclesData } from "@/data/vehicles";
+import React, { useState, useEffect } from "react";
+import { vehiclesData, Vehicle } from "@/data/vehicles";
 import VehicleCard from "@/components/VehicleCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import { siteConfig } from "@/data/site";
@@ -9,21 +9,70 @@ import { useLanguage } from "@/context/LanguageContext";
 import { Phone, MessageSquare, Filter } from "lucide-react";
 import { getGeneralWhatsAppUrl } from "@/lib/whatsapp";
 
+interface CategoryTab {
+  key: string;
+  label: string;
+}
+
 export default function VehiclesPage() {
+  const [vehicles, setVehicles] = useState<Vehicle[]>(vehiclesData);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [extraCategories, setExtraCategories] = useState<CategoryTab[]>([]);
   const { language, dict } = useLanguage();
   const t = dict.catalogue;
 
-  const categories = [
+  useEffect(() => {
+    async function loadDynamicShowroom() {
+      try {
+        const [prodsRes, catsRes] = await Promise.all([
+          fetch("/api/products"),
+          fetch("/api/categories"),
+        ]);
+
+        if (prodsRes.ok) {
+          const prodsData = await prodsRes.json();
+          if (Array.isArray(prodsData.vehicles) && prodsData.vehicles.length > 0) {
+            setVehicles(prodsData.vehicles);
+          }
+        }
+
+        if (catsRes.ok) {
+          const catsData = await catsRes.json();
+          if (Array.isArray(catsData.categories)) {
+            const standardSlugs = ["passenger", "cargo-loader", "all"];
+            const custom = catsData.categories
+              .filter((c: any) => !standardSlugs.includes(c.slug.toLowerCase()))
+              .map((c: any) => ({
+                key: c.name,
+                label: language === "hi" && c.nameHi ? c.nameHi : c.name,
+              }));
+            setExtraCategories(custom);
+          }
+        }
+      } catch {}
+    }
+
+    loadDynamicShowroom();
+  }, [language]);
+
+  const baseCategories: CategoryTab[] = [
     { key: "All", label: t.allModels },
     { key: "Passenger", label: t.passenger },
     { key: "Cargo / Loader", label: t.cargo },
   ];
 
+  const categories = [...baseCategories, ...extraCategories];
+
   const filteredVehicles =
     selectedCategory === "All"
-      ? vehiclesData
-      : vehiclesData.filter((v) => v.category === selectedCategory);
+      ? vehicles
+      : vehicles.filter(
+          (v) =>
+            v.category === selectedCategory ||
+            v.series === selectedCategory ||
+            (selectedCategory === "Passenger" && v.category === "Passenger") ||
+            (selectedCategory === "Cargo / Loader" && v.category === "Cargo / Loader")
+        );
 
   return (
     <div className="pt-24 pb-20 sm:pt-32 sm:pb-28 bg-brand-warmWhite min-h-screen">

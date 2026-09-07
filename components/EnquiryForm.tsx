@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { vehiclesData, getLocalizedVehicle } from "@/data/vehicles";
 import { siteConfig } from "@/data/site";
 import { useLanguage } from "@/context/LanguageContext";
@@ -35,6 +35,22 @@ export default function EnquiryForm({
   const [serverError, setServerError] = useState("");
   const [referenceId, setReferenceId] = useState("");
   const [pdfBase64, setPdfBase64] = useState<string | null>(null);
+  const [availableVehicles, setAvailableVehicles] = useState(vehiclesData);
+
+  useEffect(() => {
+    async function loadDynamic() {
+      try {
+        const res = await fetch("/api/products");
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.vehicles) && data.vehicles.length > 0) {
+            setAvailableVehicles(data.vehicles);
+          }
+        }
+      } catch {}
+    }
+    loadDynamic();
+  }, []);
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -256,7 +272,7 @@ export default function EnquiryForm({
             onChange={(e) => setVehicle(e.target.value)}
             className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal text-sm focus:outline-none focus:border-brand-red transition-colors"
           >
-            {vehiclesData.map((v) => {
+            {availableVehicles.map((v) => {
               const locV = getLocalizedVehicle(v, language);
               return (
                 <option key={v.id} value={locV.name} className="bg-white text-brand-charcoal">

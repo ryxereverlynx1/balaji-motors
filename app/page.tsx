@@ -40,8 +40,26 @@ const VehicleViewer = dynamic(() => import("@/components/3d/VehicleViewer"), {
 export default function HomePage() {
   const { language, dict } = useLanguage();
   const { openQuoteModal } = useQuoteModal();
-  const featuredVehicles = vehiclesData.filter((v) => v.featured);
-  const explorerVehicle = vehiclesData[0];
+  const [featuredVehicles, setFeaturedVehicles] = React.useState(vehiclesData.filter((v) => v.featured));
+  const explorerVehicle = featuredVehicles[0] || vehiclesData[0];
+
+  React.useEffect(() => {
+    async function loadFeatured() {
+      try {
+        const res = await fetch("/api/products");
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.vehicles) && data.vehicles.length > 0) {
+            const feat = data.vehicles.filter((v: any) => v.featured);
+            if (feat.length > 0) {
+              setFeaturedVehicles(feat);
+            }
+          }
+        }
+      } catch {}
+    }
+    loadFeatured();
+  }, []);
 
   const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     "Balaji Motors Avtar Nagar Road Gujral Nagar Jalandhar Punjab"

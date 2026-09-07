@@ -5,6 +5,7 @@ import "pdfkit/standard-fonts/Helvetica";
 import "pdfkit/standard-fonts/HelveticaBold";
 import { LeadRecord } from "@/lib/leads";
 import { vehiclesData } from "@/data/vehicles";
+import { getAllPublicVehicles } from "@/lib/products";
 import { siteConfig } from "@/data/site";
 
 export interface GeneratePdfOptions {
@@ -71,10 +72,15 @@ function generateFallbackPdf(lead: LeadRecord, options: GeneratePdfOptions): Buf
   return Buffer.from(pdf, "binary");
 }
 
-export function generateEnquiryPdf(
+export async function generateEnquiryPdf(
   lead: LeadRecord,
   options: GeneratePdfOptions = { type: "customer" }
 ): Promise<Buffer> {
+  let dbVehicles: any[] = [];
+  try {
+    dbVehicles = await getAllPublicVehicles();
+  } catch {}
+
   return new Promise((resolve) => {
     try {
       const doc = new PDFDocument({
@@ -93,9 +99,14 @@ export function generateEnquiryPdf(
       doc.on("error", () => resolve(generateFallbackPdf(lead, options)));
 
       const isCompany = options.type === "company";
-      const vehicleObj = vehiclesData.find(
-        (v) => v.name.toLowerCase() === lead.vehicle.toLowerCase() || v.name.includes(lead.vehicle)
-      ) || vehiclesData[0];
+      const vehicleObj =
+        dbVehicles.find(
+          (v) => v.name.toLowerCase() === lead.vehicle.toLowerCase() || v.name.includes(lead.vehicle)
+        ) ||
+        vehiclesData.find(
+          (v) => v.name.toLowerCase() === lead.vehicle.toLowerCase() || v.name.includes(lead.vehicle)
+        ) ||
+        vehiclesData[0];
 
       doc.rect(0, 0, doc.page.width, 85).fill("#C9232A");
       doc.rect(0, 85, doc.page.width, 5).fill("#F2C94C");
@@ -276,3 +287,5 @@ export function generateEnquiryPdf(
     }
   });
 }
+
+export const generateLeadPdf = generateEnquiryPdf;

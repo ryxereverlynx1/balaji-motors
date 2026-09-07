@@ -2,22 +2,26 @@ import React from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { vehiclesData } from "@/data/vehicles";
+import { getVehicleBySlug, getAllPublicVehicles } from "@/lib/products";
 import VehicleDetailContent from "@/components/VehicleDetailContent";
 
 interface VehiclePageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export function generateStaticParams() {
-  return vehiclesData.map((vehicle) => ({
-    slug: vehicle.slug,
-  }));
+export async function generateStaticParams() {
+  const dbVehicles = await getAllPublicVehicles();
+  const slugs = new Set<string>();
+  for (const v of dbVehicles) slugs.add(v.slug);
+  for (const v of vehiclesData) slugs.add(v.slug);
+  return Array.from(slugs).map((slug) => ({ slug }));
 }
 
-export function generateMetadata({ params }: VehiclePageProps): Metadata {
-  const vehicle = vehiclesData.find((v) => v.slug === params.slug);
+export async function generateMetadata({ params }: VehiclePageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const vehicle = (await getVehicleBySlug(slug, true)) || vehiclesData.find((v) => v.slug === slug);
   if (!vehicle) return { title: "Vehicle Not Found | Balaji Motors" };
 
   return {
@@ -26,14 +30,17 @@ export function generateMetadata({ params }: VehiclePageProps): Metadata {
   };
 }
 
-export default function VehicleDetailPage({ params }: VehiclePageProps) {
-  const vehicle = vehiclesData.find((v) => v.slug === params.slug);
+export default async function VehicleDetailPage({ params }: VehiclePageProps) {
+  const { slug } = await params;
+  const vehicle = (await getVehicleBySlug(slug, true)) || vehiclesData.find((v) => v.slug === slug);
 
   if (!vehicle) {
     notFound();
   }
 
-  const relatedVehicles = vehiclesData
+  const all = await getAllPublicVehicles();
+  const pool = all.length > 0 ? all : vehiclesData;
+  const relatedVehicles = pool
     .filter((v) => v.id !== vehicle.id)
     .slice(0, 3);
 

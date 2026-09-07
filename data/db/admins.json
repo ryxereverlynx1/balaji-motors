@@ -1,0 +1,11 @@
+[
+  {
+    "id": "admin_master_1",
+    "email": "balajimotors.etawah@gmail.com",
+    "passwordHash": "$2b$12$vfE4CBROLOVKT7GWpukrWO.jpf8U0mBOmhVFyJ2.XFeCjvYs8RAU6",
+    "name": "Balaji Motors Admin",
+    "role": "admin",
+    "createdAt": "2026-09-07T18:12:11.148Z",
+    "updatedAt": "2026-09-07T18:12:11.150Z"
+  }
+]
