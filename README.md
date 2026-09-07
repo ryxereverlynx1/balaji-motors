@@ -1,3 +1,3 @@
-# balaji-motors
+# Balaji Motors
 
 

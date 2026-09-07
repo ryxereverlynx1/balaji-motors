@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import os from "os";
 
 export interface LeadRecord {
   referenceId: string;
@@ -20,45 +21,100 @@ export interface LeadRecord {
   ip?: string;
 }
 
-const leadsFilePath = path.join(process.cwd(), "data", "leads.json");
+const projectLeadsPath = path.join(process.cwd(), "data", "leads.json");
+const memoryLeads = new Map<string, LeadRecord>();
+let hasLoadedInitialData = false;
 
-function ensureLeadsFileExists() {
-  const dir = path.dirname(leadsFilePath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+function getTmpLeadsPath(): string {
+  if (process.env.VERCEL) {
+    return "/tmp/balaji_leads.json";
   }
-  if (!fs.existsSync(leadsFilePath)) {
-    fs.writeFileSync(leadsFilePath, JSON.stringify([], null, 2), "utf8");
+  const base = process.env.TEMP || process.env.TMP || os.tmpdir();
+  return path.join(base, "balaji_leads.json");
+}
+
+function loadLeadsFromFile(filePath: string): LeadRecord[] {
+  try {
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, "utf8");
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed as LeadRecord[];
+      }
+    }
+  } catch {}
+  return [];
+}
+
+function syncFromStorage() {
+  if (!hasLoadedInitialData) {
+    const bundled = loadLeadsFromFile(projectLeadsPath);
+    for (const lead of bundled) {
+      if (lead && lead.referenceId) {
+        memoryLeads.set(lead.referenceId, lead);
+      }
+    }
+    hasLoadedInitialData = true;
+  }
+
+  const tmpPath = getTmpLeadsPath();
+  const tmpList = loadLeadsFromFile(tmpPath);
+  for (const lead of tmpList) {
+    if (lead && lead.referenceId) {
+      memoryLeads.set(lead.referenceId, lead);
+    }
+  }
+}
+
+function persistLeads(leads: LeadRecord[]) {
+  const jsonContent = JSON.stringify(leads, null, 2);
+
+  let wroteToProject = false;
+  try {
+    const dir = path.dirname(projectLeadsPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(projectLeadsPath, jsonContent, "utf8");
+    wroteToProject = true;
+  } catch {}
+
+  if (!wroteToProject) {
+    try {
+      const tmpPath = getTmpLeadsPath();
+      const tmpDir = path.dirname(tmpPath);
+      if (!fs.existsSync(tmpDir)) {
+        fs.mkdirSync(tmpDir, { recursive: true });
+      }
+      fs.writeFileSync(tmpPath, jsonContent, "utf8");
+    } catch {}
   }
 }
 
 export function getAllLeads(): LeadRecord[] {
-  ensureLeadsFileExists();
-  try {
-    const raw = fs.readFileSync(leadsFilePath, "utf8");
-    return JSON.parse(raw) as LeadRecord[];
-  } catch {
-    return [];
-  }
+  syncFromStorage();
+  const all = Array.from(memoryLeads.values());
+  all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  return all;
 }
 
 export function generateReferenceId(): string {
+  syncFromStorage();
   const year = new Date().getFullYear();
-  const leads = getAllLeads();
-  const count = leads.length + 101;
+  const count = memoryLeads.size + 101;
   const padded = String(count).padStart(6, "0");
   return `BM-${year}-${padded}`;
 }
 
 export function saveLead(lead: LeadRecord): LeadRecord {
-  ensureLeadsFileExists();
+  syncFromStorage();
+  memoryLeads.set(lead.referenceId, lead);
   const leads = getAllLeads();
-  leads.unshift(lead);
-  fs.writeFileSync(leadsFilePath, JSON.stringify(leads, null, 2), "utf8");
+  persistLeads(leads);
   return lead;
 }
 
 export function getLeadByReferenceId(refId: string): LeadRecord | null {
-  const leads = getAllLeads();
-  return leads.find((l) => l.referenceId === refId) || null;
+  syncFromStorage();
+  return memoryLeads.get(refId) || null;
 }
