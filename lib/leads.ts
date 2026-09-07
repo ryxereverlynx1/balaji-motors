@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
+import { getMongoDb } from "./db/mongodb";
 
 export interface LeadRecord {
   referenceId: string;
@@ -64,6 +65,28 @@ function syncFromStorage() {
       memoryLeads.set(lead.referenceId, lead);
     }
   }
+
+  getMongoDb()
+    .then(async (mongo) => {
+      if (mongo) {
+        const count = await mongo.collection("leads").countDocuments();
+        if (count === 0 && memoryLeads.size > 0) {
+          const list = Array.from(memoryLeads.values()).map((l) => ({ ...l }));
+          await mongo.collection("leads").insertMany(list);
+        } else if (count > 0) {
+          const list = await mongo
+            .collection<LeadRecord>("leads")
+            .find({}, { projection: { _id: 0 } })
+            .toArray();
+          for (const item of list) {
+            if (item && item.referenceId) {
+              memoryLeads.set(item.referenceId, item);
+            }
+          }
+        }
+      }
+    })
+    .catch(() => {});
 }
 
 function persistLeads(leads: LeadRecord[]) {
@@ -111,6 +134,18 @@ export function saveLead(lead: LeadRecord): LeadRecord {
   memoryLeads.set(lead.referenceId, lead);
   const leads = getAllLeads();
   persistLeads(leads);
+
+  getMongoDb()
+    .then((mongo) => {
+      if (mongo) {
+        mongo
+          .collection("leads")
+          .replaceOne({ referenceId: lead.referenceId }, { ...lead }, { upsert: true })
+          .catch(() => {});
+      }
+    })
+    .catch(() => {});
+
   return lead;
 }
 
@@ -119,12 +154,27 @@ export function getLeadByReferenceId(refId: string): LeadRecord | null {
   return memoryLeads.get(refId) || null;
 }
 
-export function updateLeadStatus(refId: string, status: "new" | "contacted" | "closed"): LeadRecord | null {
+export function updateLeadStatus(
+  refId: string,
+  status: "new" | "contacted" | "closed"
+): LeadRecord | null {
   syncFromStorage();
   const lead = memoryLeads.get(refId);
   if (!lead) return null;
   lead.status = status;
   memoryLeads.set(refId, lead);
   persistLeads(getAllLeads());
+
+  getMongoDb()
+    .then((mongo) => {
+      if (mongo) {
+        mongo
+          .collection("leads")
+          .updateOne({ referenceId: refId }, { $set: { status } })
+          .catch(() => {});
+      }
+    })
+    .catch(() => {});
+
   return lead;
 }

@@ -74,6 +74,7 @@ export interface ActivityRecord {
 
 export interface ProductFilter {
   categorySlug?: string;
+  categoryId?: string;
   status?: ProductStatus | "all";
   featuredOnly?: boolean;
   search?: string;

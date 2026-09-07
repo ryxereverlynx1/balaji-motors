@@ -12,6 +12,7 @@ import {
 } from "./types";
 import { initialCategories, initialProducts, createDefaultAdmin } from "./seed";
 import { getAllLeads } from "../leads";
+import { getMongoDb } from "./mongodb";
 
 interface DatabaseState {
   categories: Map<string, CategoryRecord>;
@@ -69,22 +70,68 @@ function readJsonFile<T>(filename: string, fallback: T): T {
 function writeJsonFile<T>(filename: string, data: T) {
   const dir = getStorageDir();
   const filePath = path.join(dir, filename);
-  const content = JSON.stringify(data, null, 2);
   try {
-    fs.writeFileSync(filePath, content, "utf8");
-  } catch {
-    try {
-      const altDir = path.join(process.env.TEMP || process.env.TMP || os.tmpdir(), "balaji_db");
-      if (!fs.existsSync(altDir)) {
-        fs.mkdirSync(altDir, { recursive: true });
-      }
-      fs.writeFileSync(path.join(altDir, filename), content, "utf8");
-    } catch {}
-  }
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+  } catch {}
 }
 
 export async function ensureDatabaseInitialized() {
   if (state.isInitialized) return;
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const prodCount = await mongo.collection("products").countDocuments();
+      if (prodCount === 0) {
+        const cloned = initialProducts.map((p) => ({ ...p }));
+        await mongo.collection("products").insertMany(cloned);
+      }
+
+      const catCount = await mongo.collection("categories").countDocuments();
+      if (catCount === 0) {
+        const cloned = initialCategories.map((c) => ({ ...c }));
+        await mongo.collection("categories").insertMany(cloned);
+      }
+
+      const adminCount = await mongo.collection("admins").countDocuments();
+      if (adminCount === 0) {
+        const defaultAdmin = await createDefaultAdmin();
+        await mongo.collection("admins").insertOne({ ...defaultAdmin });
+      }
+
+      const dbProds = await mongo
+        .collection<ProductRecord>("products")
+        .find({}, { projection: { _id: 0 } })
+        .toArray();
+      const dbCats = await mongo
+        .collection<CategoryRecord>("categories")
+        .find({}, { projection: { _id: 0 } })
+        .toArray();
+      const dbAdmins = await mongo
+        .collection<AdminUserRecord>("admins")
+        .find({}, { projection: { _id: 0 } })
+        .toArray();
+      const dbActs = await mongo
+        .collection<ActivityRecord>("activities")
+        .find({}, { projection: { _id: 0 } })
+        .sort({ createdAt: -1 })
+        .limit(100)
+        .toArray();
+
+      state.products.clear();
+      for (const p of dbProds) state.products.set(p.id, p);
+
+      state.categories.clear();
+      for (const c of dbCats) state.categories.set(c.id, c);
+
+      state.admins.clear();
+      for (const a of dbAdmins) state.admins.set(a.email.toLowerCase(), a);
+
+      state.activities = dbActs;
+      state.isInitialized = true;
+      return;
+    } catch {}
+  }
 
   const storedCategories = readJsonFile<CategoryRecord[]>("categories.json", []);
   if (storedCategories.length > 0) {
@@ -95,7 +142,7 @@ export async function ensureDatabaseInitialized() {
     for (const cat of initialCategories) {
       state.categories.set(cat.id, cat);
     }
-    writeJsonFile("categories.json", Array.from(state.categories.values()));
+    writeJsonFile("categories.json", initialCategories);
   }
 
   const storedProducts = readJsonFile<ProductRecord[]>("products.json", []);
@@ -107,7 +154,7 @@ export async function ensureDatabaseInitialized() {
     for (const prod of initialProducts) {
       state.products.set(prod.id, prod);
     }
-    writeJsonFile("products.json", Array.from(state.products.values()));
+    writeJsonFile("products.json", initialProducts);
   }
 
   const storedAdmins = readJsonFile<AdminUserRecord[]>("admins.json", []);
@@ -121,28 +168,274 @@ export async function ensureDatabaseInitialized() {
     writeJsonFile("admins.json", Array.from(state.admins.values()));
   }
 
-  const storedActivities = readJsonFile<ActivityRecord[]>("activities.json", []);
-  state.activities = storedActivities;
-
+  state.activities = readJsonFile<ActivityRecord[]>("activities.json", []);
   state.isInitialized = true;
+}
+
+export async function getProducts(filter?: ProductFilter): Promise<ProductRecord[]> {
+  await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const query: Record<string, any> = {};
+      if (filter?.status) {
+        query.status = filter.status;
+      }
+      if (filter?.categoryId && filter.categoryId !== "all") {
+        query.categoryId = filter.categoryId;
+      }
+      if (filter?.featuredOnly) {
+        query.featured = true;
+      }
+      if (filter?.search) {
+        const term = filter.search.trim();
+        query.$or = [
+          { name: { $regex: term, $options: "i" } },
+          { nameHi: { $regex: term, $options: "i" } },
+          { slug: { $regex: term, $options: "i" } },
+          { shortDescription: { $regex: term, $options: "i" } },
+        ];
+      }
+      const list = await mongo
+        .collection<ProductRecord>("products")
+        .find(query, { projection: { _id: 0 } })
+        .sort({ displayOrder: 1, createdAt: -1 })
+        .toArray();
+      return list;
+    } catch {}
+  }
+
+  let results = Array.from(state.products.values());
+
+  if (filter?.status) {
+    results = results.filter((p) => p.status === filter.status);
+  }
+
+  if (filter?.categoryId && filter.categoryId !== "all") {
+    results = results.filter((p) => p.categoryId === filter.categoryId);
+  }
+
+  if (filter?.featuredOnly) {
+    results = results.filter((p) => p.featured === true);
+  }
+
+  if (filter?.search) {
+    const q = filter.search.toLowerCase().trim();
+    results = results.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        (p.nameHi && p.nameHi.includes(q)) ||
+        p.slug.toLowerCase().includes(q) ||
+        p.shortDescription.toLowerCase().includes(q)
+    );
+  }
+
+  results.sort((a, b) => {
+    if (a.displayOrder !== b.displayOrder) {
+      return a.displayOrder - b.displayOrder;
+    }
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  return results;
+}
+
+export async function getProductById(id: string): Promise<ProductRecord | null> {
+  await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const item = await mongo
+        .collection<ProductRecord>("products")
+        .findOne({ id }, { projection: { _id: 0 } });
+      if (item) return item;
+    } catch {}
+  }
+
+  return state.products.get(id) || null;
+}
+
+export async function getProductBySlug(
+  slug: string,
+  allowDraft = false
+): Promise<ProductRecord | null> {
+  await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const query: Record<string, any> = { slug };
+      if (!allowDraft) {
+        query.status = "published";
+      }
+      const item = await mongo
+        .collection<ProductRecord>("products")
+        .findOne(query, { projection: { _id: 0 } });
+      if (item) return item;
+    } catch {}
+  }
+
+  const normalized = slug.toLowerCase().trim();
+  for (const product of state.products.values()) {
+    if (product.slug.toLowerCase() === normalized) {
+      if (!allowDraft && product.status !== "published") {
+        return null;
+      }
+      return product;
+    }
+  }
+  return null;
+}
+
+export async function saveProduct(input: Partial<ProductRecord>): Promise<ProductRecord> {
+  await ensureDatabaseInitialized();
+
+  const id = input.id || `prod_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+  const now = new Date().toISOString();
+
+  let categoryName = input.categoryName;
+  if (!categoryName && input.categoryId) {
+    const cat = await getCategoryById(input.categoryId);
+    categoryName = cat?.name || "Electric Vehicle";
+  }
+
+  const existing = input.id ? await getProductById(input.id) : null;
+
+  const record: ProductRecord = {
+    id,
+    name: input.name || existing?.name || "Unnamed Vehicle",
+    nameHi: input.nameHi !== undefined ? input.nameHi : existing?.nameHi,
+    slug: input.slug || existing?.slug || id,
+    categoryId: input.categoryId || existing?.categoryId || "cat_passenger",
+    categoryName: categoryName || existing?.categoryName || "Passenger Vehicle",
+    shortDescription: input.shortDescription || existing?.shortDescription || "",
+    shortDescriptionHi:
+      input.shortDescriptionHi !== undefined ? input.shortDescriptionHi : existing?.shortDescriptionHi,
+    fullDescription: input.fullDescription || existing?.fullDescription || "",
+    fullDescriptionHi:
+      input.fullDescriptionHi !== undefined ? input.fullDescriptionHi : existing?.fullDescriptionHi,
+    mainImage: input.mainImage || existing?.mainImage || "/images/rickshaw-red.webp",
+    galleryImages:
+      input.galleryImages ||
+      existing?.galleryImages ||
+      (input.mainImage ? [input.mainImage] : ["/images/rickshaw-red.webp"]),
+    priceMode: input.priceMode || existing?.priceMode || "on_enquiry",
+    price: input.price !== undefined ? input.price : (existing?.price ?? null),
+    currency: input.currency || existing?.currency || "INR",
+    featured: input.featured !== undefined ? input.featured : (existing?.featured ?? false),
+    status: input.status || existing?.status || "draft",
+    displayOrder: input.displayOrder !== undefined ? input.displayOrder : (existing?.displayOrder ?? 1),
+    model3dUrl: input.model3dUrl !== undefined ? input.model3dUrl : existing?.model3dUrl,
+    specifications: input.specifications || existing?.specifications || [],
+    createdAt: existing?.createdAt || now,
+    updatedAt: now,
+  };
+
+  state.products.set(record.id, record);
+  writeJsonFile("products.json", Array.from(state.products.values()));
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo
+        .collection("products")
+        .replaceOne({ id: record.id }, { ...record }, { upsert: true });
+    } catch {}
+  }
+
+  return record;
+}
+
+export async function deleteProduct(id: string): Promise<boolean> {
+  await ensureDatabaseInitialized();
+
+  const deleted = state.products.delete(id);
+  if (deleted) {
+    writeJsonFile("products.json", Array.from(state.products.values()));
+  }
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo.collection("products").deleteOne({ id });
+    } catch {}
+  }
+
+  return deleted;
+}
+
+export async function duplicateProduct(id: string): Promise<ProductRecord | null> {
+  await ensureDatabaseInitialized();
+  const original = await getProductById(id);
+  if (!original) return null;
+
+  const clone: ProductRecord = {
+    ...original,
+    id: `prod_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+    name: `${original.name} (Copy)`,
+    nameHi: original.nameHi ? `${original.nameHi} (प्रतिलिपि)` : undefined,
+    slug: `${original.slug}-copy-${Date.now().toString().slice(-4)}`,
+    status: "draft",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  return saveProduct(clone);
 }
 
 export async function getCategories(): Promise<CategoryRecord[]> {
   await ensureDatabaseInitialized();
-  const list = Array.from(state.categories.values());
-  list.sort((a, b) => a.displayOrder - b.displayOrder);
-  return list;
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const list = await mongo
+        .collection<CategoryRecord>("categories")
+        .find({}, { projection: { _id: 0 } })
+        .sort({ displayOrder: 1 })
+        .toArray();
+      return list;
+    } catch {}
+  }
+
+  const results = Array.from(state.categories.values());
+  results.sort((a, b) => a.displayOrder - b.displayOrder);
+  return results;
 }
 
 export async function getCategoryById(id: string): Promise<CategoryRecord | null> {
   await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const item = await mongo
+        .collection<CategoryRecord>("categories")
+        .findOne({ id }, { projection: { _id: 0 } });
+      if (item) return item;
+    } catch {}
+  }
+
   return state.categories.get(id) || null;
 }
 
 export async function getCategoryBySlug(slug: string): Promise<CategoryRecord | null> {
   await ensureDatabaseInitialized();
-  const normalized = slug.trim().toLowerCase();
-  for (const cat of Array.from(state.categories.values())) {
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const item = await mongo
+        .collection<CategoryRecord>("categories")
+        .findOne({ slug }, { projection: { _id: 0 } });
+      if (item) return item;
+    } catch {}
+  }
+
+  const normalized = slug.toLowerCase().trim();
+  for (const cat of state.categories.values()) {
     if (cat.slug.toLowerCase() === normalized) {
       return cat;
     }
@@ -150,248 +443,97 @@ export async function getCategoryBySlug(slug: string): Promise<CategoryRecord | 
   return null;
 }
 
-export async function saveCategory(categoryData: Partial<CategoryRecord> & { name: string }): Promise<CategoryRecord> {
+export async function saveCategory(input: Partial<CategoryRecord>): Promise<CategoryRecord> {
   await ensureDatabaseInitialized();
-  const id = categoryData.id || `cat_${Date.now()}_${crypto.randomBytes(3).toString("hex")}`;
-  const now = new Date().toISOString();
-  const existing = state.categories.get(id);
 
-  const slug = categoryData.slug
-    ? categoryData.slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-")
-    : categoryData.name.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
+  const id = input.id || `cat_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+  const now = new Date().toISOString();
+  const existing = input.id ? await getCategoryById(input.id) : null;
 
   const record: CategoryRecord = {
     id,
-    name: categoryData.name.trim(),
-    nameHi: categoryData.nameHi?.trim(),
-    slug,
-    description: categoryData.description?.trim(),
-    displayOrder: typeof categoryData.displayOrder === "number" ? categoryData.displayOrder : state.categories.size + 1,
-    enabled: categoryData.enabled !== undefined ? categoryData.enabled : true,
-    createdAt: existing ? existing.createdAt : now,
+    name: input.name || existing?.name || "Unnamed Category",
+    nameHi: input.nameHi !== undefined ? input.nameHi : existing?.nameHi,
+    slug: input.slug || existing?.slug || id,
+    description: input.description !== undefined ? input.description : existing?.description,
+    descriptionHi: input.descriptionHi !== undefined ? input.descriptionHi : existing?.descriptionHi,
+    displayOrder: input.displayOrder !== undefined ? input.displayOrder : (existing?.displayOrder ?? 1),
+    enabled: input.enabled !== undefined ? input.enabled : (existing?.enabled ?? true),
+    createdAt: existing?.createdAt || now,
     updatedAt: now,
   };
 
-  state.categories.set(id, record);
+  state.categories.set(record.id, record);
   writeJsonFile("categories.json", Array.from(state.categories.values()));
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo
+        .collection("categories")
+        .replaceOne({ id: record.id }, { ...record }, { upsert: true });
+    } catch {}
+  }
+
   return record;
 }
 
 export async function deleteCategory(id: string): Promise<boolean> {
   await ensureDatabaseInitialized();
-  if (state.categories.has(id)) {
-    state.categories.delete(id);
+
+  const deleted = state.categories.delete(id);
+  if (deleted) {
     writeJsonFile("categories.json", Array.from(state.categories.values()));
-    return true;
-  }
-  return false;
-}
-
-export async function getProducts(filter?: ProductFilter): Promise<ProductRecord[]> {
-  await ensureDatabaseInitialized();
-  let list = Array.from(state.products.values());
-
-  if (filter) {
-    if (filter.status && filter.status !== "all") {
-      list = list.filter((p) => p.status === filter.status);
-    }
-    if (filter.featuredOnly) {
-      list = list.filter((p) => p.featured);
-    }
-    if (filter.categorySlug) {
-      const cat = await getCategoryBySlug(filter.categorySlug);
-      if (cat) {
-        list = list.filter((p) => p.categoryId === cat.id);
-      }
-    }
-    if (filter.search) {
-      const q = filter.search.toLowerCase().trim();
-      list = list.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          (p.nameHi && p.nameHi.toLowerCase().includes(q)) ||
-          p.shortDescription.toLowerCase().includes(q) ||
-          p.slug.toLowerCase().includes(q)
-      );
-    }
   }
 
-  for (const prod of list) {
-    if (!prod.categoryName) {
-      const cat = state.categories.get(prod.categoryId);
-      if (cat) prod.categoryName = cat.name;
-    }
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo.collection("categories").deleteOne({ id });
+    } catch {}
   }
 
-  list.sort((a, b) => {
-    if (a.displayOrder !== b.displayOrder) {
-      return a.displayOrder - b.displayOrder;
-    }
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-
-  return list;
-}
-
-export async function getProductById(id: string): Promise<ProductRecord | null> {
-  await ensureDatabaseInitialized();
-  const prod = state.products.get(id);
-  if (!prod) return null;
-  if (!prod.categoryName) {
-    const cat = state.categories.get(prod.categoryId);
-    if (cat) prod.categoryName = cat.name;
-  }
-  return prod;
-}
-
-export async function getProductBySlug(slug: string, allowDraft = false): Promise<ProductRecord | null> {
-  await ensureDatabaseInitialized();
-  const normalized = slug.trim().toLowerCase();
-  for (const prod of Array.from(state.products.values())) {
-    if (prod.slug.toLowerCase() === normalized) {
-      if (!allowDraft && prod.status !== "published") {
-        return null;
-      }
-      if (!prod.categoryName) {
-        const cat = state.categories.get(prod.categoryId);
-        if (cat) prod.categoryName = cat.name;
-      }
-      return prod;
-    }
-  }
-  return null;
-}
-
-export async function saveProduct(productData: Partial<ProductRecord> & { name: string; categoryId: string }): Promise<ProductRecord> {
-  await ensureDatabaseInitialized();
-  const id = productData.id || `prod_${Date.now()}_${crypto.randomBytes(3).toString("hex")}`;
-  const now = new Date().toISOString();
-  const existing = state.products.get(id);
-
-  let rawSlug = productData.slug
-    ? productData.slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-")
-    : productData.name.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
-
-  if (!rawSlug) rawSlug = `vehicle-${Date.now()}`;
-
-  let finalSlug = rawSlug;
-  let counter = 1;
-  while (true) {
-    let collision = false;
-    for (const [existingId, prod] of Array.from(state.products.entries())) {
-      if (existingId !== id && prod.slug.toLowerCase() === finalSlug.toLowerCase()) {
-        collision = true;
-        break;
-      }
-    }
-    if (!collision) break;
-    finalSlug = `${rawSlug}-${counter++}`;
-  }
-
-  const category = state.categories.get(productData.categoryId);
-  const categoryName = category ? category.name : "Passenger Vehicle";
-
-  const specs: SpecificationItem[] = Array.isArray(productData.specifications)
-    ? productData.specifications.map((s, idx) => ({
-        id: s.id || `spec_${id}_${idx + 1}`,
-        productId: id,
-        label: s.label.trim(),
-        labelHi: s.labelHi?.trim(),
-        value: s.value.trim(),
-        valueHi: s.valueHi?.trim(),
-        icon: s.icon || "layers",
-        displayOrder: typeof s.displayOrder === "number" ? s.displayOrder : idx + 1,
-      }))
-    : existing?.specifications || [];
-
-  const record: ProductRecord = {
-    id,
-    name: productData.name.trim(),
-    nameHi: productData.nameHi?.trim(),
-    slug: finalSlug,
-    categoryId: productData.categoryId,
-    categoryName,
-    shortDescription: productData.shortDescription?.trim() || "",
-    shortDescriptionHi: productData.shortDescriptionHi?.trim(),
-    fullDescription: productData.fullDescription?.trim() || "",
-    fullDescriptionHi: productData.fullDescriptionHi?.trim(),
-    mainImage: productData.mainImage?.trim() || "/images/rickshaw-red.webp",
-    galleryImages: Array.isArray(productData.galleryImages) ? productData.galleryImages : [productData.mainImage || "/images/rickshaw-red.webp"],
-    priceMode: productData.priceMode === "fixed_price" ? "fixed_price" : "on_enquiry",
-    price: productData.priceMode === "fixed_price" && typeof productData.price === "number" ? productData.price : null,
-    currency: productData.currency || "INR",
-    featured: Boolean(productData.featured),
-    status: productData.status || "draft",
-    displayOrder: typeof productData.displayOrder === "number" ? productData.displayOrder : state.products.size + 1,
-    model3dUrl: productData.model3dUrl !== undefined ? productData.model3dUrl : null,
-    specifications: specs,
-    createdAt: existing ? existing.createdAt : now,
-    updatedAt: now,
-  };
-
-  state.products.set(id, record);
-  writeJsonFile("products.json", Array.from(state.products.values()));
-  return record;
-}
-
-export async function duplicateProduct(id: string): Promise<ProductRecord | null> {
-  await ensureDatabaseInitialized();
-  const source = state.products.get(id);
-  if (!source) return null;
-
-  const newId = `prod_${Date.now()}_${crypto.randomBytes(3).toString("hex")}`;
-  const now = new Date().toISOString();
-
-  const newSpecs = source.specifications.map((s, idx) => ({
-    ...s,
-    id: `spec_${newId}_${idx + 1}`,
-    productId: newId,
-  }));
-
-  const copyRecord: ProductRecord = {
-    ...source,
-    id: newId,
-    name: `${source.name} (Copy)`,
-    nameHi: source.nameHi ? `${source.nameHi} (प्रतिलिपि)` : undefined,
-    slug: `${source.slug}-copy-${Date.now().toString().slice(-4)}`,
-    status: "draft",
-    featured: false,
-    specifications: newSpecs,
-    createdAt: now,
-    updatedAt: now,
-  };
-
-  state.products.set(newId, copyRecord);
-  writeJsonFile("products.json", Array.from(state.products.values()));
-  return copyRecord;
-}
-
-export async function deleteProduct(id: string): Promise<boolean> {
-  await ensureDatabaseInitialized();
-  if (state.products.has(id)) {
-    state.products.delete(id);
-    writeJsonFile("products.json", Array.from(state.products.values()));
-    return true;
-  }
-  return false;
+  return deleted;
 }
 
 export async function getAdminByEmail(email: string): Promise<AdminUserRecord | null> {
   await ensureDatabaseInitialized();
-  return state.admins.get(email.toLowerCase().trim()) || null;
+
+  const normalized = email.toLowerCase().trim();
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const item = await mongo
+        .collection<AdminUserRecord>("admins")
+        .findOne({ email: normalized }, { projection: { _id: 0 } });
+      if (item) return item;
+    } catch {}
+  }
+
+  return state.admins.get(normalized) || null;
 }
 
 export async function saveAdminUser(admin: AdminUserRecord): Promise<AdminUserRecord> {
   await ensureDatabaseInitialized();
+
   state.admins.set(admin.email.toLowerCase().trim(), admin);
   writeJsonFile("admins.json", Array.from(state.admins.values()));
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo
+        .collection("admins")
+        .replaceOne({ email: admin.email.toLowerCase().trim() }, { ...admin }, { upsert: true });
+    } catch {}
+  }
+
   return admin;
 }
 
 export async function logActivity(entry: Omit<ActivityRecord, "id" | "createdAt">): Promise<ActivityRecord> {
-  await ensureDatabaseInitialized();
   const record: ActivityRecord = {
-    id: `act_${Date.now()}_${crypto.randomBytes(3).toString("hex")}`,
+    id: `act_${Date.now()}_${crypto.randomBytes(4).toString("hex")}`,
     adminEmail: entry.adminEmail,
     action: entry.action,
     entityType: entry.entityType,
@@ -405,16 +547,62 @@ export async function logActivity(entry: Omit<ActivityRecord, "id" | "createdAt"
     state.activities = state.activities.slice(0, 200);
   }
   writeJsonFile("activities.json", state.activities);
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo.collection("activities").insertOne({ ...record });
+    } catch {}
+  }
+
   return record;
 }
 
 export async function getActivities(limit = 50): Promise<ActivityRecord[]> {
   await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const list = await mongo
+        .collection<ActivityRecord>("activities")
+        .find({}, { projection: { _id: 0 } })
+        .sort({ createdAt: -1 })
+        .limit(limit)
+        .toArray();
+      return list;
+    } catch {}
+  }
+
   return state.activities.slice(0, limit);
 }
 
 export async function getDashboardStats() {
   await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const totalProducts = await mongo.collection("products").countDocuments();
+      const publishedProducts = await mongo.collection("products").countDocuments({ status: "published" });
+      const draftProducts = await mongo.collection("products").countDocuments({ status: "draft" });
+      const archivedProducts = await mongo.collection("products").countDocuments({ status: "archived" });
+      const totalCategories = await mongo.collection("categories").countDocuments({ enabled: true });
+      const totalEnquiries = await mongo.collection("leads").countDocuments();
+      const newEnquiries = await mongo.collection("leads").countDocuments({ status: "new" });
+
+      return {
+        totalProducts,
+        publishedProducts,
+        draftProducts,
+        archivedProducts,
+        totalCategories,
+        totalEnquiries,
+        newEnquiries,
+      };
+    } catch {}
+  }
+
   const products = Array.from(state.products.values());
   const categories = Array.from(state.categories.values());
   const enquiries = getAllLeads();
