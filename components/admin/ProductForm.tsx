@@ -389,8 +389,8 @@ export default function ProductForm({
         </div>
       )}
 
-      <div className="bg-white border border-brand-border rounded-lg shadow-card p-6 space-y-6">
-        <div className="border-b border-brand-border pb-3 flex items-center justify-between">
+      <div className="bg-white border border-brand-border rounded-lg shadow-card p-4 sm:p-6 space-y-6">
+        <div className="border-b border-brand-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
           <div>
             <h2 className="text-sm font-black uppercase tracking-wider text-brand-charcoal flex items-center gap-2">
               <Package className="w-4 h-4 text-brand-red" />
@@ -400,7 +400,7 @@ export default function ProductForm({
               Public commercial titles, classification, and vehicle descriptions.
             </p>
           </div>
-          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-muted">
+          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-muted self-start sm:self-auto">
             Step 1 of 5
           </span>
         </div>
@@ -416,7 +416,7 @@ export default function ProductForm({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. BAXY Super King E-Rickshaw"
-              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-sm font-semibold text-brand-charcoal focus:outline-none focus:border-brand-red"
+              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-sm font-semibold text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
 
@@ -429,7 +429,7 @@ export default function ProductForm({
               value={nameHi}
               onChange={(e) => setNameHi(e.target.value)}
               placeholder="e.g. बैक्सी सुपर किंग ई-रिक्शा"
-              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-sm font-semibold text-brand-charcoal focus:outline-none focus:border-brand-red"
+              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-sm font-semibold text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
         </div>
@@ -449,7 +449,7 @@ export default function ProductForm({
                   setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"));
                 }}
                 placeholder="baxy-super-king-passenger"
-                className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs font-mono text-brand-charcoal focus:outline-none focus:border-brand-red"
+                className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs font-mono text-brand-charcoal focus:outline-none focus:border-brand-red"
               />
             </div>
             <p className="text-[11px] text-brand-muted mt-1">
@@ -464,7 +464,7 @@ export default function ProductForm({
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
+              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -486,7 +486,7 @@ export default function ProductForm({
               value={shortDescription}
               onChange={(e) => setShortDescription(e.target.value)}
               placeholder="Brief summary for product cards and search results..."
-              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
 
@@ -499,7 +499,7 @@ export default function ProductForm({
               value={shortDescriptionHi}
               onChange={(e) => setShortDescriptionHi(e.target.value)}
               placeholder="कार्ड और सर्च के लिए संक्षिप्त विवरण..."
-              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
         </div>
@@ -514,7 +514,7 @@ export default function ProductForm({
               value={fullDescription}
               onChange={(e) => setFullDescription(e.target.value)}
               placeholder="Detailed engineering and commercial transit capabilities..."
-              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
 
@@ -527,13 +527,13 @@ export default function ProductForm({
               value={fullDescriptionHi}
               onChange={(e) => setFullDescriptionHi(e.target.value)}
               placeholder="विस्तृत व्यावसायिक व तकनीकी विवरण..."
-              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+              className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
         </div>
       </div>
-      <div className="bg-white border border-brand-border rounded-lg shadow-card p-6 space-y-6">
-        <div className="border-b border-brand-border pb-3 flex items-center justify-between">
+      <div className="bg-white border border-brand-border rounded-lg shadow-card p-4 sm:p-6 space-y-6">
+        <div className="border-b border-brand-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
           <div>
             <h2 className="text-sm font-black uppercase tracking-wider text-brand-charcoal flex items-center gap-2">
               <Upload className="w-4 h-4 text-brand-red" />
@@ -543,7 +543,7 @@ export default function ProductForm({
               Main product showcase photograph and supplementary showroom gallery images.
             </p>
           </div>
-          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-muted">
+          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-muted self-start sm:self-auto">
             Step 2 of 5
           </span>
         </div>
@@ -641,8 +641,8 @@ export default function ProductForm({
         </div>
       </div>
 
-      <div className="bg-white border border-brand-border rounded-lg shadow-card p-6 space-y-6">
-        <div className="border-b border-brand-border pb-3 flex items-center justify-between">
+      <div className="bg-white border border-brand-border rounded-lg shadow-card p-4 sm:p-6 space-y-6">
+        <div className="border-b border-brand-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
           <div>
             <h2 className="text-sm font-black uppercase tracking-wider text-brand-charcoal flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-brand-red" />
@@ -652,7 +652,7 @@ export default function ProductForm({
               Configure price mode between &quot;On Enquiry&quot; and exact fixed ex-showroom price.
             </p>
           </div>
-          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-muted">
+          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-muted self-start sm:self-auto">
             Step 3 of 5
           </span>
         </div>
@@ -734,7 +734,7 @@ export default function ProductForm({
                     value={price}
                     onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
                     placeholder="145000"
-                    className="w-full pl-8 pr-3 py-2 rounded bg-white border border-brand-border text-sm font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
+                    className="w-full pl-8 pr-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
                   />
                 </div>
               </div>
@@ -747,15 +747,15 @@ export default function ProductForm({
                   type="text"
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full px-3 py-2 rounded bg-white border border-brand-border text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
+                  className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
                 />
               </div>
             </div>
           )}
         </div>
       </div>
-      <div className="bg-white border border-brand-border rounded-lg shadow-card p-6 space-y-6">
-        <div className="border-b border-brand-border pb-3 flex items-center justify-between">
+      <div className="bg-white border border-brand-border rounded-lg shadow-card p-4 sm:p-6 space-y-6">
+        <div className="border-b border-brand-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="text-sm font-black uppercase tracking-wider text-brand-charcoal flex items-center gap-2">
               <Sliders className="w-4 h-4 text-brand-red" />
@@ -765,33 +765,33 @@ export default function ProductForm({
               10 standard engineering parameters plus custom specifications. Reorder or edit values.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
             <button
               type="button"
               onClick={handleResetToDefaults}
-              className="px-2.5 py-1 text-[11px] font-bold text-brand-charcoal hover:text-brand-red border border-brand-border rounded hover:bg-brand-warmWhite transition-colors"
+              className="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-bold text-brand-charcoal hover:text-brand-red border border-brand-border rounded hover:bg-brand-warmWhite transition-colors text-center cursor-pointer"
             >
               Reset 10 Defaults
             </button>
             <button
               type="button"
               onClick={handleAddSpec}
-              className="px-2.5 py-1 text-[11px] font-bold text-white bg-brand-charcoal hover:bg-brand-red rounded transition-colors flex items-center gap-1"
+              className="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-bold text-white bg-brand-charcoal hover:bg-brand-red rounded transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <Plus className="w-3 h-3" />
+              <Plus className="w-3.5 h-3.5" />
               <span>Add Custom Spec</span>
             </button>
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           {specifications.length === 0 ? (
             <div className="text-center py-6 border border-dashed border-brand-border rounded bg-brand-cream/30">
               <p className="text-xs text-brand-muted">No specifications defined for this vehicle yet.</p>
               <button
                 type="button"
                 onClick={handleResetToDefaults}
-                className="mt-2 px-3 py-1.5 text-xs font-bold text-brand-red border border-brand-red rounded hover:bg-red-50"
+                className="mt-2 px-3 py-1.5 text-xs font-bold text-brand-red border border-brand-red rounded hover:bg-red-50 cursor-pointer"
               >
                 Load 10 Standard Dealership Specs
               </button>
@@ -800,31 +800,83 @@ export default function ProductForm({
             specifications.map((spec, idx) => (
               <div
                 key={spec.id || idx}
-                className="p-3.5 bg-brand-warmWhite/60 border border-brand-border rounded-lg space-y-2 hover:border-brand-charcoal/30 transition-colors"
+                className="p-3.5 sm:p-4 bg-brand-warmWhite/70 border border-brand-border rounded-lg space-y-3 hover:border-brand-charcoal/30 transition-colors"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1">
-                    <span className="w-5 h-5 rounded-full bg-brand-cream border border-brand-border text-[10px] font-black text-brand-charcoal flex items-center justify-center shrink-0">
+                <div className="flex items-center justify-between gap-3 pb-2.5 border-b border-brand-border/60">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="w-6 h-6 rounded-full bg-brand-charcoal text-white text-xs font-black flex items-center justify-center shrink-0">
                       {idx + 1}
                     </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-brand-charcoal truncate">
+                      {spec.label || `Specification #${idx + 1}`}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      type="button"
+                      disabled={idx === 0}
+                      onClick={() => handleMoveSpec(idx, "up")}
+                      className="p-1.5 rounded text-brand-muted hover:text-brand-charcoal hover:bg-brand-cream disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+                      title="Move up"
+                    >
+                      <MoveUp className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      disabled={idx === specifications.length - 1}
+                      onClick={() => handleMoveSpec(idx, "down")}
+                      className="p-1.5 rounded text-brand-muted hover:text-brand-charcoal hover:bg-brand-cream disabled:opacity-30 disabled:pointer-events-none transition-colors cursor-pointer"
+                      title="Move down"
+                    >
+                      <MoveDown className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteSpec(idx)}
+                      className="p-1.5 rounded text-brand-muted hover:text-brand-red hover:bg-red-50 transition-colors cursor-pointer"
+                      title="Delete specification"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">
+                      Parameter Name (English) *
+                    </label>
                     <input
                       type="text"
                       value={spec.label}
                       onChange={(e) => handleUpdateSpec(idx, "label", e.target.value)}
-                      placeholder="Specification Label (English)"
-                      className="text-xs font-bold text-brand-charcoal bg-white px-2.5 py-1 rounded border border-brand-border focus:outline-none focus:border-brand-red w-48 sm:w-56"
+                      placeholder="e.g. Motor Power, Battery Capacity"
+                      className="w-full text-base sm:text-xs font-bold text-brand-charcoal bg-white px-3 py-2 rounded border border-brand-border focus:outline-none focus:border-brand-red"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">
+                      Parameter Name (Hindi)
+                    </label>
                     <input
                       type="text"
                       value={spec.labelHi || ""}
                       onChange={(e) => handleUpdateSpec(idx, "labelHi", e.target.value)}
-                      placeholder="লेবਲ (हिंदी)"
-                      className="text-xs text-brand-charcoal bg-white px-2 py-1 rounded border border-brand-border focus:outline-none focus:border-brand-red w-36 sm:w-44"
+                      placeholder="उदा. मोटर प्रकार, बैटरी क्षमता"
+                      className="w-full text-base sm:text-xs text-brand-charcoal bg-white px-3 py-2 rounded border border-brand-border focus:outline-none focus:border-brand-red"
                     />
+                  </div>
+
+                  <div className="sm:col-span-2 lg:col-span-1">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">
+                      Technical Group
+                    </label>
                     <select
                       value={spec.category || "General"}
                       onChange={(e) => handleUpdateSpec(idx, "category", e.target.value)}
-                      className="text-[11px] font-bold text-brand-charcoal bg-white px-2 py-1 rounded border border-brand-border focus:outline-none focus:border-brand-red"
+                      className="w-full text-base sm:text-xs font-bold text-brand-charcoal bg-white px-3 py-2 rounded border border-brand-border focus:outline-none focus:border-brand-red"
                     >
                       <option value="Drivetrain">Drivetrain</option>
                       <option value="Battery">Battery</option>
@@ -834,74 +886,45 @@ export default function ProductForm({
                       <option value="Commercial">Commercial</option>
                     </select>
                   </div>
-
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      type="button"
-                      disabled={idx === 0}
-                      onClick={() => handleMoveSpec(idx, "up")}
-                      className="p-1 rounded text-brand-muted hover:text-brand-charcoal hover:bg-brand-cream disabled:opacity-30 disabled:pointer-events-none"
-                      title="Move up"
-                    >
-                      <MoveUp className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      disabled={idx === specifications.length - 1}
-                      onClick={() => handleMoveSpec(idx, "down")}
-                      className="p-1 rounded text-brand-muted hover:text-brand-charcoal hover:bg-brand-cream disabled:opacity-30 disabled:pointer-events-none"
-                      title="Move down"
-                    >
-                      <MoveDown className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteSpec(idx)}
-                      className="p-1 rounded text-brand-muted hover:text-brand-red hover:bg-red-50"
-                      title="Delete specification"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 border-t border-brand-border/40">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-0.5">
-                      Value (English) *
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">
+                      Specification Value (English) *
                     </label>
                     <input
                       type="text"
                       value={spec.value}
                       onChange={(e) => handleUpdateSpec(idx, "value", e.target.value)}
                       placeholder="e.g. 1200W High Torque"
-                      className="w-full text-xs text-brand-charcoal bg-white px-2.5 py-1 rounded border border-brand-border focus:outline-none focus:border-brand-red"
+                      className="w-full text-base sm:text-xs text-brand-charcoal bg-white px-3 py-2 rounded border border-brand-border focus:outline-none focus:border-brand-red"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-0.5">
-                      Value (Hindi)
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">
+                      Specification Value (Hindi)
                     </label>
                     <input
                       type="text"
                       value={spec.valueHi || ""}
                       onChange={(e) => handleUpdateSpec(idx, "valueHi", e.target.value)}
-                      placeholder="੢xा. 1200 ᤵाट हाई ञौर्क"
-                      className="w-full text-xs text-brand-charcoal bg-white px-2.5 py-1 rounded border border-brand-border focus:outline-none focus:border-brand-red"
+                      placeholder="उदा. 1200 वाट हाई टॉर्क"
+                      className="w-full text-base sm:text-xs text-brand-charcoal bg-white px-3 py-2 rounded border border-brand-border focus:outline-none focus:border-brand-red"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-brand-muted mb-0.5">
-                      Unit (Optional)
+                  <div className="sm:col-span-2 lg:col-span-1">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">
+                      Engineering Unit (Optional)
                     </label>
                     <input
                       type="text"
                       value={spec.unit || ""}
                       onChange={(e) => handleUpdateSpec(idx, "unit", e.target.value)}
-                      placeholder="km, W, Hours, kg"
-                      className="w-full text-xs text-brand-charcoal bg-white px-2.5 py-1 rounded border border-brand-border focus:outline-none focus:border-brand-red"
+                      placeholder="e.g. km, W, Hours, kg"
+                      className="w-full text-base sm:text-xs text-brand-charcoal bg-white px-3 py-2 rounded border border-brand-border focus:outline-none focus:border-brand-red"
                     />
                   </div>
                 </div>
@@ -911,8 +934,8 @@ export default function ProductForm({
         </div>
       </div>
 
-      <div className="bg-white border border-brand-border rounded-lg shadow-card p-6 space-y-6">
-        <div className="border-b border-brand-border pb-3 flex items-center justify-between">
+      <div className="bg-white border border-brand-border rounded-lg shadow-card p-4 sm:p-6 space-y-6">
+        <div className="border-b border-brand-border pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
           <div>
             <h2 className="text-sm font-black uppercase tracking-wider text-brand-charcoal flex items-center gap-2">
               <Globe className="w-4 h-4 text-brand-red" />
@@ -922,7 +945,7 @@ export default function ProductForm({
               Publication visibility, homepage spotlight, sorting position, and interactive 3D model path.
             </p>
           </div>
-          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-muted">
+          <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-muted self-start sm:self-auto">
             Step 5 of 5
           </span>
         </div>
@@ -935,7 +958,7 @@ export default function ProductForm({
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as ProductStatus)}
-              className="w-full px-3 py-2 rounded bg-white border border-brand-border text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
+              className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
             >
               <option value="published">Published (Visible in Showroom)</option>
               <option value="draft">Draft (Hidden from Showroom)</option>
@@ -956,7 +979,7 @@ export default function ProductForm({
               max="999"
               value={displayOrder}
               onChange={(e) => setDisplayOrder(Math.max(1, Number(e.target.value)))}
-              className="w-full px-3 py-2 rounded bg-white border border-brand-border text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
+              className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
             <p className="text-[11px] text-brand-muted mt-2">
               Lower numbers appear first on the vehicle catalogue page. (e.g. 1 = top of showroom).
@@ -972,7 +995,7 @@ export default function ProductForm({
                 type="checkbox"
                 checked={featured}
                 onChange={(e) => setFeatured(e.target.checked)}
-                className="w-4 5-4 text-brand-red rounded border-brand-border focus:ring-brand-red"
+                className="w-4 h-4 text-brand-red rounded border-brand-border focus:ring-brand-red cursor-pointer"
               />
               <span className="text-xs font-bold text-brand-charcoal">
                 Feature on Balaji Motors Homepage
@@ -994,7 +1017,7 @@ export default function ProductForm({
             value={model3dUrl}
             onChange={(e) => setModel3dUrl(e.target.value)}
             placeholder="/models/rickshaw_clean.glb"
-            className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs font-mono text-brand-charcoal focus:outline-none focus:border-brand-red"
+            className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs font-mono text-brand-charcoal focus:outline-none focus:border-brand-red"
           />
           <p className="text-[11px] text-brand-muted mt-1.5">
             Balaji Motors features an interactive 3D electric rickshaw viewer with exploded parts and colorway customizer. Leave empty to use the standard default 3D model asset.

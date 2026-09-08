@@ -121,7 +121,7 @@ export default function AdminSettingsPage() {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+                className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
               />
             </div>
 
@@ -136,7 +136,7 @@ export default function AdminSettingsPage() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="At least 8 characters"
-                className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+                className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
               />
             </div>
 
@@ -151,7 +151,7 @@ export default function AdminSettingsPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Repeat new password"
-                className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+                className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
               />
             </div>
 
