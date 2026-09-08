@@ -118,7 +118,7 @@ export async function generateEnquiryPdf(
         40,
         58
       );
-      doc.fontSize(8).text(`Phone: ${siteConfig.displayPhone} | Web: balajimotors-jalandhar.com`, 40, 70);
+      doc.fontSize(8).text(`Phone: ${siteConfig.displayPhone} | Web: balajimotors.ryxer.site`, 40, 70);
 
       const headerRightTitle = isCompany ? "COMPANY LEAD COPY" : "CUSTOMER COPY";
       doc.font("Helvetica-Bold").fontSize(10).fillColor("#F2C94C").text(headerRightTitle, 380, 24, { align: "right", width: 175 });

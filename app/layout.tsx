@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Balaji Motors" }],
   creator: "Balaji Motors",
   publisher: "Balaji Motors Jalandhar",
-  metadataBase: new URL("https://balajimotors-jalandhar.com"),
+  metadataBase: new URL("https://balajimotors.ryxer.site"),
   openGraph: {
     title: "Balaji Motors | Electric Rickshaw Dealership in Jalandhar",
     description: "Reliable commercial electric three-wheelers, passenger e-rickshaws, and electric cargo loaders with finance and service support in Jalandhar.",
