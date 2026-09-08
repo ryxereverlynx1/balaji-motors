@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Plus_Jakarta_Sans, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
@@ -93,6 +94,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-E584XQ5Q3X";
+
   return (
     <html lang="hi" className={`${fontSans.variable} ${fontDevanagari.variable}`}>
       <head>
@@ -102,6 +105,18 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans min-h-screen bg-brand-warmWhite text-brand-charcoal selection:bg-brand-red selection:text-white flex flex-col pb-16 sm:pb-0">
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gaId}');
+          `}
+        </Script>
         <LanguageProvider>
           <QuoteModalProvider>
             <Navbar />
