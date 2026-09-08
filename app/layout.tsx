@@ -94,7 +94,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-E584XQ5Q3X";
+  const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-0VPTCJZ8RG";
 
   return (
     <html lang="hi" className={`${fontSans.variable} ${fontDevanagari.variable}`}>
