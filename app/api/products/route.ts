@@ -1,6 +1,10 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getProducts } from "@/lib/db";
 import { ProductFilter } from "@/lib/db/types";
+import { mapProductToVehicle } from "@/lib/products";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,7 +21,8 @@ export async function GET(req: NextRequest) {
     };
 
     const products = await getProducts(filter);
-    return NextResponse.json({ success: true, products });
+    const vehicles = products.map(mapProductToVehicle);
+    return NextResponse.json({ success: true, products, vehicles });
   } catch {
     return NextResponse.json({ error: "Failed to load products" }, { status: 500 });
   }

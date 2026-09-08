@@ -38,6 +38,8 @@ export interface Vehicle {
   seriesHi: string;
   category: "Passenger" | "Cargo / Loader";
   categoryHi: string;
+  categoryId?: string;
+  categoryName?: string;
   tagline: string;
   taglineHi: string;
   shortDescription: string;

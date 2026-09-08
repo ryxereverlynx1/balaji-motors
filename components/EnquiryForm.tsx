@@ -40,11 +40,16 @@ export default function EnquiryForm({
   useEffect(() => {
     async function loadDynamic() {
       try {
-        const res = await fetch("/api/products");
+        const res = await fetch("/api/products", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data.vehicles) && data.vehicles.length > 0) {
-            setAvailableVehicles(data.vehicles);
+          const list = Array.isArray(data.vehicles)
+            ? data.vehicles
+            : Array.isArray(data.products)
+            ? data.products
+            : null;
+          if (list !== null) {
+            setAvailableVehicles(list);
           }
         }
       } catch {}

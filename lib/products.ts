@@ -1,4 +1,4 @@
-﻿import { getProducts, getProductBySlug, getCategories } from "./db";
+import { getProducts, getProductBySlug, getCategories } from "./db";
 import { ProductRecord, CategoryRecord } from "./db/types";
 import { Vehicle, VehicleSpecs, VehicleColor, VehicleHotspot } from "@/data/vehicles";
 
@@ -135,6 +135,8 @@ export function mapProductToVehicle(p: ProductRecord): Vehicle {
     seriesHi: p.categoryName || (isCargo ? "कमर्शियल कार्गो सीरीज" : "कमर्शियल पैसेंजर सीरीज"),
     category: isCargo ? "Cargo / Loader" : "Passenger",
     categoryHi: isCargo ? "लोडर / मालवाहक" : "पैसेंजर ई-रिक्शा",
+    categoryId: p.categoryId,
+    categoryName: p.categoryName,
     tagline: p.shortDescription,
     taglineHi: p.shortDescriptionHi || p.shortDescription,
     shortDescription: p.shortDescription,

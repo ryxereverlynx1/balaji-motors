@@ -9,15 +9,24 @@ import { useLanguage } from "@/context/LanguageContext";
 import { Phone, MessageSquare, Filter } from "lucide-react";
 import { getGeneralWhatsAppUrl } from "@/lib/whatsapp";
 
-interface CategoryTab {
-  key: string;
-  label: string;
+import { CategoryRecord } from "@/lib/db/types";
+
+interface VehiclesShowroomProps {
+  initialVehicles?: Vehicle[];
+  initialCategories?: CategoryRecord[];
 }
 
-export default function VehiclesShowroom() {
-  const [vehicles, setVehicles] = useState<Vehicle[]>(vehiclesData);
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [extraCategories, setExtraCategories] = useState<CategoryTab[]>([]);
+export default function VehiclesShowroom({
+  initialVehicles,
+  initialCategories,
+}: VehiclesShowroomProps) {
+  const [vehicles, setVehicles] = useState<Vehicle[]>(
+    initialVehicles && initialVehicles.length > 0 ? initialVehicles : vehiclesData
+  );
+  const [categories, setCategories] = useState<CategoryRecord[]>(
+    initialCategories || []
+  );
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("all");
   const { language, dict } = useLanguage();
   const t = dict.catalogue;
 
@@ -25,64 +34,84 @@ export default function VehiclesShowroom() {
     async function loadDynamicShowroom() {
       try {
         const [prodsRes, catsRes] = await Promise.all([
-          fetch("/api/products"),
-          fetch("/api/categories"),
+          fetch("/api/products", { cache: "no-store" }),
+          fetch("/api/categories", { cache: "no-store" }),
         ]);
 
         if (prodsRes.ok) {
           const prodsData = await prodsRes.json();
-          if (Array.isArray(prodsData.vehicles) && prodsData.vehicles.length > 0) {
-            setVehicles(prodsData.vehicles);
+          const list = Array.isArray(prodsData.vehicles)
+            ? prodsData.vehicles
+            : Array.isArray(prodsData.products)
+            ? prodsData.products
+            : null;
+          if (list !== null) {
+            setVehicles(list);
           }
         }
 
         if (catsRes.ok) {
           const catsData = await catsRes.json();
           if (Array.isArray(catsData.categories)) {
-            const standardSlugs = ["passenger", "cargo-loader", "all"];
-            const custom = catsData.categories
-              .filter((c: any) => !standardSlugs.includes(c.slug.toLowerCase()))
-              .map((c: any) => ({
-                key: c.name,
-                label: language === "hi" && c.nameHi ? c.nameHi : c.name,
-              }));
-            setExtraCategories(custom);
+            setCategories(catsData.categories);
           }
         }
       } catch {}
     }
 
     loadDynamicShowroom();
-  }, [language]);
+  }, []);
 
-  const baseCategories: CategoryTab[] = [
-    { key: "All", label: t.allModels },
-    { key: "Passenger", label: t.passenger },
-    { key: "Cargo / Loader", label: t.cargo },
+  const categoryTabs = [
+    { id: "all", label: t.allModels },
+    ...categories.map((c) => ({
+      id: c.id,
+      label: language === "hi" && c.nameHi ? c.nameHi : c.name,
+    })),
   ];
 
-  const categories = [...baseCategories, ...extraCategories];
-
   const filteredVehicles =
-    selectedCategory === "All"
+    selectedCategoryId === "all"
       ? vehicles
-      : vehicles.filter(
-          (v) =>
-            v.category === selectedCategory ||
-            v.series === selectedCategory ||
-            (selectedCategory === "Passenger" && v.category === "Passenger") ||
-            (selectedCategory === "Cargo / Loader" && v.category === "Cargo / Loader")
-        );
+      : vehicles.filter((v) => {
+          const activeCat = categories.find((c) => c.id === selectedCategoryId);
+          if (!activeCat) return true;
+
+          const catId = (v as any).categoryId;
+          if (catId && catId === activeCat.id) return true;
+
+          const catName = (v as any).categoryName || v.category || v.series;
+          if (catName && catName.toLowerCase() === activeCat.name.toLowerCase()) return true;
+
+          if (
+            activeCat.slug === "passenger" ||
+            activeCat.slug === "e-rickshaw" ||
+            activeCat.slug === "passenger-vehicle"
+          ) {
+            return v.category === "Passenger";
+          }
+
+          if (
+            activeCat.slug === "cargo-loader" ||
+            activeCat.slug === "cargo" ||
+            activeCat.slug === "loader" ||
+            activeCat.slug === "electric-loader"
+          ) {
+            return v.category === "Cargo / Loader";
+          }
+
+          return false;
+        });
 
   return (
     <div className="pt-24 pb-20 sm:pt-32 sm:pb-28 bg-brand-warmWhite min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="border-b border-brand-border pb-10 mb-10">
           <div className="text-xs font-bold uppercase tracking-widest text-brand-red mb-2">
-            {language === "hi" ? "?????????? ????-?????? ?????" : "ELECTRIC THREE-WHEELER SHOWROOM"}
+            {t.badge}
           </div>
           <h1 className="text-3xl sm:text-5xl font-black text-brand-charcoal tracking-tight">
-            {language === "hi" ? "???? ????? ?? ??? ?-?????? ?????" : "Find the Right E-Rickshaw"}
+            {t.title}
           </h1>
           <p className="text-sm sm:text-base text-brand-muted mt-3 max-w-2xl leading-relaxed">
             {t.subtitle}
@@ -94,13 +123,13 @@ export default function VehiclesShowroom() {
                 <Filter className="w-3.5 h-3.5 text-brand-red" />
                 <span className="hidden sm:inline">{t.filterLabel}</span>
               </div>
-              {categories.map((cat) => (
+              {categoryTabs.map((cat) => (
                 <button
-                  key={cat.key}
+                  key={cat.id}
                   type="button"
-                  onClick={() => setSelectedCategory(cat.key)}
+                  onClick={() => setSelectedCategoryId(cat.id)}
                   className={`px-3.5 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-colors active:scale-95 ${
-                    selectedCategory === cat.key
+                    selectedCategoryId === cat.id
                       ? "bg-brand-red text-white shadow-xs"
                       : "text-brand-charcoal hover:text-brand-red hover:bg-white"
                   }`}

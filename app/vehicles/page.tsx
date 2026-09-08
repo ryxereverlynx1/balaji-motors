@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import VehiclesShowroom from "@/components/VehiclesShowroom";
+import { getAllPublicVehicles, getPublicCategories } from "@/lib/products";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Electric Rickshaws & Commercial E-Loaders Catalogue",
@@ -42,14 +46,22 @@ const collectionJsonLd = {
   },
 };
 
-export default function VehiclesPage() {
+export default async function VehiclesPage() {
+  const [initialVehicles, initialCategories] = await Promise.all([
+    getAllPublicVehicles(),
+    getPublicCategories(),
+  ]);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
       />
-      <VehiclesShowroom />
+      <VehiclesShowroom
+        initialVehicles={initialVehicles}
+        initialCategories={initialCategories}
+      />
     </>
   );
 }

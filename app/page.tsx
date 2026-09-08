@@ -85,14 +85,17 @@ export default function HomePage() {
   React.useEffect(() => {
     async function loadFeatured() {
       try {
-        const res = await fetch("/api/products");
+        const res = await fetch("/api/products", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data.vehicles) && data.vehicles.length > 0) {
-            const feat = data.vehicles.filter((v: any) => v.featured);
-            if (feat.length > 0) {
-              setFeaturedVehicles(feat);
-            }
+          const list = Array.isArray(data.vehicles)
+            ? data.vehicles
+            : Array.isArray(data.products)
+            ? data.products
+            : null;
+          if (list !== null) {
+            const feat = list.filter((v: any) => v.featured);
+            setFeaturedVehicles(feat.length > 0 ? feat : list);
           }
         }
       } catch {}
