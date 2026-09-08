@@ -37,6 +37,45 @@ const VehicleViewer = dynamic(() => import("@/components/3d/VehicleViewer"), {
   loading: () => <ViewerFallback vehicleName="Interactive 3D Explorer" />,
 });
 
+const homeFaqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Where is Balaji Motors electric rickshaw showroom located in Jalandhar?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Balaji Motors is located at Avtar Nagar Road, Near Hotel Regent Park / Gujral Nagar, Jalandhar, Punjab 144001.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What models of electric rickshaws are available at Balaji Motors?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "We offer BAXY Super King Passenger E-Rickshaws, BAXY Cargo Express Loaders, Balaji City Passenger Rickshaws, and Balaji Closed Delivery Vans.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does Balaji Motors provide on-spot loan and EMI financing in Punjab?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, we provide fast loan assistance with low down payment schemes, flexible EMIs, and minimal documentation through leading vehicle finance partners.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What warranty and service support is provided?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "All vehicles include Manufacturer Warranty on Motor & Drivetrain, along with genuine spare parts, battery diagnostics, and repairs at our Jalandhar workshop.",
+      },
+    },
+  ],
+};
+
 export default function HomePage() {
   const { language, dict } = useLanguage();
   const { openQuoteModal } = useQuoteModal();
@@ -67,6 +106,10 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col bg-brand-warmWhite">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqJsonLd) }}
+      />
       <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-20 overflow-hidden bg-gradient-to-b from-brand-cream via-brand-cream/80 to-brand-warmWhite border-b border-brand-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">

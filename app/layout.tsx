@@ -23,8 +23,11 @@ const fontDevanagari = Noto_Sans_Devanagari({
 });
 
 export const metadata: Metadata = {
-  title: "Balaji Motors | Electric Rickshaws & E-Loaders in Jalandhar, Punjab",
-  description: "Official dealership for commercial electric rickshaws, passenger e-rickshaws, and electric loaders in Jalandhar, Punjab. Genuine service, spare parts, and on-spot finance guidance.",
+  title: {
+    default: "Balaji Motors | Electric Rickshaws & E-Loaders in Jalandhar, Punjab",
+    template: "%s | Balaji Motors Jalandhar",
+  },
+  description: "Authorized dealership for commercial electric rickshaws, passenger e-rickshaws, and electric loaders in Jalandhar, Punjab. Genuine service, spare parts, and on-spot finance guidance.",
   keywords: [
     "Electric Rickshaw Dealer in Jalandhar",
     "E-Rickshaw Dealer Jalandhar",
@@ -34,17 +37,23 @@ export const metadata: Metadata = {
     "Balaji Motors Jalandhar",
     "Electric Cargo Rickshaw Punjab",
     "E-Rickshaw Price Jalandhar",
+    "Commercial E-Loader Punjab",
+    "Electric Rickshaw Subsidy Punjab",
   ],
   authors: [{ name: "Balaji Motors" }],
   creator: "Balaji Motors",
   publisher: "Balaji Motors Jalandhar",
   metadataBase: new URL("https://balajimotors.ryxer.site"),
+  alternates: {
+    canonical: "https://balajimotors.ryxer.site",
+  },
   openGraph: {
     title: "Balaji Motors | Electric Rickshaw Dealership in Jalandhar",
     description: "Reliable commercial electric three-wheelers, passenger e-rickshaws, and electric cargo loaders with finance and service support in Jalandhar.",
     locale: "hi_IN",
     type: "website",
     siteName: "Balaji Motors",
+    url: "https://balajimotors.ryxer.site",
     images: [
       {
         url: "/og-image.png",
@@ -66,14 +75,21 @@ export const metadata: Metadata = {
   verification: {
     google: "googled80a02406690a5e4",
   },
+  other: {
+    "geo.region": "IN-PB",
+    "geo.placename": "Jalandhar",
+    "geo.position": "31.3260;75.5762",
+    "ICBM": "31.3260, 75.5762",
+  },
 };
 
 const localBusinessJsonLd = {
   "@context": "https://schema.org",
-  "@type": "AutoDealer",
+  "@type": ["AutoDealer", "MotorcycleDealer"],
   name: siteConfig.name,
   legalName: siteConfig.legalName,
   description: siteConfig.tagline,
+  url: "https://balajimotors.ryxer.site",
   telephone: siteConfig.primaryPhone,
   email: siteConfig.email,
   address: {
@@ -84,8 +100,29 @@ const localBusinessJsonLd = {
     postalCode: siteConfig.address.pincode,
     addressCountry: "IN",
   },
-  areaServed: ["Jalandhar", "Phagwara", "Kapurthala", "Hoshiarpur", "Punjab"],
-  priceRange: "$$",
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 31.326,
+    longitude: 75.5762,
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "09:30",
+      closes: "19:30",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Sunday",
+      opens: "10:30",
+      closes: "16:00",
+    },
+  ],
+  areaServed: ["Jalandhar", "Phagwara", "Kapurthala", "Hoshiarpur", "Ludhiana", "Punjab"],
+  currenciesAccepted: "INR",
+  paymentAccepted: "Cash, UPI, Net Banking, Financing, Cheque",
+  priceRange: "₹₹",
 };
 
 export default function RootLayout({
