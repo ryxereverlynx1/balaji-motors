@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { CategoryRecord, ProductRecord } from "@/lib/db/types";
 import {
@@ -15,7 +15,9 @@ import {
   AlertTriangle,
   CheckCircle2,
   XCircle,
+  Languages,
 } from "lucide-react";
+import { translateToHindi } from "@/lib/translate";
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<CategoryRecord[]>([]);
@@ -36,6 +38,48 @@ export default function AdminCategoriesPage() {
 
   const [deleteCategory, setDeleteCategory] = useState<CategoryRecord | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const [translatingFields, setTranslatingFields] = useState<Record<string, boolean>>({});
+  const translateTimersRef = useRef<Record<string, NodeJS.Timeout>>({});
+
+  const handleTranslateField = async (
+    fieldKey: string,
+    englishText: string,
+    applyHindi: (val: string) => void
+  ) => {
+    const text = englishText.trim();
+    if (!text) return;
+    setTranslatingFields((prev) => ({ ...prev, [fieldKey]: true }));
+    try {
+      const translated = await translateToHindi(text);
+      if (translated) {
+        applyHindi(translated);
+      }
+    } finally {
+      setTranslatingFields((prev) => ({ ...prev, [fieldKey]: false }));
+    }
+  };
+
+  const scheduleAutoTranslate = (
+    fieldKey: string,
+    englishText: string,
+    applyHindi: (val: string) => void
+  ) => {
+    if (translateTimersRef.current[fieldKey]) {
+      clearTimeout(translateTimersRef.current[fieldKey]);
+    }
+    const text = englishText.trim();
+    if (!text) return;
+    translateTimersRef.current[fieldKey] = setTimeout(() => {
+      handleTranslateField(fieldKey, text, applyHindi);
+    }, 600);
+  };
+
+  useEffect(() => {
+    return () => {
+      Object.values(translateTimersRef.current).forEach((t) => clearTimeout(t));
+    };
+  }, []);
 
   const loadData = async () => {
     setIsLoading(true);
@@ -361,30 +405,94 @@ export default function AdminCategoriesPage() {
                     required
                     value={formName}
                     onChange={(e) => {
-                      setFormName(e.target.value);
+                      const val = e.target.value;
+                      setFormName(val);
                       if (!editingCategory) {
                         setFormSlug(
-                          e.target.value
+                          val
                             .toLowerCase()
                             .replace(/[^a-z0-9]/g, "-")
                             .replace(/-+/g, "-")
                         );
                       }
+                      scheduleAutoTranslate("catName", val, (hi) => setFormNameHi(hi));
                     }}
+                    onBlur={() => handleTranslateField("catName", formName, (hi) => setFormNameHi(hi))}
                     placeholder="e.g. Electric Cargo Loader"
                     className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1">
-                    Category Name (Hindi)
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal">
+                      Category Name (Hindi)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateField("catName", formName, (hi) => setFormNameHi(hi))}
+                      className="text-[10px] font-bold text-brand-red hover:underline inline-flex items-center gap-1 cursor-pointer"
+                      title="Auto-fill Hindi translation"
+                    >
+                      {translatingFields["catName"] ? (
+                        <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                      ) : (
+                        <Languages className="w-2.5 h-2.5" />
+                      )}
+                      <span>{translatingFields["catName"] ? "Translating..." : "Auto-fill Hindi"}</span>
+                    </button>
+                  </div>
                   <input
                     type="text"
                     value={formNameHi}
                     onChange={(e) => setFormNameHi(e.target.value)}
                     placeholder="उदा. इलेक्ट्रिक कार्गो लोडर"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1">
+                    Description (English)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={formDescription}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFormDescription(val);
+                      scheduleAutoTranslate("catDesc", val, (hi) => setFormDescriptionHi(hi));
+                    }}
+                    onBlur={() => handleTranslateField("catDesc", formDescription, (hi) => setFormDescriptionHi(hi))}
+                    placeholder="e.g. Passenger transit electric rickshaws"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal">
+                      Description (Hindi)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateField("catDesc", formDescription, (hi) => setFormDescriptionHi(hi))}
+                      className="text-[10px] font-bold text-brand-red hover:underline inline-flex items-center gap-1 cursor-pointer"
+                      title="Auto-fill Hindi translation"
+                    >
+                      {translatingFields["catDesc"] ? (
+                        <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                      ) : (
+                        <Languages className="w-2.5 h-2.5" />
+                      )}
+                      <span>{translatingFields["catDesc"] ? "Translating..." : "Auto-fill Hindi"}</span>
+                    </button>
+                  </div>
+                  <textarea
+                    rows={2}
+                    value={formDescriptionHi}
+                    onChange={(e) => setFormDescriptionHi(e.target.value)}
+                    placeholder="उदा. यात्री परिवहन इलेक्ट्रिक रिक्शा"
                     className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
                   />
                 </div>

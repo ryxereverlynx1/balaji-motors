@@ -26,7 +26,9 @@ import {
   Globe,
   Sliders,
   Save,
+  Languages,
 } from "lucide-react";
+import { translateToHindi } from "@/lib/translate";
 
 interface ProductFormProps {
   initialProduct?: ProductRecord | null;
@@ -97,6 +99,69 @@ export default function ProductForm({
   const [success, setSuccess] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [translatingFields, setTranslatingFields] = useState<Record<string, boolean>>({});
+  const translateTimersRef = useRef<Record<string, NodeJS.Timeout>>({});
+
+  const handleTranslateField = async (
+    fieldKey: string,
+    englishText: string,
+    applyHindi: (val: string) => void
+  ) => {
+    const text = englishText.trim();
+    if (!text) return;
+    setTranslatingFields((prev) => ({ ...prev, [fieldKey]: true }));
+    try {
+      const translated = await translateToHindi(text);
+      if (translated) {
+        applyHindi(translated);
+      }
+    } finally {
+      setTranslatingFields((prev) => ({ ...prev, [fieldKey]: false }));
+    }
+  };
+
+  const scheduleAutoTranslate = (
+    fieldKey: string,
+    englishText: string,
+    applyHindi: (val: string) => void
+  ) => {
+    if (translateTimersRef.current[fieldKey]) {
+      clearTimeout(translateTimersRef.current[fieldKey]);
+    }
+    const text = englishText.trim();
+    if (!text) return;
+    translateTimersRef.current[fieldKey] = setTimeout(() => {
+      handleTranslateField(fieldKey, text, applyHindi);
+    }, 600);
+  };
+
+  const handleTranslateAllSpecs = async () => {
+    if (specifications.length === 0) return;
+    setTranslatingFields((prev) => ({ ...prev, allSpecs: true }));
+    try {
+      const updated = [...specifications];
+      for (let i = 0; i < updated.length; i++) {
+        const item = updated[i];
+        if (item.label.trim()) {
+          const hiLabel = await translateToHindi(item.label.trim());
+          if (hiLabel) updated[i].labelHi = hiLabel;
+        }
+        if (item.value.trim()) {
+          const hiVal = await translateToHindi(item.value.trim());
+          if (hiVal) updated[i].valueHi = hiVal;
+        }
+      }
+      setSpecifications(updated);
+    } finally {
+      setTranslatingFields((prev) => ({ ...prev, allSpecs: false }));
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      Object.values(translateTimersRef.current).forEach((t) => clearTimeout(t));
+    };
+  }, []);
 
   useEffect(() => {
     if (!isSlugCustomized && name.trim()) {
@@ -414,16 +479,36 @@ export default function ProductForm({
               type="text"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setName(val);
+                scheduleAutoTranslate("name", val, (hi) => setNameHi(hi));
+              }}
+              onBlur={() => handleTranslateField("name", name, (hi) => setNameHi(hi))}
               placeholder="e.g. BAXY Super King E-Rickshaw"
               className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-sm font-semibold text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1.5">
-              Product Name (Hindi)
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal">
+                Product Name (Hindi)
+              </label>
+              <button
+                type="button"
+                onClick={() => handleTranslateField("name", name, (hi) => setNameHi(hi))}
+                className="text-[10px] font-bold text-brand-red hover:underline inline-flex items-center gap-1 cursor-pointer"
+                title="Auto-fill Hindi translation"
+              >
+                {translatingFields["name"] ? (
+                  <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                ) : (
+                  <Languages className="w-2.5 h-2.5" />
+                )}
+                <span>{translatingFields["name"] ? "Translating..." : "Auto-fill Hindi"}</span>
+              </button>
+            </div>
             <input
               type="text"
               value={nameHi}
@@ -484,16 +569,36 @@ export default function ProductForm({
               rows={3}
               required
               value={shortDescription}
-              onChange={(e) => setShortDescription(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setShortDescription(val);
+                scheduleAutoTranslate("shortDesc", val, (hi) => setShortDescriptionHi(hi));
+              }}
+              onBlur={() => handleTranslateField("shortDesc", shortDescription, (hi) => setShortDescriptionHi(hi))}
               placeholder="Brief summary for product cards and search results..."
               className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1.5">
-              Short Description (Hindi)
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal">
+                Short Description (Hindi)
+              </label>
+              <button
+                type="button"
+                onClick={() => handleTranslateField("shortDesc", shortDescription, (hi) => setShortDescriptionHi(hi))}
+                className="text-[10px] font-bold text-brand-red hover:underline inline-flex items-center gap-1 cursor-pointer"
+                title="Auto-fill Hindi translation"
+              >
+                {translatingFields["shortDesc"] ? (
+                  <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                ) : (
+                  <Languages className="w-2.5 h-2.5" />
+                )}
+                <span>{translatingFields["shortDesc"] ? "Translating..." : "Auto-fill Hindi"}</span>
+              </button>
+            </div>
             <textarea
               rows={3}
               value={shortDescriptionHi}
@@ -512,16 +617,36 @@ export default function ProductForm({
             <textarea
               rows={4}
               value={fullDescription}
-              onChange={(e) => setFullDescription(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setFullDescription(val);
+                scheduleAutoTranslate("fullDesc", val, (hi) => setFullDescriptionHi(hi));
+              }}
+              onBlur={() => handleTranslateField("fullDesc", fullDescription, (hi) => setFullDescriptionHi(hi))}
               placeholder="Detailed engineering and commercial transit capabilities..."
               className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1.5">
-              Full Commercial Description (Hindi)
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal">
+                Full Commercial Description (Hindi)
+              </label>
+              <button
+                type="button"
+                onClick={() => handleTranslateField("fullDesc", fullDescription, (hi) => setFullDescriptionHi(hi))}
+                className="text-[10px] font-bold text-brand-red hover:underline inline-flex items-center gap-1 cursor-pointer"
+                title="Auto-fill Hindi translation"
+              >
+                {translatingFields["fullDesc"] ? (
+                  <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                ) : (
+                  <Languages className="w-2.5 h-2.5" />
+                )}
+                <span>{translatingFields["fullDesc"] ? "Translating..." : "Auto-fill Hindi"}</span>
+              </button>
+            </div>
             <textarea
               rows={4}
               value={fullDescriptionHi}
@@ -768,6 +893,20 @@ export default function ProductForm({
           <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
             <button
               type="button"
+              disabled={specifications.length === 0 || translatingFields["allSpecs"]}
+              onClick={handleTranslateAllSpecs}
+              className="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-bold text-brand-charcoal hover:text-brand-red border border-brand-border rounded hover:bg-brand-warmWhite transition-colors text-center cursor-pointer flex items-center justify-center gap-1.5"
+              title="Auto-translate all specification parameters and values to Hindi"
+            >
+              {translatingFields["allSpecs"] ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-red" />
+              ) : (
+                <Languages className="w-3.5 h-3.5 text-brand-red" />
+              )}
+              <span>{translatingFields["allSpecs"] ? "Translating..." : "Translate All Specs"}</span>
+            </button>
+            <button
+              type="button"
               onClick={handleResetToDefaults}
               className="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-bold text-brand-charcoal hover:text-brand-red border border-brand-border rounded hover:bg-brand-warmWhite transition-colors text-center cursor-pointer"
             >
@@ -850,16 +989,46 @@ export default function ProductForm({
                     <input
                       type="text"
                       value={spec.label}
-                      onChange={(e) => handleUpdateSpec(idx, "label", e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        handleUpdateSpec(idx, "label", val);
+                        scheduleAutoTranslate(`spec_label_${idx}`, val, (hi) => {
+                          handleUpdateSpec(idx, "labelHi", hi);
+                        });
+                      }}
+                      onBlur={() => {
+                        handleTranslateField(`spec_label_${idx}`, spec.label, (hi) => {
+                          handleUpdateSpec(idx, "labelHi", hi);
+                        });
+                      }}
                       placeholder="e.g. Motor Power, Battery Capacity"
                       className="w-full text-base sm:text-xs font-bold text-brand-charcoal bg-white px-3 py-2 rounded border border-brand-border focus:outline-none focus:border-brand-red"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">
-                      Parameter Name (Hindi)
-                    </label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted">
+                        Parameter Name (Hindi)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleTranslateField(`spec_label_${idx}`, spec.label, (hi) => {
+                            handleUpdateSpec(idx, "labelHi", hi);
+                          })
+                        }
+                        className="text-[9px] font-bold text-brand-red hover:underline inline-flex items-center gap-0.5 cursor-pointer"
+                        title="Auto-fill Hindi translation"
+                      >
+                        {translatingFields[`spec_label_${idx}`] ? (
+                          <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                        ) : (
+                          <Languages className="w-2.5 h-2.5" />
+                        )}
+                        <span>{translatingFields[`spec_label_${idx}`] ? "Translating..." : "Auto-fill Hindi"}</span>
+                      </button>
+                    </div>
                     <input
                       type="text"
                       value={spec.labelHi || ""}
@@ -896,16 +1065,46 @@ export default function ProductForm({
                     <input
                       type="text"
                       value={spec.value}
-                      onChange={(e) => handleUpdateSpec(idx, "value", e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        handleUpdateSpec(idx, "value", val);
+                        scheduleAutoTranslate(`spec_value_${idx}`, val, (hi) => {
+                          handleUpdateSpec(idx, "valueHi", hi);
+                        });
+                      }}
+                      onBlur={() => {
+                        handleTranslateField(`spec_value_${idx}`, spec.value, (hi) => {
+                          handleUpdateSpec(idx, "valueHi", hi);
+                        });
+                      }}
                       placeholder="e.g. 1200W High Torque"
                       className="w-full text-base sm:text-xs text-brand-charcoal bg-white px-3 py-2 rounded border border-brand-border focus:outline-none focus:border-brand-red"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted mb-1">
-                      Specification Value (Hindi)
-                    </label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-brand-muted">
+                        Specification Value (Hindi)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleTranslateField(`spec_value_${idx}`, spec.value, (hi) => {
+                            handleUpdateSpec(idx, "valueHi", hi);
+                          })
+                        }
+                        className="text-[9px] font-bold text-brand-red hover:underline inline-flex items-center gap-0.5 cursor-pointer"
+                        title="Auto-fill Hindi translation"
+                      >
+                        {translatingFields[`spec_value_${idx}`] ? (
+                          <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                        ) : (
+                          <Languages className="w-2.5 h-2.5" />
+                        )}
+                        <span>{translatingFields[`spec_value_${idx}`] ? "Translating..." : "Auto-fill Hindi"}</span>
+                      </button>
+                    </div>
                     <input
                       type="text"
                       value={spec.valueHi || ""}
