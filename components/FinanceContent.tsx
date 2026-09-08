@@ -117,13 +117,13 @@ export default function FinanceContent() {
         </div>
 
         <ScrollReveal>
-          <div className="mb-16 bg-brand-cream border border-brand-border rounded-md p-8 shadow-card">
-            <h2 className="text-2xl font-black text-brand-charcoal tracking-tight mb-8">
+          <div className="mb-14 sm:mb-16 bg-brand-cream border border-brand-border rounded-md p-5 sm:p-8 shadow-card">
+            <h2 className="text-xl sm:text-2xl font-black text-brand-charcoal tracking-tight mb-6 sm:mb-8">
               {t.processTitle}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
               {processSteps.map((s) => (
-                <div key={s.step} className="space-y-2">
+                <div key={s.step} className="space-y-1.5 sm:space-y-2 p-3 sm:p-0 rounded bg-white sm:bg-transparent border sm:border-0 border-brand-border">
                   <div className="text-2xl font-black text-brand-red font-mono">{s.step}</div>
                   <h3 className="text-sm font-bold text-brand-charcoal">{s.title}</h3>
                   <p className="text-xs text-brand-muted leading-relaxed">{s.desc}</p>
@@ -133,15 +133,15 @@ export default function FinanceContent() {
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div className="lg:col-span-5 space-y-6">
             <ScrollReveal>
-              <h2 className="text-2xl font-black text-brand-charcoal tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-black text-brand-charcoal tracking-tight">
                 {t.faqTitle}
               </h2>
             </ScrollReveal>
 
-            <div className="space-y-4 text-xs text-brand-charcoal">
+            <div className="space-y-3 sm:space-y-4 text-xs text-brand-charcoal">
               <ScrollReveal delay={80}>
                 <div className="p-4 rounded bg-white border border-brand-border space-y-1 shadow-xs">
                   <div className="font-bold flex items-center gap-2">
@@ -180,15 +180,15 @@ export default function FinanceContent() {
             </div>
 
             <ScrollReveal delay={300}>
-              <div className="p-6 rounded bg-brand-cream border border-brand-border space-y-3 shadow-xs">
+              <div className="p-5 sm:p-6 rounded bg-brand-cream border border-brand-border space-y-3 shadow-xs">
                 <h4 className="text-sm font-bold text-brand-charcoal">{t.directFinanceTitle}</h4>
                 <p className="text-xs text-brand-muted leading-relaxed">
                   {t.directFinanceDesc}
                 </p>
-                <div className="pt-2 flex flex-wrap gap-2">
+                <div className="pt-2 flex flex-col sm:flex-row gap-2">
                   <a
                     href={`tel:${siteConfig.primaryPhone}`}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
                   >
                     <Phone className="w-3.5 h-3.5" />
                     <span>{siteConfig.displayPhone}</span>
@@ -197,7 +197,7 @@ export default function FinanceContent() {
                     href={getFinanceWhatsAppUrl(undefined, language)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded bg-[#25D366]/15 hover:bg-[#25D366]/25 active:scale-[0.98] border border-[#25D366]/30 text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-all"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded bg-[#25D366]/15 hover:bg-[#25D366]/25 active:scale-[0.98] border border-[#25D366]/30 text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-all"
                   >
                     <MessageSquare className="w-3.5 h-3.5 text-[#25D366]" />
                     <span>WhatsApp</span>
@@ -210,7 +210,7 @@ export default function FinanceContent() {
           <div className="lg:col-span-7">
             <ScrollReveal delay={120}>
               <EnquiryForm
-                defaultEnquiryType={language === "hi" ? "??? ? ???? ??????? (EMI)" : "Finance & EMI Guidance"}
+                defaultEnquiryType={language === "hi" ? "लोन व आसान किश्तें (EMI)" : "Finance & EMI Guidance"}
                 sourceContext="Finance Page"
               />
             </ScrollReveal>

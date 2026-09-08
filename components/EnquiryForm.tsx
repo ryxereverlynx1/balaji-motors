@@ -200,7 +200,7 @@ export default function EnquiryForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white border border-brand-border rounded-md p-6 sm:p-8 space-y-5 shadow-card">
+    <form onSubmit={handleSubmit} className="bg-white border border-brand-border rounded-md p-4 sm:p-8 space-y-4 sm:space-y-5 shadow-card">
       <div className="space-y-1">
         <h3 className="text-lg font-bold text-brand-charcoal uppercase tracking-tight">
           {t.formTitle}
@@ -237,7 +237,7 @@ export default function EnquiryForm({
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder={t.namePlaceholder}
-            className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal placeholder-brand-muted/60 text-sm focus:outline-none focus:border-brand-red transition-colors"
+            className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal placeholder-brand-muted/60 text-base sm:text-sm focus:outline-none focus:border-brand-red transition-colors"
           />
           {errors.fullName && (
             <p className="text-[11px] text-brand-red flex items-center gap-1 mt-1">
@@ -256,7 +256,7 @@ export default function EnquiryForm({
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder={t.phonePlaceholder}
-            className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal placeholder-brand-muted/60 text-sm focus:outline-none focus:border-brand-red transition-colors"
+            className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal placeholder-brand-muted/60 text-base sm:text-sm focus:outline-none focus:border-brand-red transition-colors"
           />
           {errors.phone && (
             <p className="text-[11px] text-brand-red flex items-center gap-1 mt-1">
@@ -275,7 +275,7 @@ export default function EnquiryForm({
           <select
             value={vehicle}
             onChange={(e) => setVehicle(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal text-sm focus:outline-none focus:border-brand-red transition-colors"
+            className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal text-base sm:text-sm focus:outline-none focus:border-brand-red transition-colors"
           >
             {availableVehicles.map((v) => {
               const locV = getLocalizedVehicle(v, language);
@@ -298,7 +298,7 @@ export default function EnquiryForm({
           <select
             value={enquiryType}
             onChange={(e) => setEnquiryType(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal text-sm focus:outline-none focus:border-brand-red transition-colors"
+            className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal text-base sm:text-sm focus:outline-none focus:border-brand-red transition-colors"
           >
             <option value="Vehicle On-Road Price" className="bg-white text-brand-charcoal">
               {t.options.onRoadPrice}
@@ -328,7 +328,7 @@ export default function EnquiryForm({
           value={city}
           onChange={(e) => setCity(e.target.value)}
           placeholder={t.cityPlaceholder}
-          className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal placeholder-brand-muted/60 text-sm focus:outline-none focus:border-brand-red transition-colors"
+          className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal placeholder-brand-muted/60 text-base sm:text-sm focus:outline-none focus:border-brand-red transition-colors"
         />
       </div>
 
@@ -341,11 +341,11 @@ export default function EnquiryForm({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder={t.notesPlaceholder}
-          className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal placeholder-brand-muted/60 text-sm focus:outline-none focus:border-brand-red transition-colors resize-none"
+          className="w-full px-3.5 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-brand-charcoal placeholder-brand-muted/60 text-base sm:text-sm focus:outline-none focus:border-brand-red transition-colors resize-none"
         />
       </div>
 
-      <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
         <button
           type="submit"
           disabled={isSubmitting}
@@ -364,7 +364,7 @@ export default function EnquiryForm({
           )}
         </button>
 
-        <div className="text-xs text-brand-muted flex items-center gap-2">
+        <div className="text-xs text-brand-muted flex items-center justify-center sm:justify-start gap-2">
           <span>{t.callDirectPrompt}</span>
           <a href={`tel:${siteConfig.primaryPhone}`} className="text-brand-charcoal font-bold hover:text-brand-red hover:underline">
             {siteConfig.displayPhone}

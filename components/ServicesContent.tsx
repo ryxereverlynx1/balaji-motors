@@ -89,20 +89,20 @@ export default function ServicesContent() {
         </div>
 
         <ScrollReveal>
-          <div className="bg-brand-cream border border-brand-border rounded-md p-8 mb-16 shadow-card">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="bg-brand-cream border border-brand-border rounded-md p-5 sm:p-8 mb-14 sm:mb-16 shadow-card">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
               <div className="lg:col-span-8 space-y-3">
                 <span className="text-xs font-bold uppercase tracking-wideUpper text-brand-red">
                   {t.directHelpBadge}
                 </span>
-                <h3 className="text-2xl font-bold text-brand-charcoal">
+                <h3 className="text-xl sm:text-2xl font-bold text-brand-charcoal">
                   {t.directHelpTitle}
                 </h3>
-                <p className="text-sm text-brand-muted leading-relaxed">
+                <p className="text-xs sm:text-sm text-brand-muted leading-relaxed">
                   {t.directHelpDesc}
                 </p>
               </div>
-              <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-end">
+              <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-2.5 sm:gap-3 justify-end w-full sm:w-auto">
                 <a
                   href={getServiceWhatsAppUrl(language)}
                   target="_blank"
@@ -124,15 +124,15 @@ export default function ServicesContent() {
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div className="lg:col-span-6 space-y-6">
             <ScrollReveal>
-              <h2 className="text-2xl font-black text-brand-charcoal tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-black text-brand-charcoal tracking-tight">
                 {t.tipsTitle}
               </h2>
             </ScrollReveal>
 
-            <div className="space-y-4 text-xs text-brand-charcoal leading-relaxed">
+            <div className="space-y-3 sm:space-y-4 text-xs text-brand-charcoal leading-relaxed">
               <ScrollReveal delay={80}>
                 <div className="p-4 rounded bg-white border border-brand-border space-y-1 shadow-xs">
                   <h4 className="font-bold text-brand-charcoal text-sm">{t.tip1Title}</h4>
@@ -159,7 +159,7 @@ export default function ServicesContent() {
           <div className="lg:col-span-6">
             <ScrollReveal delay={120}>
               <EnquiryForm
-                defaultEnquiryType={language === "hi" ? "????? ???? ? ?????? ??????" : "Battery Diagnostics / Service"}
+                defaultEnquiryType={language === "hi" ? "बैटरी जांच व सर्विस सहायता" : "Battery Diagnostics / Service"}
                 sourceContext="Services Page"
               />
             </ScrollReveal>

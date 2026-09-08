@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -44,7 +44,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md bg-white border border-brand-border rounded-lg shadow-card p-6 sm:p-8">
+    <div className="w-full max-w-md bg-white border border-brand-border rounded-lg shadow-card p-5 sm:p-8">
       <div className="text-center mb-8">
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-brand-cream border border-brand-border mb-4">
           <div className="w-10 h-10 rounded bg-brand-red flex items-center justify-center font-black text-white text-lg">
@@ -84,7 +84,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@balajimotors.com"
-              className="w-full pl-9 pr-3 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
+              className="w-full pl-9 pr-3 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
             />
           </div>
         </div>
@@ -103,7 +103,7 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
-              className="w-full pl-9 pr-3 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
+              className="w-full pl-9 pr-3 py-2.5 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
             />
           </div>
         </div>

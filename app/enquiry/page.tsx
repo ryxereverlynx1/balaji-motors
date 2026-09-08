@@ -13,9 +13,9 @@ export default function EnquiryPage() {
   const t = dict.enquiryPage;
 
   return (
-    <div className="pt-24 pb-20 sm:pt-32 sm:pb-28 bg-brand-warmWhite min-h-screen">
+    <div className="pt-20 pb-16 sm:pt-32 sm:pb-28 bg-brand-warmWhite min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <div className="text-xs font-bold uppercase tracking-widest text-brand-red mb-2">
             {t.badge}
           </div>
@@ -27,7 +27,7 @@ export default function EnquiryPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10">
           <ScrollReveal delay={50}>
             <div className="p-4 rounded bg-white border border-brand-border flex items-center gap-3 text-xs shadow-card h-full">
               <ShieldCheck className="w-5 h-5 text-brand-red flex-shrink-0" />
@@ -66,7 +66,7 @@ export default function EnquiryPage() {
         </ScrollReveal>
 
         <ScrollReveal delay={150}>
-          <div className="mt-8 p-6 rounded bg-brand-cream border border-brand-border text-center space-y-3 shadow-card">
+          <div className="mt-6 sm:mt-8 p-4 sm:p-6 rounded bg-brand-cream border border-brand-border text-center space-y-3 shadow-card">
             <h4 className="text-sm font-bold text-brand-charcoal tracking-wide">
               {t.instantWhatsappTitle}
             </h4>
@@ -78,7 +78,7 @@ export default function EnquiryPage() {
                 href={getGeneralWhatsAppUrl(language)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-[#25D366] hover:bg-[#20BA5A] active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded bg-[#25D366] hover:bg-[#20BA5A] active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm w-full sm:w-auto"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>{t.messageWhatsappBtn}</span>

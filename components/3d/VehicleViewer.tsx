@@ -82,9 +82,9 @@ export default function VehicleViewer({
           : "h-[400px] sm:h-[480px] lg:h-[540px] rounded-md shadow-card"
       }`}
     >
-      <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
-        <span className="px-3 py-1 rounded bg-white/90 backdrop-blur-sm border border-brand-border text-[11px] font-bold tracking-wideUpper uppercase text-brand-charcoal shadow-xs flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-brand-red" />
+      <div className="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 z-20 flex items-center gap-1.5 sm:gap-2">
+        <span className="px-2 sm:px-3 py-1 rounded bg-white/90 backdrop-blur-sm border border-brand-border text-[10px] sm:text-[11px] font-bold tracking-wideUpper uppercase text-brand-charcoal shadow-xs flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-brand-red shrink-0" />
           <span>{t.studioTitle}</span>
         </span>
 
@@ -95,7 +95,7 @@ export default function VehicleViewer({
               setShowHotspots(!showHotspots);
               if (showHotspots) setSelectedHotspot(null);
             }}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded border text-[11px] font-bold tracking-wideUpper uppercase transition-all shadow-xs active:scale-[0.98] ${
+            className={`flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded border text-[10px] sm:text-[11px] font-bold tracking-wideUpper uppercase transition-all shadow-xs active:scale-[0.98] ${
               showHotspots
                 ? "bg-brand-red text-white border-brand-red"
                 : "bg-white/90 text-brand-charcoal border-brand-border hover:bg-white"
@@ -107,7 +107,7 @@ export default function VehicleViewer({
         )}
       </div>
 
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-1 bg-white/90 backdrop-blur-sm p-1 rounded border border-brand-border shadow-xs">
+      <div className="absolute top-2.5 sm:top-4 right-2.5 sm:right-4 z-20 flex items-center gap-1 bg-white/90 backdrop-blur-sm p-1 rounded border border-brand-border shadow-xs">
         <button
           type="button"
           onClick={() => setZoom((prev) => Math.min(prev + 0.15, 1.5))}
@@ -202,13 +202,13 @@ export default function VehicleViewer({
         </div>
       )}
 
-      <div className="relative z-20 mx-4 mb-4 flex flex-wrap items-center justify-between gap-3 bg-white/95 backdrop-blur-md px-3.5 py-2.5 rounded border border-brand-border shadow-card">
+      <div className="relative z-20 mx-2 sm:mx-4 mb-2 sm:mb-4 flex flex-wrap items-center justify-between gap-2 sm:gap-3 bg-white/95 backdrop-blur-md px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 rounded border border-brand-border shadow-card">
         {colors.length > 0 ? (
-          <div className="flex items-center gap-2.5">
-            <span className="text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold">
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
+            <span className="text-[10px] sm:text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold">
               {t.bodyPaint}
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {colors.map((c) => {
                 const isSelected = activeColor.name === c.name;
                 const cName = language === "hi" ? c.nameHi || c.name : c.name;
@@ -217,7 +217,7 @@ export default function VehicleViewer({
                     key={c.name}
                     type="button"
                     onClick={() => setActiveColor(c)}
-                    className={`group relative w-6 h-6 rounded-full border border-brand-charcoal/20 transition-all flex items-center justify-center shadow-xs ${
+                    className={`group relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-brand-charcoal/20 transition-all flex items-center justify-center shadow-xs ${
                       isSelected
                         ? "ring-2 ring-offset-2 ring-brand-red scale-110"
                         : "hover:scale-105"
@@ -226,7 +226,7 @@ export default function VehicleViewer({
                     title={cName}
                   >
                     {isSelected && (
-                      <Check className={`w-3 h-3 ${c.hex === "#E5E7EB" ? "text-brand-charcoal" : "text-white"} drop-shadow-sm`} />
+                      <Check className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${c.hex === "#E5E7EB" ? "text-brand-charcoal" : "text-white"} drop-shadow-sm`} />
                     )}
                   </button>
                 );
@@ -242,7 +242,7 @@ export default function VehicleViewer({
           </span>
         )}
 
-        <span className="text-[11px] text-brand-muted uppercase tracking-wideUpper font-semibold">
+        <span className="text-[10px] sm:text-[11px] text-brand-muted uppercase tracking-wideUpper font-semibold hidden sm:inline">
           {t.inspectLabel}
         </span>
       </div>

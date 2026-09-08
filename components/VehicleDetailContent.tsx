@@ -79,28 +79,28 @@ export default function VehicleDetailContent({
 
           <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[11px] font-bold uppercase tracking-wideUpper px-2.5 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-charcoal">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wideUpper px-2 sm:px-2.5 py-0.5 rounded bg-brand-cream border border-brand-border text-brand-charcoal">
                   {v.category}
                 </span>
-                <span className="text-[11px] font-bold uppercase tracking-wideUpper px-2.5 py-0.5 rounded bg-white border border-brand-border text-brand-muted">
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wideUpper px-2 sm:px-2.5 py-0.5 rounded bg-white border border-brand-border text-brand-muted">
                   {v.series}
                 </span>
                 {v.badges.map((b) => (
                   <span
                     key={b}
-                    className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-brand-yellow/30 text-brand-charcoal"
+                    className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-brand-yellow/30 text-brand-charcoal break-words"
                   >
                     {b}
                   </span>
                 ))}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl font-black text-brand-charcoal tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-black text-brand-charcoal tracking-tight">
                 {v.name}
               </h1>
 
-              <p className="text-sm font-medium text-brand-muted leading-relaxed">
+              <p className="text-xs sm:text-sm font-medium text-brand-muted leading-relaxed">
                 {v.tagline}
               </p>
 
@@ -117,11 +117,11 @@ export default function VehicleDetailContent({
               </div>
 
               <div className="space-y-2.5 pt-1">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                   <button
                     type="button"
                     onClick={() => openQuoteModal(v.name)}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
                   >
                     <FileText className="w-4 h-4" />
                     <span>{dict.nav.getQuote}</span>
@@ -131,7 +131,7 @@ export default function VehicleDetailContent({
                     href={getVehicleWhatsAppUrl(v.name, language)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded bg-[#25D366] hover:bg-[#20BA5A] active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 rounded bg-[#25D366] hover:bg-[#20BA5A] active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
                   >
                     <MessageSquare className="w-4 h-4" />
                     <span>{t.whatsappQuoteBtn}</span>
@@ -169,56 +169,56 @@ export default function VehicleDetailContent({
         </div>
 
         <div className="border-t border-brand-border pt-14 mb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
             <div className="lg:col-span-7 space-y-8">
               <ScrollReveal>
                 <div>
-                  <h2 className="text-2xl font-black text-brand-charcoal tracking-tight mb-4">
+                  <h2 className="text-xl sm:text-2xl font-black text-brand-charcoal tracking-tight mb-4">
                     {t.keySpecsTitle}
                   </h2>
                   <div className="bg-white border border-brand-border rounded-md overflow-hidden divide-y divide-brand-border shadow-card">
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         <Zap className="w-3.5 h-3.5 text-brand-red" />
                         <span>{t.motorType}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">{v.specs.motor}</span>
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">{v.specs.motor}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         <Battery className="w-3.5 h-3.5 text-brand-red" />
                         <span>{t.batteryChemistry}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">{v.specs.batteryType}</span>
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">{v.specs.batteryType}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         <Battery className="w-3.5 h-3.5 text-brand-red" />
                         <span>{t.batteryCapacity}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">{v.specs.batteryCapacity}</span>
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">{v.specs.batteryCapacity}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         <Gauge className="w-3.5 h-3.5 text-brand-red" />
                         <span>{t.estimatedRange}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">{v.specs.rangePerCharge}</span>
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">{v.specs.rangePerCharge}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         <Clock className="w-3.5 h-3.5 text-brand-red" />
                         <span>{t.chargingTime}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">{v.specs.chargingTime}</span>
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">{v.specs.chargingTime}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         {vehicle.category === "Passenger" ? (
                           <Users className="w-3.5 h-3.5 text-brand-red" />
                         ) : (
@@ -226,41 +226,41 @@ export default function VehicleDetailContent({
                         )}
                         <span>{t.capacityLabel}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">
                         {v.specs.seatingCapacity || v.specs.payloadCapacity}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         <Gauge className="w-3.5 h-3.5 text-brand-red" />
                         <span>{t.topSpeed}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">{v.specs.topSpeed}</span>
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">{v.specs.topSpeed}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         <Layers className="w-3.5 h-3.5 text-brand-red" />
                         <span>{t.brakingSystem}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">{v.specs.brakes}</span>
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">{v.specs.brakes}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         <Layers className="w-3.5 h-3.5 text-brand-red" />
                         <span>{t.chassisFrame}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">{v.specs.chassisFrame}</span>
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">{v.specs.chassisFrame}</span>
                     </div>
 
-                    <div className="grid grid-cols-2 p-3.5 text-xs">
-                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 p-3 sm:p-3.5 text-xs">
+                      <span className="text-brand-muted uppercase font-bold flex items-center gap-2 shrink-0">
                         <Shield className="w-3.5 h-3.5 text-brand-red" />
                         <span>{t.warranty}</span>
                       </span>
-                      <span className="text-brand-charcoal font-semibold text-right">{v.specs.warranty}</span>
+                      <span className="text-brand-charcoal font-semibold text-left sm:text-right break-words">{v.specs.warranty}</span>
                     </div>
                   </div>
                 </div>

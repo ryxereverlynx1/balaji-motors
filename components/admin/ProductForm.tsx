@@ -339,7 +339,7 @@ export default function ProductForm({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {slug && (
             <Link
               href={`/vehicles/${slug}?preview=true`}
@@ -1003,18 +1003,18 @@ export default function ProductForm({
       </div>
 
 
-      <div className="sticky bottom-4 z-20 bg-white/95 backdrop-blur border border-brand-border rounded-lg shadow-lg p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="sticky bottom-4 z-20 bg-white/95 backdrop-blur border border-brand-border rounded-lg shadow-lg p-3 sm:p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-xs text-brand-muted">
           <span className="w-2 h-2 rounded-full bg-brand-green" />
           <span>Single Source of Truth: Database Storage Engine Active</span>
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto justify-end">
           <button
             type="button"
             disabled={isSaving}
             onClick={() => router.push("/admin/products")}
-            className="px-4 py-2 border border-brand-border text-brand-charcoal hover:bg-brand-warmWhite text-xs font-bold uppercase tracking-wider rounded transition-colors"
+            className="w-full sm:w-auto text-center px-4 py-2 border border-brand-border text-brand-charcoal hover:bg-brand-warmWhite text-xs font-bold uppercase tracking-wider rounded transition-colors"
           >
             Cancel
           </button>
@@ -1023,7 +1023,7 @@ export default function ProductForm({
             type="button"
             disabled={isSaving}
             onClick={() => handleSave("draft")}
-            className="px-4 py-2 border border-brand-charcoal text-brand-charcoal hover:bg-brand-charcoal hover:text-white text-xs font-bold uppercase tracking-wider rounded transition-colors"
+            className="w-full sm:w-auto text-center px-4 py-2 border border-brand-charcoal text-brand-charcoal hover:bg-brand-charcoal hover:text-white text-xs font-bold uppercase tracking-wider rounded transition-colors"
           >
             Save as Draft
           </button>
@@ -1032,7 +1032,7 @@ export default function ProductForm({
             type="button"
             disabled={isSaving}
             onClick={() => handleSave()}
-            className="px-5 py-2 bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold uppercase tracking-wider rounded shadow-sm transition-colors flex items-center gap-2 disabled:opacity-50"
+            className="w-full sm:w-auto justify-center px-5 py-2 bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold uppercase tracking-wider rounded shadow-sm transition-colors flex items-center gap-2 disabled:opacity-50"
           >
             {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
             <span>{isEdit ? "Update Vehicle Record" : "Save & Publish Vehicle"}</span>

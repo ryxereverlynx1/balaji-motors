@@ -89,10 +89,10 @@ export default function ContactContent() {
                     <div>
                       <div className="text-brand-muted uppercase font-bold">{t.hoursLabel}</div>
                       <div className="text-brand-charcoal font-semibold mt-0.5">
-                        {language === "hi" ? "?????? - ??????: ???? 9:30 ?? ??? 7:30" : "Monday - Saturday: 9:30 AM - 7:30 PM"}
+                        {language === "hi" ? "सोमवार - शनिवार: सुबह 9:30 से शाम 7:30" : "Monday - Saturday: 9:30 AM - 7:30 PM"}
                       </div>
                       <div className="text-brand-muted mt-0.5">
-                        {language === "hi" ? "??????: ???? 10:30 ?? ??? 4:00 (?????????? ??????)" : "Sunday: 10:30 AM - 4:00 PM (By Appointment)"}
+                        {language === "hi" ? "रविवार: सुबह 10:30 से शाम 4:00 (अपॉइंटमेंट द्वारा)" : "Sunday: 10:30 AM - 4:00 PM (By Appointment)"}
                       </div>
                     </div>
                   </div>
@@ -109,7 +109,7 @@ export default function ContactContent() {
                     <span>{t.directionsBtn}</span>
                   </a>
 
-                  <div className="grid grid-cols-2 gap-2 pt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                     <a
                       href={`tel:${siteConfig.primaryPhone}`}
                       className="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded bg-white hover:bg-brand-border active:scale-[0.98] border border-brand-border text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-all shadow-xs"

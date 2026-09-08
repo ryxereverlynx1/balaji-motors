@@ -82,10 +82,11 @@ export default function HeroRickshaw() {
       onMouseLeave={handleMouseLeave}
       className="relative w-full h-[360px] sm:h-[440px] lg:h-[500px] select-none flex flex-col justify-between overflow-hidden bg-gradient-to-b from-brand-warmWhite to-brand-cream/70"
     >
-      <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
-        <span className="px-2.5 py-1 rounded bg-white/90 backdrop-blur-sm border border-brand-border text-[11px] font-bold tracking-wideUpper uppercase text-brand-charcoal shadow-xs flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-brand-red" />
-          <span>Interactive Studio View</span>
+      <div className="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 z-20 flex items-center gap-1.5 sm:gap-2">
+        <span className="px-2 sm:px-2.5 py-1 rounded bg-white/90 backdrop-blur-sm border border-brand-border text-[10px] sm:text-[11px] font-bold tracking-wideUpper uppercase text-brand-charcoal shadow-xs flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-brand-red shrink-0" />
+          <span className="hidden xs:inline sm:inline">Interactive </span>
+          <span>Studio</span>
         </span>
 
         <button
@@ -94,7 +95,7 @@ export default function HeroRickshaw() {
             setShowHotspots(!showHotspots);
             if (showHotspots) setActiveHotspot(null);
           }}
-          className={`px-2.5 py-1 rounded text-[11px] font-bold tracking-wideUpper uppercase border transition-colors shadow-xs flex items-center gap-1 ${
+          className={`px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-[11px] font-bold tracking-wideUpper uppercase border transition-colors shadow-xs flex items-center gap-1 ${
             showHotspots
               ? "bg-brand-red text-white border-brand-red"
               : "bg-white/90 text-brand-charcoal border-brand-border hover:bg-white"
@@ -105,7 +106,7 @@ export default function HeroRickshaw() {
         </button>
       </div>
 
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-1 bg-white/90 backdrop-blur-sm p-1 rounded border border-brand-border shadow-xs">
+      <div className="absolute top-2.5 sm:top-4 right-2.5 sm:right-4 z-20 flex items-center gap-1 bg-white/90 backdrop-blur-sm p-1 rounded border border-brand-border shadow-xs">
         <button
           type="button"
           onClick={() => setZoom((prev) => Math.min(prev + 0.15, 1.45))}
@@ -185,23 +186,23 @@ export default function HeroRickshaw() {
         </div>
       )}
 
-      <div className="relative z-20 mx-4 mb-4 flex flex-wrap items-center justify-between gap-3 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded border border-brand-border shadow-card">
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold">
-            Available Colors:
+      <div className="relative z-20 mx-2 sm:mx-4 mb-2 sm:mb-4 flex flex-wrap items-center justify-between gap-2 sm:gap-3 bg-white/95 backdrop-blur-md px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded border border-brand-border shadow-card">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="text-[10px] sm:text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold">
+            Colors:
           </span>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 sm:gap-1.5">
             {colorPresets.map((c) => (
               <button
                 key={c.name}
                 type="button"
                 onClick={() => setSelectedColor(c)}
-                className="group relative w-6 h-6 rounded-full border border-brand-charcoal/20 transition-transform hover:scale-110 flex items-center justify-center shadow-xs"
+                className="group relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-brand-charcoal/20 transition-transform hover:scale-110 flex items-center justify-center shadow-xs"
                 style={{ backgroundColor: c.hex }}
                 title={c.name}
               >
                 {selectedColor.name === c.name && (
-                  <Check className={`w-3 h-3 ${c.hex === "#E5E7EB" ? "text-brand-charcoal" : "text-white"} drop-shadow-sm`} />
+                  <Check className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${c.hex === "#E5E7EB" ? "text-brand-charcoal" : "text-white"} drop-shadow-sm`} />
                 )}
               </button>
             ))}
@@ -211,7 +212,7 @@ export default function HeroRickshaw() {
           </span>
         </div>
 
-        <span className="text-[11px] text-brand-muted uppercase tracking-wideUpper font-semibold">
+        <span className="text-[10px] sm:text-[11px] text-brand-muted uppercase tracking-wideUpper font-semibold hidden sm:inline">
           Real Punjab Dealership Stock
         </span>
       </div>

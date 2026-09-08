@@ -9,7 +9,7 @@ export default function WhatsAppButton() {
   const { language } = useLanguage();
 
   return (
-    <aside aria-label="WhatsApp quick chat" className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40">
+    <aside aria-label="WhatsApp quick chat" className="fixed bottom-[calc(4.75rem+env(safe-area-inset-bottom,0px))] sm:bottom-6 right-3.5 sm:right-6 z-40">
       <a
         href={getGeneralWhatsAppUrl(language)}
         target="_blank"

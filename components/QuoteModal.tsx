@@ -190,41 +190,41 @@ export default function QuoteModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-brand-warmWhite border border-brand-border rounded-lg shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col"
+        className="relative w-[96vw] sm:w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-brand-warmWhite border border-brand-border rounded-lg shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col"
         role="dialog"
         aria-modal="true"
       >
-        <div className="sticky top-0 z-20 bg-brand-warmWhite/95 backdrop-blur-md px-6 py-4 border-b border-brand-border flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-brand-red shadow-xs" />
-            <span className="text-xs font-black uppercase tracking-wideUpper text-brand-charcoal">
+        <div className="sticky top-0 z-20 bg-brand-warmWhite/95 backdrop-blur-md px-4 sm:px-6 py-3 sm:py-4 border-b border-brand-border flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="w-2.5 h-2.5 rounded-full bg-brand-red shadow-xs shrink-0" />
+            <span className="text-xs font-black uppercase tracking-wideUpper text-brand-charcoal truncate">
               BALAJI MOTORS • {isHindi ? "ऑन-रोड कोटेशन अनुरोध" : "GET A QUOTE"}
             </span>
           </div>
           <button
             type="button"
             onClick={closeQuoteModal}
-            className="p-1.5 rounded bg-brand-cream hover:bg-brand-border text-brand-charcoal transition-colors"
+            className="p-1.5 rounded bg-brand-cream hover:bg-brand-border text-brand-charcoal transition-colors shrink-0"
             aria-label="Close quote modal"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="p-6 sm:p-8">
+        <div className="p-4 sm:p-6 md:p-8">
           {submitSuccess ? (
-            <div className="text-center space-y-5 py-4 animate-in fade-in">
-              <div className="w-16 h-16 rounded-full bg-brand-lightRed border border-brand-red/30 flex items-center justify-center mx-auto text-brand-red shadow-sm">
-                <CheckCircle2 className="w-9 h-9" />
+            <div className="text-center space-y-4 sm:space-y-5 py-2 sm:py-4 animate-in fade-in">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-brand-lightRed border border-brand-red/30 flex items-center justify-center mx-auto text-brand-red shadow-sm">
+                <CheckCircle2 className="w-8 h-8 sm:w-9 sm:h-9" />
               </div>
 
               <div>
                 <div className="inline-block px-3 py-1 rounded bg-brand-cream border border-brand-border text-xs font-mono font-bold text-brand-red mb-2">
                   {referenceId}
                 </div>
-                <h3 className="text-2xl font-black text-brand-charcoal tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-black text-brand-charcoal tracking-tight">
                   {isHindi ? "पूछताछ दर्ज हो चुकी है" : "Enquiry Successfully Logged"}
                 </h3>
                 <p className="text-xs sm:text-sm text-brand-muted max-w-md mx-auto mt-2 leading-relaxed">
@@ -241,11 +241,11 @@ export default function QuoteModal() {
                 )}
               </div>
 
-              <div className="pt-4 border-t border-brand-border flex flex-col sm:flex-row items-center justify-center gap-3">
+              <div className="pt-3 sm:pt-4 border-t border-brand-border flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3">
                 <button
                   type="button"
                   onClick={downloadPdf}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
                   <span>{isHindi ? "कोटेशन PDF डाउनलोड करें" : "Download PDF Summary"}</span>
@@ -254,7 +254,7 @@ export default function QuoteModal() {
                 <button
                   type="button"
                   onClick={handleWhatsAppRedirect}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded bg-[#25D366] hover:bg-[#20BA5A] active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded bg-[#25D366] hover:bg-[#20BA5A] active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>{isHindi ? "व्हाट्सएप पर बात करें" : "WhatsApp Showroom"}</span>
@@ -265,7 +265,7 @@ export default function QuoteModal() {
                 <button
                   type="button"
                   onClick={handleResetForm}
-                  className="text-xs font-bold text-brand-muted hover:text-brand-charcoal underline uppercase tracking-wider"
+                  className="text-xs font-bold text-brand-muted hover:text-brand-charcoal underline uppercase tracking-wider cursor-pointer"
                 >
                   {isHindi ? "बंद करें व वापस जाएं" : "Close & Return to Vehicles"}
                 </button>
@@ -311,7 +311,7 @@ export default function QuoteModal() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder={isHindi ? "उदा. गुरप्रीत सिंह" : "e.g. Gurpreet Singh"}
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
                   />
                   {errors.fullName && <p className="text-[10px] text-brand-red">{errors.fullName}</p>}
                 </div>
@@ -325,7 +325,7 @@ export default function QuoteModal() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="10-digit mobile number"
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
                   />
                   {errors.phone && <p className="text-[10px] text-brand-red">{errors.phone}</p>}
                 </div>
@@ -341,7 +341,7 @@ export default function QuoteModal() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="yourname@gmail.com"
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
                   />
                   {errors.email && <p className="text-[10px] text-brand-red">{errors.email}</p>}
                 </div>
@@ -355,7 +355,7 @@ export default function QuoteModal() {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="e.g. Jalandhar, Phagwara, Kapurthala"
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
                   />
                   {errors.city && <p className="text-[10px] text-brand-red">{errors.city}</p>}
                 </div>
@@ -369,7 +369,7 @@ export default function QuoteModal() {
                   <select
                     value={vehicle}
                     onChange={(e) => setVehicle(e.target.value)}
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal focus:outline-none focus:border-brand-red transition-colors"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal focus:outline-none focus:border-brand-red transition-colors"
                   >
                     {availableVehicles.map((v) => {
                       const loc = getLocalizedVehicle(v, language);
@@ -392,7 +392,7 @@ export default function QuoteModal() {
                     max={50}
                     value={quantity}
                     onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10) || 1))}
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal focus:outline-none focus:border-brand-red transition-colors"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal focus:outline-none focus:border-brand-red transition-colors"
                   />
                 </div>
               </div>
@@ -405,7 +405,7 @@ export default function QuoteModal() {
                   <select
                     value={enquiryType}
                     onChange={(e) => setEnquiryType(e.target.value)}
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal focus:outline-none focus:border-brand-red transition-colors"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal focus:outline-none focus:border-brand-red transition-colors"
                   >
                     {enquiryTypeOptions.map((opt) => (
                       <option key={opt.id} value={isHindi ? opt.labelHi : opt.labelEn}>
@@ -422,7 +422,7 @@ export default function QuoteModal() {
                   <select
                     value={preferredContact}
                     onChange={(e) => setPreferredContact(e.target.value)}
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal focus:outline-none focus:border-brand-red transition-colors"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal focus:outline-none focus:border-brand-red transition-colors"
                   >
                     <option value="Phone Call">{isHindi ? "फोन कॉल" : "Phone Call"}</option>
                     <option value="WhatsApp">{isHindi ? "व्हाट्सएप संदेश" : "WhatsApp"}</option>
@@ -440,7 +440,7 @@ export default function QuoteModal() {
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder={isHindi ? "उदा. सिंह ट्रांसपोर्ट / व्यक्तिगत" : "e.g. Singh Logistics / Self-Employed"}
-                  className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
+                  className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors"
                 />
               </div>
 
@@ -453,13 +453,13 @@ export default function QuoteModal() {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder={isHindi ? "बैटरी पसंद, डाउन पेमेंट बजट या डिलीवरी समय..." : "Mention battery preference, down-payment budget, or route details..."}
-                  className="w-full px-3 py-2 rounded bg-white border border-brand-border text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors resize-none"
+                  className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-sm text-brand-charcoal placeholder-brand-muted/60 focus:outline-none focus:border-brand-red transition-colors resize-none"
                 />
               </div>
 
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-brand-border">
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-brand-border">
                 <div className="flex items-center gap-2 text-xs text-brand-muted">
-                  <FileText className="w-3.5 h-3.5 text-brand-red" />
+                  <FileText className="w-3.5 h-3.5 text-brand-red shrink-0" />
                   <span>{isHindi ? "स्वचालित PDF सारांश तैयार होगा" : "Generates official PDF quote summary"}</span>
                 </div>
 
@@ -467,7 +467,7 @@ export default function QuoteModal() {
                   <button
                     type="button"
                     onClick={closeQuoteModal}
-                    className="flex-1 sm:flex-none px-4 py-2.5 rounded bg-brand-cream hover:bg-brand-border text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-colors"
+                    className="flex-1 sm:flex-none px-4 py-2.5 rounded bg-brand-cream hover:bg-brand-border text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
                   >
                     {isHindi ? "रद्द करें" : "Cancel"}
                   </button>
@@ -475,7 +475,7 @@ export default function QuoteModal() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] disabled:opacity-70 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
+                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] disabled:opacity-70 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>

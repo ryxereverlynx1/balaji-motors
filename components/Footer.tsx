@@ -134,11 +134,11 @@ export default function Footer() {
             </div>
             <div className="flex items-start gap-2.5 text-xs text-[#A8A296] pt-1">
               <Phone className="w-4 h-4 text-brand-red flex-shrink-0 mt-0.5" />
-              <div>
+              <div className="flex flex-wrap items-center gap-1.5">
                 <a href={`tel:${siteConfig.primaryPhone}`} className="hover:text-white font-semibold text-white">
                   {siteConfig.displayPhone}
                 </a>
-                <span className="mx-1.5">•</span>
+                <span>•</span>
                 <a href={`tel:${siteConfig.secondaryPhone}`} className="hover:text-white">
                   {siteConfig.secondaryPhone}
                 </a>
@@ -165,11 +165,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8A8478]">
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8A8478] text-center sm:text-left">
           <p>
             &copy; {new Date().getFullYear()} {siteConfig.name}. {t.rights}
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <Link href="/contact" className="hover:text-white transition-colors">
               {t.contactLink}
             </Link>

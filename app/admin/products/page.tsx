@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -276,7 +276,7 @@ export default function AdminProductsPage() {
         </div>
 
         <div className="bg-white border border-brand-border rounded-lg shadow-card overflow-hidden">
-          <div className="px-5 py-3.5 bg-brand-warmWhite border-b border-brand-border flex items-center justify-between text-xs">
+          <div className="px-4 sm:px-5 py-3.5 bg-brand-warmWhite border-b border-brand-border flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
             <span className="font-bold uppercase tracking-wider text-brand-charcoal">
               Showing {filteredProducts.length} of {products.length} Products
             </span>
@@ -474,11 +474,11 @@ export default function AdminProductsPage() {
                 showroom.
               </p>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-brand-border">
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3 pt-3 border-t border-brand-border">
                 <button
                   type="button"
                   onClick={() => setDeleteModalProduct(null)}
-                  className="px-4 py-2 rounded bg-brand-cream hover:bg-brand-border border border-brand-border text-xs font-bold uppercase tracking-wider text-brand-charcoal transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded bg-brand-cream hover:bg-brand-border border border-brand-border text-xs font-bold uppercase tracking-wider text-brand-charcoal transition-colors cursor-pointer text-center"
                 >
                   Cancel
                 </button>
@@ -486,7 +486,7 @@ export default function AdminProductsPage() {
                   type="button"
                   onClick={handleDeleteConfirm}
                   disabled={actionLoadingId !== null}
-                  className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-50 text-center"
                 >
                   {actionLoadingId !== null ? "Deleting..." : "Confirm Delete"}
                 </button>

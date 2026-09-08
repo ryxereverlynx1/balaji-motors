@@ -44,6 +44,15 @@ body {
   background: #B8B0A2;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @keyframes heroFadeUp {
   from {
     opacity: 0;

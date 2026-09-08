@@ -372,7 +372,7 @@ export default function AdminCategoriesPage() {
                       }
                     }}
                     placeholder="e.g. Electric Cargo Loader"
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
                   />
                 </div>
 
@@ -385,7 +385,7 @@ export default function AdminCategoriesPage() {
                     value={formNameHi}
                     onChange={(e) => setFormNameHi(e.target.value)}
                     placeholder="उदा. इलेक्ट्रिक कार्गो लोडर"
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
                   />
                 </div>
 
@@ -399,7 +399,7 @@ export default function AdminCategoriesPage() {
                     value={formSlug}
                     onChange={(e) => setFormSlug(e.target.value)}
                     placeholder="e.g. cargo-loader"
-                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-xs font-mono text-brand-charcoal focus:outline-none focus:border-brand-red"
+                    className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs font-mono text-brand-charcoal focus:outline-none focus:border-brand-red"
                   />
                 </div>
 
@@ -413,7 +413,7 @@ export default function AdminCategoriesPage() {
                       min="1"
                       value={formDisplayOrder}
                       onChange={(e) => setFormDisplayOrder(Math.max(1, Number(e.target.value)))}
-                      className="w-full px-3 py-2 rounded bg-white border border-brand-border text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
+                      className="w-full px-3 py-2 rounded bg-white border border-brand-border text-base sm:text-xs font-bold text-brand-charcoal focus:outline-none focus:border-brand-red"
                     />
                   </div>
 
@@ -433,18 +433,18 @@ export default function AdminCategoriesPage() {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-brand-border flex items-center justify-end gap-2">
+                <div className="pt-4 border-t border-brand-border flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-4 py-2 border border-brand-border text-xs font-bold uppercase tracking-wider text-brand-charcoal rounded"
+                    className="w-full sm:w-auto text-center px-4 py-2 border border-brand-border text-xs font-bold uppercase tracking-wider text-brand-charcoal rounded"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="px-5 py-2 bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2 disabled:opacity-50"
+                    className="w-full sm:w-auto justify-center px-5 py-2 bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2 disabled:opacity-50"
                   >
                     {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
                     <span>{editingCategory ? "Update Category" : "Create Category"}</span>
@@ -474,12 +474,12 @@ export default function AdminCategoriesPage() {
                 )}
               </p>
 
-              <div className="flex items-center justify-end gap-2">
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2">
                 <button
                   type="button"
                   disabled={isDeleting}
                   onClick={() => setDeleteCategory(null)}
-                  className="px-4 py-2 border border-brand-border text-xs font-bold uppercase tracking-wider text-brand-charcoal rounded"
+                  className="w-full sm:w-auto text-center px-4 py-2 border border-brand-border text-xs font-bold uppercase tracking-wider text-brand-charcoal rounded"
                 >
                   Cancel
                 </button>
@@ -487,7 +487,7 @@ export default function AdminCategoriesPage() {
                   type="button"
                   disabled={isDeleting}
                   onClick={handleDeleteCategory}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2"
+                  className="w-full sm:w-auto justify-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2"
                 >
                   {isDeleting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
                   <span>Delete Category</span>

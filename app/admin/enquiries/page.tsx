@@ -279,8 +279,8 @@ export default function AdminEnquiriesPage() {
 
         {selectedLead && (
           <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg border border-brand-border shadow-2xl max-w-xl w-full overflow-hidden">
-              <div className="p-5 border-b border-brand-border flex items-center justify-between">
+            <div className="bg-white rounded-lg border border-brand-border shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-4 sm:p-5 border-b border-brand-border flex items-center justify-between">
                 <div>
                   <h2 className="text-sm font-black uppercase tracking-wider text-brand-charcoal flex items-center gap-2">
                     <span>Enquiry Lead</span>
@@ -301,8 +301,8 @@ export default function AdminEnquiriesPage() {
                 </button>
               </div>
 
-              <div className="p-5 space-y-4 text-xs">
-                <div className="grid grid-cols-2 gap-4 p-3 bg-brand-warmWhite rounded border border-brand-border">
+              <div className="p-4 sm:p-5 space-y-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 bg-brand-warmWhite rounded border border-brand-border">
                   <div>
                     <div className="text-[10px] uppercase font-bold text-brand-muted">Customer Name</div>
                     <div className="text-xs font-bold text-brand-charcoal mt-0.5">{selectedLead.fullName}</div>
@@ -356,7 +356,7 @@ export default function AdminEnquiriesPage() {
 
                 <div>
                   <div className="text-[10px] uppercase font-bold text-brand-muted mb-2">Update Follow-Up Status</div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <button
                       type="button"
                       disabled={isUpdatingStatus}
@@ -396,12 +396,12 @@ export default function AdminEnquiriesPage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-brand-border flex items-center justify-between">
+                <div className="pt-3 border-t border-brand-border flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
                   <a
                     href={`/api/quote/pdf?referenceId=${selectedLead.referenceId}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-brand-charcoal hover:bg-brand-charcoal/90 text-white text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2"
+                    className="w-full sm:w-auto justify-center px-4 py-2 bg-brand-charcoal hover:bg-brand-charcoal/90 text-white text-xs font-bold uppercase tracking-wider rounded flex items-center gap-2"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Download Official PDF Quotation</span>
@@ -410,7 +410,7 @@ export default function AdminEnquiriesPage() {
                   <button
                     type="button"
                     onClick={() => setSelectedLead(null)}
-                    className="px-4 py-2 border border-brand-border text-xs font-bold uppercase tracking-wider text-brand-charcoal rounded"
+                    className="w-full sm:w-auto text-center px-4 py-2 border border-brand-border text-xs font-bold uppercase tracking-wider text-brand-charcoal rounded"
                   >
                     Close
                   </button>

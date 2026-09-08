@@ -117,10 +117,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             <div className="lg:col-span-6 space-y-5">
-              <div className="animate-hero-fade-up inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-brand-border text-xs font-bold uppercase tracking-wideUpper text-brand-charcoal shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-brand-yellow" />
+              <div className="animate-hero-fade-up inline-flex flex-wrap items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-white border border-brand-border text-[10px] sm:text-xs font-bold uppercase tracking-wideUpper text-brand-charcoal shadow-xs max-w-full">
+                <span className="w-2 h-2 rounded-full bg-brand-yellow shrink-0" />
                 <span>{dict.hero.badge}</span>
-                <span className="text-brand-red ml-1 font-extrabold">• {dict.hero.runningCostBadge}</span>
+                <span className="text-brand-red font-extrabold">• {dict.hero.runningCostBadge}</span>
               </div>
 
               <h1
@@ -144,7 +144,7 @@ export default function HomePage() {
               >
                 <Link
                   href="/vehicles"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] active:translate-y-0.5 text-white text-xs font-bold uppercase tracking-wideUpper transition-all shadow-sm group"
+                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] active:translate-y-0.5 text-white text-xs font-bold uppercase tracking-wideUpper transition-all shadow-sm group w-full sm:w-auto"
                 >
                   <span>{dict.hero.viewVehicles}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -153,7 +153,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => openQuoteModal()}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded bg-white hover:bg-brand-cream active:scale-[0.98] active:translate-y-0.5 border border-brand-charcoal/20 text-brand-charcoal text-xs font-bold uppercase tracking-wideUpper transition-colors shadow-xs cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded bg-white hover:bg-brand-cream active:scale-[0.98] active:translate-y-0.5 border border-brand-charcoal/20 text-brand-charcoal text-xs font-bold uppercase tracking-wideUpper transition-colors shadow-xs cursor-pointer w-full sm:w-auto"
                 >
                   <span>{dict.hero.getQuote}</span>
                 </button>
@@ -161,25 +161,25 @@ export default function HomePage() {
 
               <div
                 style={{ animationDelay: "400ms" }}
-                className="animate-hero-fade-up pt-6 border-t border-brand-border grid grid-cols-3 gap-4 text-left"
+                className="animate-hero-fade-up pt-6 border-t border-brand-border grid grid-cols-3 gap-2 sm:gap-4 text-left"
               >
-                <div>
-                  <div className="text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold">
+                <div className="min-w-0">
+                  <div className="text-[9px] sm:text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold truncate">
                     {dict.hero.locationLabel}
                   </div>
-                  <div className="text-xs font-bold text-brand-charcoal mt-0.5">{dict.hero.locationValue}</div>
+                  <div className="text-[11px] sm:text-xs font-bold text-brand-charcoal mt-0.5 break-words">{dict.hero.locationValue}</div>
                 </div>
-                <div>
-                  <div className="text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold">
+                <div className="min-w-0">
+                  <div className="text-[9px] sm:text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold truncate">
                     {dict.hero.segmentLabel}
                   </div>
-                  <div className="text-xs font-bold text-brand-charcoal mt-0.5">{dict.hero.segmentValue}</div>
+                  <div className="text-[11px] sm:text-xs font-bold text-brand-charcoal mt-0.5 break-words">{dict.hero.segmentValue}</div>
                 </div>
-                <div>
-                  <div className="text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold">
+                <div className="min-w-0">
+                  <div className="text-[9px] sm:text-[11px] uppercase tracking-wideUpper text-brand-muted font-bold truncate">
                     {dict.hero.supportLabel}
                   </div>
-                  <div className="text-xs font-bold text-brand-charcoal mt-0.5">{dict.hero.supportValue}</div>
+                  <div className="text-[11px] sm:text-xs font-bold text-brand-charcoal mt-0.5 break-words">{dict.hero.supportValue}</div>
                 </div>
               </div>
             </div>
@@ -193,31 +193,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-white border-b border-brand-border py-4">
+      <section className="bg-white border-b border-brand-border py-3 sm:py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-y-3 gap-x-6 text-xs font-bold uppercase tracking-wideUpper text-brand-charcoal">
+          <div className="flex flex-wrap items-center justify-center sm:justify-between gap-y-2.5 gap-x-4 sm:gap-x-6 text-[11px] sm:text-xs font-bold uppercase tracking-wideUpper text-brand-charcoal">
             <span className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-brand-red" />
+              <Zap className="w-4 h-4 text-brand-red shrink-0" />
               <span>{dict.ticker.electric3w}</span>
             </span>
             <span className="hidden md:inline text-brand-border">•</span>
             <span className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-brand-red" />
+              <FileText className="w-4 h-4 text-brand-red shrink-0" />
               <span>{dict.ticker.financeGuidance}</span>
             </span>
             <span className="hidden md:inline text-brand-border">•</span>
             <span className="flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-brand-red" />
+              <Wrench className="w-4 h-4 text-brand-red shrink-0" />
               <span>{dict.ticker.afterSales}</span>
             </span>
             <span className="hidden md:inline text-brand-border">•</span>
             <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-brand-red" />
+              <Shield className="w-4 h-4 text-brand-red shrink-0" />
               <span>{dict.ticker.spareParts}</span>
             </span>
             <span className="hidden md:inline text-brand-border">•</span>
             <span className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-brand-red" />
+              <MapPin className="w-4 h-4 text-brand-red shrink-0" />
               <span>{dict.ticker.jalandharShowroom}</span>
             </span>
           </div>
@@ -345,17 +345,17 @@ export default function HomePage() {
               </div>
 
               <ScrollReveal delay={400}>
-                <div className="pt-4 flex flex-wrap items-center gap-3">
+                <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <Link
                     href="/about"
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded bg-white/10 hover:bg-white/20 active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded bg-white/10 hover:bg-white/20 active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all"
                   >
                     <span>{dict.whyUs.aboutBtn}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                   <a
                     href={`tel:${siteConfig.primaryPhone}`}
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded bg-brand-charcoalSoft border border-white/15 text-white text-xs font-bold uppercase tracking-wider hover:border-brand-yellow active:scale-[0.98] transition-all"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded bg-brand-charcoalSoft border border-white/15 text-white text-xs font-bold uppercase tracking-wider hover:border-brand-yellow active:scale-[0.98] transition-all"
                   >
                     <Phone className="w-3.5 h-3.5 text-brand-yellow" />
                     <span>{dict.whyUs.callBtn} {siteConfig.displayPhone}</span>
@@ -366,7 +366,7 @@ export default function HomePage() {
 
             <div className="lg:col-span-6">
               <ScrollReveal delay={200}>
-                <div className="bg-brand-charcoalSoft border border-white/10 rounded-md p-6 sm:p-8 space-y-6 shadow-xl">
+                <div className="bg-brand-charcoalSoft border border-white/10 rounded-md p-5 sm:p-8 space-y-5 sm:space-y-6 shadow-xl">
                   <div className="border-b border-white/10 pb-4">
                     <span className="text-[11px] uppercase tracking-wideUpper text-brand-yellow font-bold">
                       {dict.whyUs.showroomBoxBadge}
@@ -384,7 +384,7 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div>
                         <div className="text-[#A8A296] uppercase tracking-wide font-semibold">{dict.whyUs.hoursLabel}</div>
                         <div className="text-white font-medium mt-0.5">{dict.whyUs.hoursValue}</div>
@@ -445,7 +445,7 @@ export default function HomePage() {
             hotspots={explorerVehicle.hotspots}
           />
 
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <ScrollReveal delay={50}>
               <div className="p-4 rounded bg-white border border-brand-border shadow-xs h-full">
                 <div className="text-xs font-bold uppercase tracking-wide text-brand-red">{dict.architecture.bldcTitle}</div>
@@ -616,10 +616,10 @@ export default function HomePage() {
       <section className="py-16 bg-white border-b border-brand-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <div className="bg-brand-cream border border-brand-border rounded-md p-8 shadow-card flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="bg-brand-cream border border-brand-border rounded-md p-5 sm:p-8 shadow-card flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="space-y-2 text-left">
                 <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-brand-red">
-                  <MapPin className="w-4 h-4 text-brand-red" />
+                  <MapPin className="w-4 h-4 text-brand-red shrink-0" />
                   <span>{dict.showroomVisit.badge}</span>
                 </div>
                 <h3 className="text-2xl font-bold text-brand-charcoal">
@@ -633,19 +633,19 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-3 flex-shrink-0">
+              <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 w-full sm:w-auto shrink-0">
                 <a
                   href={directionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs w-full sm:w-auto"
                 >
                   <Navigation className="w-4 h-4" />
                   <span>{dict.showroomVisit.openMapBtn}</span>
                 </a>
                 <a
                   href={`tel:${siteConfig.primaryPhone}`}
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded bg-white hover:bg-brand-border active:scale-[0.98] border border-brand-border text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded bg-white hover:bg-brand-border active:scale-[0.98] border border-brand-border text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-all shadow-xs w-full sm:w-auto"
                 >
                   <Phone className="w-4 h-4 text-brand-red" />
                   <span>{dict.showroomVisit.callShowroomBtn}</span>

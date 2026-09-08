@@ -449,14 +449,14 @@ export default function ExplodedView({
   );
 
   return (
-    <section className="relative w-full bg-gradient-to-b from-brand-warmWhite via-brand-cream/70 to-brand-warmWhite border border-brand-border rounded-lg overflow-hidden p-6 sm:p-8 lg:p-10 shadow-card">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-brand-border pb-6">
+    <section className="relative w-full bg-gradient-to-b from-brand-warmWhite via-brand-cream/70 to-brand-warmWhite border border-brand-border rounded-lg overflow-hidden p-4 sm:p-8 lg:p-10 shadow-card">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-8 border-b border-brand-border pb-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-brand-border text-xs font-bold uppercase tracking-wideUpper text-brand-red mb-2 shadow-xs">
             <Layers className="w-3.5 h-3.5 text-brand-red" />
             <span>{isHindi ? "वास्तविक 3D पुर्जे एक्सप्लोरर" : "Real 3D Product Architecture"}</span>
           </div>
-          <h3 className="text-2xl sm:text-3xl font-black text-brand-charcoal tracking-tight">
+          <h3 className="text-xl sm:text-3xl font-black text-brand-charcoal tracking-tight">
             {isHindi ? "ई-रिक्शा की 3D बनावट व आंतरिक पुर्जे" : "Interactive 3D Exploded Architecture"}
           </h3>
           <p className="text-xs sm:text-sm text-brand-muted mt-1 max-w-xl leading-relaxed">
@@ -470,7 +470,7 @@ export default function ExplodedView({
           <button
             type="button"
             onClick={toggleExploded}
-            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm cursor-pointer ${
+            className={`inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-all active:scale-[0.98] shadow-sm cursor-pointer ${
               isExploded
                 ? "bg-brand-charcoal text-white hover:bg-brand-charcoalSoft"
                 : "bg-brand-red text-white hover:bg-brand-darkRed"
@@ -491,7 +491,7 @@ export default function ExplodedView({
           <button
             type="button"
             onClick={() => setIsAutoRotate(!isAutoRotate)}
-            className={`inline-flex items-center gap-1.5 px-3 py-2.5 rounded border text-xs font-bold uppercase tracking-wider transition-colors active:scale-[0.98] shadow-xs cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 px-3 py-2 sm:py-2.5 rounded border text-xs font-bold uppercase tracking-wider transition-colors active:scale-[0.98] shadow-xs cursor-pointer ${
               isAutoRotate
                 ? "bg-brand-red text-white border-brand-red"
                 : "bg-white hover:bg-brand-cream border-brand-border text-brand-charcoal"
@@ -505,7 +505,7 @@ export default function ExplodedView({
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded bg-white hover:bg-brand-cream border border-brand-border text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-colors active:scale-[0.98] shadow-xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 sm:py-2.5 rounded bg-white hover:bg-brand-cream border border-brand-border text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-colors active:scale-[0.98] shadow-xs cursor-pointer"
             title="Reset 3D View"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -514,8 +514,8 @@ export default function ExplodedView({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-1.5 mb-6 pb-2 overflow-x-auto">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-brand-muted mr-1">
+      <div className="flex items-center gap-1.5 mb-5 sm:mb-6 pb-2 overflow-x-auto no-scrollbar max-w-full">
+        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-brand-muted mr-1 shrink-0">
           {isHindi ? "पुर्जे चुनें:" : "Select Module:"}
         </span>
         {explodedPartsData.map((part) => {
@@ -528,7 +528,7 @@ export default function ExplodedView({
                 setIsExploded(true);
                 setSelectedPart(part);
               }}
-              className={`px-3 py-1 rounded-full text-xs font-semibold transition-all whitespace-nowrap active:scale-95 cursor-pointer ${
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-all whitespace-nowrap shrink-0 active:scale-95 cursor-pointer ${
                 isSelected
                   ? "bg-brand-red text-white shadow-xs"
                   : "bg-white hover:bg-brand-cream border border-brand-border text-brand-charcoal"
@@ -540,8 +540,8 @@ export default function ExplodedView({
         })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-        <div className="lg:col-span-8 relative h-[500px] sm:h-[580px] lg:h-[640px] w-full bg-gradient-to-b from-white via-brand-warmWhite to-brand-cream/40 border border-brand-border rounded-lg overflow-hidden shadow-card">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
+        <div className="lg:col-span-8 relative h-[340px] sm:h-[480px] lg:h-[620px] w-full bg-gradient-to-b from-white via-brand-warmWhite to-brand-cream/40 border border-brand-border rounded-lg overflow-hidden shadow-card">
           <div className="absolute inset-0 w-full h-full">
             <ThreeErrorBoundary fallback={fallbackView}>
               <Suspense fallback={<ViewerLoadingOverlay />}>

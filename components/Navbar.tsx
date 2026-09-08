@@ -58,15 +58,15 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="group flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-brand-charcoal uppercase group-hover:text-brand-red transition-colors">
+          <div className="flex items-center justify-between gap-2">
+            <Link href="/" className="group flex flex-col shrink min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="text-lg sm:text-2xl font-black tracking-tight text-brand-charcoal uppercase group-hover:text-brand-red transition-colors truncate">
                   BALAJI MOTORS
                 </span>
-                <span className="w-2 h-2 rounded-full bg-brand-yellow shadow-xs" />
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-brand-yellow shadow-xs shrink-0" />
               </div>
-              <span className="text-[10px] tracking-wideUpper uppercase text-brand-muted font-bold -mt-0.5">
+              <span className="text-[9px] sm:text-[10px] tracking-wideUpper uppercase text-brand-muted font-bold -mt-0.5 truncate">
                 JALANDHAR • E-RICKSHAWS
               </span>
             </Link>
@@ -139,12 +139,12 @@ export default function Navbar() {
               </button>
             </div>
 
-            <div className="flex lg:hidden items-center gap-2">
-              <div className="inline-flex sm:hidden items-center p-0.5 rounded-full bg-brand-cream border border-brand-border text-[10px] font-bold">
+            <div className="flex lg:hidden items-center gap-1.5 sm:gap-2 shrink-0">
+              <div className="inline-flex sm:hidden items-center p-0.5 rounded-full bg-brand-cream border border-brand-border text-[9px] sm:text-[10px] font-bold">
                 <button
                   type="button"
                   onClick={() => setLanguage("hi")}
-                  className={`px-2 py-0.5 rounded-full ${
+                  className={`px-1.5 sm:px-2 py-0.5 rounded-full ${
                     isHindi ? "bg-brand-red text-white" : "text-brand-charcoal"
                   }`}
                 >
@@ -153,7 +153,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setLanguage("en")}
-                  className={`px-2 py-0.5 rounded-full ${
+                  className={`px-1.5 sm:px-2 py-0.5 rounded-full ${
                     !isHindi ? "bg-brand-red text-white" : "text-brand-charcoal"
                   }`}
                 >
@@ -163,16 +163,16 @@ export default function Navbar() {
 
               <a
                 href={`tel:${siteConfig.primaryPhone}`}
-                className="p-2 rounded bg-brand-cream border border-brand-border text-brand-charcoal hover:text-brand-red"
+                className="p-1.5 sm:p-2 rounded bg-brand-cream border border-brand-border text-brand-charcoal hover:text-brand-red"
                 aria-label="Call Balaji Motors"
               >
-                <Phone className="w-4 h-4 text-brand-red" />
+                <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-red" />
               </a>
 
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded bg-brand-cream border border-brand-border text-brand-charcoal hover:text-brand-red transition-colors flex items-center justify-center w-9 h-9"
+                className="p-1.5 sm:p-2 rounded bg-brand-cream border border-brand-border text-brand-charcoal hover:text-brand-red transition-colors flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9"
                 aria-label="Toggle Navigation Menu"
               >
                 <div className="relative w-4 h-3.5 flex flex-col justify-between">

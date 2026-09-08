@@ -70,7 +70,7 @@ export default function AboutContent() {
 
           <div className="lg:col-span-5">
             <ScrollReveal delay={120}>
-              <div className="bg-brand-cream border border-brand-border rounded-md p-8 space-y-6 shadow-card">
+              <div className="bg-brand-cream border border-brand-border rounded-md p-5 sm:p-8 space-y-6 shadow-card">
                 <div className="border-b border-brand-border pb-4">
                   <div className="text-xs font-bold uppercase tracking-wide text-brand-red">
                     {t.coordsBadge}
@@ -124,15 +124,15 @@ export default function AboutContent() {
           </div>
         </div>
 
-        <div className="mb-16">
+        <div className="mb-14 sm:mb-16">
           <ScrollReveal>
-            <h2 className="text-2xl font-black text-brand-charcoal tracking-tight mb-8">
+            <h2 className="text-xl sm:text-2xl font-black text-brand-charcoal tracking-tight mb-6 sm:mb-8">
               {t.commitmentsTitle}
             </h2>
           </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <ScrollReveal delay={80}>
-              <div className="bg-white border border-brand-border rounded-md p-6 space-y-3 shadow-card h-full hover:-translate-y-1 transition-transform">
+              <div className="bg-white border border-brand-border rounded-md p-5 sm:p-6 space-y-3 shadow-card h-full hover:-translate-y-1 transition-transform">
                 <div className="w-10 h-10 rounded bg-brand-lightRed border border-brand-red/20 flex items-center justify-center text-brand-red">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
@@ -144,7 +144,7 @@ export default function AboutContent() {
             </ScrollReveal>
 
             <ScrollReveal delay={160}>
-              <div className="bg-white border border-brand-border rounded-md p-6 space-y-3 shadow-card h-full hover:-translate-y-1 transition-transform">
+              <div className="bg-white border border-brand-border rounded-md p-5 sm:p-6 space-y-3 shadow-card h-full hover:-translate-y-1 transition-transform">
                 <div className="w-10 h-10 rounded bg-brand-lightRed border border-brand-red/20 flex items-center justify-center text-brand-red">
                   <Users className="w-5 h-5" />
                 </div>
@@ -156,7 +156,7 @@ export default function AboutContent() {
             </ScrollReveal>
 
             <ScrollReveal delay={240}>
-              <div className="bg-white border border-brand-border rounded-md p-6 space-y-3 shadow-card h-full hover:-translate-y-1 transition-transform">
+              <div className="bg-white border border-brand-border rounded-md p-5 sm:p-6 space-y-3 shadow-card h-full hover:-translate-y-1 transition-transform">
                 <div className="w-10 h-10 rounded bg-brand-lightRed border border-brand-red/20 flex items-center justify-center text-brand-red">
                   <Wrench className="w-5 h-5" />
                 </div>
@@ -170,24 +170,24 @@ export default function AboutContent() {
         </div>
 
         <ScrollReveal>
-          <div className="bg-brand-cream border border-brand-border rounded-md p-8 text-center space-y-4 shadow-card">
-            <h3 className="text-2xl font-bold text-brand-charcoal">
+          <div className="bg-brand-cream border border-brand-border rounded-md p-5 sm:p-8 text-center space-y-4 shadow-card">
+            <h3 className="text-xl sm:text-2xl font-bold text-brand-charcoal">
               {t.meetTeamTitle}
             </h3>
-            <p className="text-sm text-brand-muted max-w-xl mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm text-brand-muted max-w-xl mx-auto leading-relaxed">
               {t.meetTeamSubtitle}
             </p>
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs group"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs group"
               >
                 <span>{t.visitShowroomBtn}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <a
                 href={`tel:${siteConfig.primaryPhone}`}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded bg-white hover:bg-brand-border active:scale-[0.98] border border-brand-border text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded bg-white hover:bg-brand-border active:scale-[0.98] border border-brand-border text-brand-charcoal text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
               >
                 <Phone className="w-4 h-4 text-brand-red" />
                 <span>Call {siteConfig.displayPhone}</span>
