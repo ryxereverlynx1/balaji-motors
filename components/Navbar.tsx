@@ -58,8 +58,8 @@ export default function Navbar() {
             : "bg-brand-warmWhite/90 backdrop-blur-sm border-b border-brand-border/60 py-3.5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-2">
+        <div className="max-w-7xl 2xl:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between gap-3 xl:gap-6">
             <Link href="/" className="group flex items-center gap-2 sm:gap-2.5 shrink-0 whitespace-nowrap">
               <Image
                 src="/logo.png"
@@ -71,25 +71,25 @@ export default function Navbar() {
               />
               <div className="flex flex-col shrink-0 whitespace-nowrap">
                 <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className="text-base sm:text-xl lg:text-base xl:text-xl font-black tracking-tight text-brand-charcoal uppercase group-hover:text-brand-red transition-colors whitespace-nowrap">
+                  <span className="text-base sm:text-lg xl:text-xl font-black tracking-tight text-brand-charcoal uppercase group-hover:text-brand-red transition-colors whitespace-nowrap">
                     BALAJI MOTORS
                   </span>
                   <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-brand-yellow shadow-xs shrink-0" />
                 </div>
-                <span className="text-[8px] sm:text-[9.5px] tracking-wideUpper uppercase text-brand-muted font-bold -mt-0.5 whitespace-nowrap">
+                <span className="text-[8px] sm:text-[9px] tracking-wideUpper uppercase text-brand-muted font-bold -mt-0.5 whitespace-nowrap">
                   JALANDHAR • E-RICKSHAWS
                 </span>
               </div>
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 shrink min-w-0">
+            <nav className="hidden lg:flex items-center gap-1 xl:gap-2 shrink-0">
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`relative px-2 xl:px-3 py-1.5 text-[11px] xl:text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-colors ${
+                    className={`relative px-2 xl:px-2.5 py-1.5 text-[11px] xl:text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-colors ${
                       isActive
                         ? "text-brand-red font-extrabold"
                         : "text-brand-charcoal hover:text-brand-red"
@@ -97,7 +97,7 @@ export default function Navbar() {
                   >
                     <span>{item.label}</span>
                     {isActive && (
-                      <span className="absolute bottom-0 left-2 right-2 xl:left-3 xl:right-3 h-0.5 bg-brand-red rounded-full" />
+                      <span className="absolute bottom-0 left-2 right-2 xl:left-2.5 xl:right-2.5 h-0.5 bg-brand-red rounded-full" />
                     )}
                   </Link>
                 );
@@ -143,7 +143,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => openQuoteModal()}
-                className="inline-flex items-center gap-1.5 px-3 xl:px-4 py-1.5 xl:py-2 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] active:translate-y-0.5 text-white text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-all shadow-sm group cursor-pointer whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1.5 px-3.5 xl:px-4 py-1.5 xl:py-2 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] active:translate-y-0.5 text-white text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-all shadow-sm group cursor-pointer whitespace-nowrap shrink-0"
               >
                 <span>{dict.nav.getQuote}</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform shrink-0" />

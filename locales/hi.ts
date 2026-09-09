@@ -1,11 +1,11 @@
 export const hi = {
   nav: {
     home: "होम",
-    vehicles: "हमारे ई-रिक्शा",
-    services: "वर्कशॉप व सर्विस",
-    finance: "लोन व फाइनेंस",
+    vehicles: "ई-रिक्शा",
+    services: "सर्विस",
+    finance: "फाइनेंस",
     about: "हमारे बारे में",
-    contact: "संपर्क व शोरूम",
+    contact: "संपर्क",
     getQuote: "कोटेशन प्राप्त करें",
     callUs: "फोन करें",
     showroomAddress: "शोरूम: होटल रीजेंट पार्क के पास, अवतार नगर रोड, जालंधर",
