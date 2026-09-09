@@ -83,6 +83,14 @@ export const metadata: Metadata = {
   },
 };
 
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Balaji Motors",
+  alternateName: ["Balaji Motors Jalandhar", "BM Jalandhar"],
+  url: "https://balajimotors.ryxer.site",
+};
+
 const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": ["AutoDealer", "MotorcycleDealer"],
@@ -133,6 +141,10 @@ export default function RootLayout({
   return (
     <html lang="hi" className={`${fontSans.variable} ${fontDevanagari.variable}`}>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
