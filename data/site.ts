@@ -50,7 +50,7 @@ export const siteConfig: DealershipConfig = {
     country: "India",
     fullFormatted: "Near Hotel Regent Park, Avtar Nagar Road, Gujral Nagar, Jalandhar, Punjab 144001",
   },
-  brandAffiliation: "Authorized Dealership for BAXY Electric Three-Wheelers & Leading E-Rickshaw Brands",
+  brandAffiliation: "Authorized Dealership for Sargam, MKB, King & Balaji Motors Electric Three-Wheelers",
   openingHours: [
     { days: "Monday - Saturday", hours: "9:30 AM - 7:30 PM" },
     { days: "Sunday", hours: "10:30 AM - 4:00 PM (By Appointment)" },

@@ -3,12 +3,12 @@ import ServicesContent from "@/components/ServicesContent";
 
 export const metadata: Metadata = {
   title: "E-Rickshaw Service, Battery Replacement & Spare Parts",
-  description: "Official service center for electric rickshaws in Jalandhar, Punjab. Battery diagnostics, controller repairs, motor servicing, and genuine BAXY spare parts.",
+  description: "Official service center for electric rickshaws in Jalandhar, Punjab. Battery diagnostics, controller repairs, motor servicing, and genuine OEM spare parts for Sargam, MKB, King, and Balaji Motors.",
   keywords: [
     "E-Rickshaw Service Jalandhar",
     "Electric Rickshaw Battery Replacement Punjab",
     "E-Rickshaw Controller Repair",
-    "BAXY Spare Parts Jalandhar",
+    "E-Rickshaw Spare Parts Jalandhar",
     "Electric Auto Maintenance Punjab",
   ],
   alternates: {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "E-Rickshaw Service & Battery Center | Balaji Motors Jalandhar",
-    description: "Official service center for electric rickshaws in Jalandhar, Punjab. Battery diagnostics, controller repairs, motor servicing, and genuine BAXY spare parts.",
+    description: "Official service center for electric rickshaws in Jalandhar, Punjab. Battery diagnostics, controller repairs, motor servicing, and genuine OEM spare parts for Sargam, MKB, King, and Balaji Motors.",
     url: "https://balajimotors.ryxer.site/services",
     images: [
       {

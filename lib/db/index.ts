@@ -9,8 +9,10 @@ import {
   AdminUserRecord,
   ActivityRecord,
   ProductFilter,
+  CustomerStoryRecord,
+  CustomerFilter,
 } from "./types";
-import { initialCategories, initialProducts, createDefaultAdmin } from "./seed";
+import { initialCategories, initialProducts, createDefaultAdmin, initialCustomers } from "./seed";
 import { getAllLeads } from "../leads";
 import { getMongoDb } from "./mongodb";
 
@@ -18,6 +20,7 @@ interface DatabaseState {
   categories: Map<string, CategoryRecord>;
   products: Map<string, ProductRecord>;
   admins: Map<string, AdminUserRecord>;
+  customers: Map<string, CustomerStoryRecord>;
   activities: ActivityRecord[];
   isInitialized: boolean;
 }
@@ -26,6 +29,7 @@ const state: DatabaseState = {
   categories: new Map(),
   products: new Map(),
   admins: new Map(),
+  customers: new Map(),
   activities: [],
   isInitialized: false,
 };
@@ -99,6 +103,12 @@ export async function ensureDatabaseInitialized() {
         await mongo.collection("admins").insertOne({ ...defaultAdmin });
       }
 
+      const custCount = await mongo.collection("customers").countDocuments();
+      if (custCount === 0) {
+        const cloned = initialCustomers.map((c) => ({ ...c }));
+        await mongo.collection("customers").insertMany(cloned);
+      }
+
       const dbProds = await mongo
         .collection<ProductRecord>("products")
         .find({}, { projection: { _id: 0 } })
@@ -110,6 +120,11 @@ export async function ensureDatabaseInitialized() {
       const dbAdmins = await mongo
         .collection<AdminUserRecord>("admins")
         .find({}, { projection: { _id: 0 } })
+        .toArray();
+      const dbCusts = await mongo
+        .collection<CustomerStoryRecord>("customers")
+        .find({}, { projection: { _id: 0 } })
+        .sort({ displayOrder: 1, createdAt: -1 })
         .toArray();
       const dbActs = await mongo
         .collection<ActivityRecord>("activities")
@@ -126,6 +141,9 @@ export async function ensureDatabaseInitialized() {
 
       state.admins.clear();
       for (const a of dbAdmins) state.admins.set(a.email.toLowerCase(), a);
+
+      state.customers.clear();
+      for (const cu of dbCusts) state.customers.set(cu.id, cu);
 
       state.activities = dbActs;
       state.isInitialized = true;
@@ -166,6 +184,18 @@ export async function ensureDatabaseInitialized() {
     const defaultAdmin = await createDefaultAdmin();
     state.admins.set(defaultAdmin.email.toLowerCase(), defaultAdmin);
     writeJsonFile("admins.json", Array.from(state.admins.values()));
+  }
+
+  const storedCustomers = readJsonFile<CustomerStoryRecord[]>("customers.json", []);
+  if (storedCustomers.length > 0) {
+    for (const cust of storedCustomers) {
+      state.customers.set(cust.id, cust);
+    }
+  } else {
+    for (const cust of initialCustomers) {
+      state.customers.set(cust.id, cust);
+    }
+    writeJsonFile("customers.json", initialCustomers);
   }
 
   state.activities = readJsonFile<ActivityRecord[]>("activities.json", []);
@@ -590,6 +620,7 @@ export async function getDashboardStats() {
       const totalCategories = await mongo.collection("categories").countDocuments({ enabled: true });
       const totalEnquiries = await mongo.collection("leads").countDocuments();
       const newEnquiries = await mongo.collection("leads").countDocuments({ status: "new" });
+      const totalCustomers = await mongo.collection("customers").countDocuments();
 
       return {
         totalProducts,
@@ -599,6 +630,7 @@ export async function getDashboardStats() {
         totalCategories,
         totalEnquiries,
         newEnquiries,
+        totalCustomers,
       };
     } catch {}
   }
@@ -614,6 +646,7 @@ export async function getDashboardStats() {
   const totalCategories = categories.filter((c) => c.enabled).length;
   const totalEnquiries = enquiries.length;
   const newEnquiries = enquiries.filter((e) => e.status === "new").length;
+  const totalCustomers = state.customers.size;
 
   return {
     totalProducts,
@@ -623,5 +656,172 @@ export async function getDashboardStats() {
     totalCategories,
     totalEnquiries,
     newEnquiries,
+    totalCustomers,
   };
+}
+
+export async function getCustomers(filter?: CustomerFilter): Promise<CustomerStoryRecord[]> {
+  await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const query: Record<string, any> = {};
+      if (filter?.featuredOnly) {
+        query.featured = true;
+      }
+      if (filter?.search) {
+        const term = filter.search.trim();
+        query.$or = [
+          { name: { $regex: term, $options: "i" } },
+          { nameHi: { $regex: term, $options: "i" } },
+          { location: { $regex: term, $options: "i" } },
+          { vehicleName: { $regex: term, $options: "i" } },
+          { quote: { $regex: term, $options: "i" } },
+        ];
+      }
+      const list = await mongo
+        .collection<CustomerStoryRecord>("customers")
+        .find(query, { projection: { _id: 0 } })
+        .sort({ displayOrder: 1, createdAt: -1 })
+        .toArray();
+      return list;
+    } catch {}
+  }
+
+  let list = Array.from(state.customers.values());
+  if (filter?.featuredOnly) {
+    list = list.filter((c) => c.featured);
+  }
+  if (filter?.search) {
+    const term = filter.search.toLowerCase().trim();
+    list = list.filter(
+      (c) =>
+        c.name.toLowerCase().includes(term) ||
+        (c.nameHi && c.nameHi.toLowerCase().includes(term)) ||
+        c.location.toLowerCase().includes(term) ||
+        c.vehicleName.toLowerCase().includes(term) ||
+        c.quote.toLowerCase().includes(term)
+    );
+  }
+
+  return list.sort((a, b) => a.displayOrder - b.displayOrder);
+}
+
+export async function getCustomerById(id: string): Promise<CustomerStoryRecord | null> {
+  await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const cust = await mongo
+        .collection<CustomerStoryRecord>("customers")
+        .findOne({ id }, { projection: { _id: 0 } });
+      if (cust) return cust;
+    } catch {}
+  }
+
+  return state.customers.get(id) || null;
+}
+
+export async function createCustomer(
+  data: Omit<CustomerStoryRecord, "id" | "createdAt" | "updatedAt">,
+  adminEmail: string
+): Promise<CustomerStoryRecord> {
+  await ensureDatabaseInitialized();
+
+  const now = new Date().toISOString();
+  const id = `cust_${Date.now()}_${crypto.randomBytes(3).toString("hex")}`;
+  const record: CustomerStoryRecord = {
+    ...data,
+    id,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  state.customers.set(id, record);
+  writeJsonFile("customers.json", Array.from(state.customers.values()));
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo.collection("customers").insertOne({ ...record });
+    } catch {}
+  }
+
+  await logActivity({
+    adminEmail,
+    action: "create",
+    entityType: "customer",
+    entityId: id,
+    details: `Added customer delivery story: ${record.name} (${record.vehicleName})`,
+  });
+
+  return record;
+}
+
+export async function updateCustomer(
+  id: string,
+  data: Partial<CustomerStoryRecord>,
+  adminEmail: string
+): Promise<CustomerStoryRecord | null> {
+  await ensureDatabaseInitialized();
+
+  const existing = await getCustomerById(id);
+  if (!existing) return null;
+
+  const now = new Date().toISOString();
+  const updated: CustomerStoryRecord = {
+    ...existing,
+    ...data,
+    id,
+    updatedAt: now,
+  };
+
+  state.customers.set(id, updated);
+  writeJsonFile("customers.json", Array.from(state.customers.values()));
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo.collection("customers").updateOne({ id }, { $set: updated });
+    } catch {}
+  }
+
+  await logActivity({
+    adminEmail,
+    action: "update",
+    entityType: "customer",
+    entityId: id,
+    details: `Updated customer delivery story: ${updated.name}`,
+  });
+
+  return updated;
+}
+
+export async function deleteCustomer(id: string, adminEmail: string): Promise<boolean> {
+  await ensureDatabaseInitialized();
+
+  const existing = await getCustomerById(id);
+  if (!existing) return false;
+
+  state.customers.delete(id);
+  writeJsonFile("customers.json", Array.from(state.customers.values()));
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo.collection("customers").deleteOne({ id });
+    } catch {}
+  }
+
+  await logActivity({
+    adminEmail,
+    action: "delete",
+    entityType: "customer",
+    entityId: id,
+    details: `Deleted customer delivery story: ${existing.name}`,
+  });
+
+  return true;
 }

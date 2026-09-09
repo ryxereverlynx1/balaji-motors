@@ -24,7 +24,7 @@ export default function EnquiryForm({
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("Jalandhar");
-  const [vehicle, setVehicle] = useState(preselectedVehicle || "BAXY Super King E-Rickshaw");
+  const [vehicle, setVehicle] = useState(preselectedVehicle || "Sargam Victor Passenger E-Rickshaw");
   const [enquiryType, setEnquiryType] = useState(defaultEnquiryType || t.options.onRoadPrice);
   const [notes, setNotes] = useState("");
   const [honeypot, setHoneypot] = useState("");

@@ -4,6 +4,7 @@ import React from "react";
 import { siteConfig } from "@/data/site";
 import EnquiryForm from "@/components/EnquiryForm";
 import ScrollReveal from "@/components/ScrollReveal";
+import GoogleMapEmbed from "@/components/GoogleMapEmbed";
 import { useLanguage } from "@/context/LanguageContext";
 import {
   Phone,
@@ -141,44 +142,15 @@ export default function ContactContent() {
         </div>
 
         <ScrollReveal>
-          <div className="bg-brand-cream border border-brand-border rounded-md p-6 sm:p-8 shadow-card">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wide text-brand-red">
-                  {t.mapCardBadge}
-                </span>
-                <h3 className="text-xl font-bold text-brand-charcoal mt-1">{t.mapCardTitle}</h3>
-              </div>
-              <a
-                href={directionsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-red hover:text-brand-darkRed group"
-              >
-                <span>{t.openInMaps}</span>
-                <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
+          <div className="space-y-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wide text-brand-red">
+                {t.mapCardBadge}
+              </span>
+              <h3 className="text-2xl font-black text-brand-charcoal tracking-tight mt-1">{t.mapCardTitle}</h3>
             </div>
 
-            <div className="relative w-full h-[300px] sm:h-[360px] bg-white border border-brand-border rounded-md overflow-hidden flex flex-col items-center justify-center text-center p-6 shadow-xs">
-              <div className="w-14 h-14 rounded-full bg-brand-lightRed border border-brand-red/20 flex items-center justify-center mb-3 text-brand-red shadow-xs">
-                <MapPin className="w-7 h-7" />
-              </div>
-              <h4 className="text-lg font-bold text-brand-charcoal">Balaji Motors Showroom</h4>
-              <p className="text-xs text-brand-muted max-w-md mt-1 leading-relaxed">
-                {siteConfig.address.fullFormatted}
-              </p>
-              <div className="mt-4 flex items-center gap-3">
-                <a
-                  href={directionsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-5 py-2.5 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
-                >
-                  {t.gpsBtn}
-                </a>
-              </div>
-            </div>
+            <GoogleMapEmbed height={460} />
           </div>
         </ScrollReveal>
       </div>

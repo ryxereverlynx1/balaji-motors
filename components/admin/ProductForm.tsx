@@ -485,7 +485,7 @@ export default function ProductForm({
                 scheduleAutoTranslate("name", val, (hi) => setNameHi(hi));
               }}
               onBlur={() => handleTranslateField("name", name, (hi) => setNameHi(hi))}
-              placeholder="e.g. BAXY Super King E-Rickshaw"
+              placeholder="e.g. Sargam Victor Passenger E-Rickshaw"
               className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-sm font-semibold text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
@@ -513,7 +513,7 @@ export default function ProductForm({
               type="text"
               value={nameHi}
               onChange={(e) => setNameHi(e.target.value)}
-              placeholder="e.g. बैक्सी सुपर किंग ई-रिक्शा"
+              placeholder="e.g. सरगम विक्टर पैसेंजर ई-रिक्शा"
               className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-sm font-semibold text-brand-charcoal focus:outline-none focus:border-brand-red"
             />
           </div>
@@ -533,7 +533,7 @@ export default function ProductForm({
                   setIsSlugCustomized(true);
                   setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"));
                 }}
-                placeholder="baxy-super-king-passenger"
+                placeholder="sargam-victor-passenger"
                 className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-base sm:text-xs font-mono text-brand-charcoal focus:outline-none focus:border-brand-red"
               />
             </div>

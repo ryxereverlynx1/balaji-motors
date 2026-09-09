@@ -3,6 +3,7 @@
 import React from "react";
 import EnquiryForm from "@/components/EnquiryForm";
 import ScrollReveal from "@/components/ScrollReveal";
+import LoanCalculator from "@/components/LoanCalculator";
 import { useLanguage } from "@/context/LanguageContext";
 import {
   FileText,
@@ -94,6 +95,10 @@ export default function FinanceContent() {
             </p>
           </div>
         </div>
+
+        <ScrollReveal>
+          <LoanCalculator />
+        </ScrollReveal>
 
         <div className="mb-16">
           <ScrollReveal>
@@ -207,7 +212,7 @@ export default function FinanceContent() {
             </ScrollReveal>
           </div>
 
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7" id="finance-enquiry-form">
             <ScrollReveal delay={120}>
               <EnquiryForm
                 defaultEnquiryType={language === "hi" ? "लोन व आसान किश्तें (EMI)" : "Finance & EMI Guidance"}

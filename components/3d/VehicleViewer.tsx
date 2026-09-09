@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 interface VehicleViewerProps {
-  category?: "Passenger" | "Cargo / Loader";
+  category?: "Passenger" | "Cargo / Loader" | string;
   colors?: VehicleColor[];
   hotspots?: VehicleHotspot[];
   initialColorHex?: string;

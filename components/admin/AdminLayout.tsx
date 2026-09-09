@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -16,6 +16,7 @@ import {
   X,
   ShieldCheck,
   Zap,
+  Users,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -26,6 +27,7 @@ const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/products", label: "Products", icon: Package, exact: false },
   { href: "/admin/categories", label: "Categories", icon: FolderTree, exact: false },
+  { href: "/admin/customers", label: "Happy Customers", icon: Users, exact: false },
   { href: "/admin/enquiries", label: "Enquiries", icon: Mail, exact: false },
   { href: "/admin/activity", label: "Activity Log", icon: History, exact: false },
   { href: "/admin/settings", label: "Settings", icon: Settings, exact: false },

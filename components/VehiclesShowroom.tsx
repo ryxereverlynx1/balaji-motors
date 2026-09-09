@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { vehiclesData, Vehicle } from "@/data/vehicles";
 import VehicleCard from "@/components/VehicleCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import { siteConfig } from "@/data/site";
 import { useLanguage } from "@/context/LanguageContext";
-import { Phone, MessageSquare, Filter } from "lucide-react";
+import { Phone, MessageSquare, Filter, Scale } from "lucide-react";
 import { getGeneralWhatsAppUrl } from "@/lib/whatsapp";
 
 import { CategoryRecord } from "@/lib/db/types";
@@ -139,8 +140,17 @@ export default function VehiclesShowroom({
               ))}
             </div>
 
-            <div className="text-xs text-brand-muted shrink-0">
-              {t.showingCount} <span className="text-brand-charcoal font-bold">{filteredVehicles.length}</span>
+            <div className="flex items-center gap-3 shrink-0">
+              <Link
+                href="/vehicles/compare"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-charcoal hover:bg-brand-red text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-xs"
+              >
+                <Scale className="w-3.5 h-3.5" />
+                <span>{language === "hi" ? "मॉडल तुलना करें" : "Compare Models"}</span>
+              </Link>
+              <div className="text-xs text-brand-muted hidden sm:block">
+                {t.showingCount} <span className="text-brand-charcoal font-bold">{filteredVehicles.length}</span>
+              </div>
             </div>
           </div>
         </div>

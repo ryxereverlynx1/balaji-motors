@@ -76,7 +76,13 @@ export default async function VehicleDetailPage({ params }: VehiclePageProps) {
     description: desc,
     brand: {
       "@type": "Brand",
-      name: vehicle.name.toUpperCase().includes("BAXY") ? "BAXY" : "Balaji Motors",
+      name: vehicle.name.toUpperCase().includes("SARGAM")
+        ? "Sargam"
+        : vehicle.name.toUpperCase().includes("MKB")
+        ? "MKB"
+        : vehicle.name.toUpperCase().includes("KING")
+        ? "King"
+        : "Balaji Motors",
     },
     category: "Motor Vehicles > Three-Wheeler Electric Vehicles",
     offers: {

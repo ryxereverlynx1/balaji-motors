@@ -66,7 +66,7 @@ export interface ActivityRecord {
   id: string;
   adminEmail: string;
   action: string;
-  entityType: "product" | "category" | "enquiry" | "auth" | "settings";
+  entityType: "product" | "category" | "enquiry" | "customer" | "auth" | "settings";
   entityId?: string;
   details: string;
   createdAt: string;
@@ -76,6 +76,31 @@ export interface ProductFilter {
   categorySlug?: string;
   categoryId?: string;
   status?: ProductStatus | "all";
+  featuredOnly?: boolean;
+  search?: string;
+}
+
+export interface CustomerStoryRecord {
+  id: string;
+  name: string;
+  nameHi?: string;
+  location: string;
+  locationHi?: string;
+  vehicleName: string;
+  vehicleNameHi?: string;
+  deliveryDate: string;
+  deliveryDateHi?: string;
+  rating: number;
+  quote: string;
+  quoteHi?: string;
+  image: string;
+  featured: boolean;
+  displayOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CustomerFilter {
   featuredOnly?: boolean;
   search?: string;
 }

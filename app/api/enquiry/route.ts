@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       phone: cleanPhone,
       email: email && typeof email === "string" ? email.trim() : undefined,
       city: city.trim(),
-      vehicle: vehicle || "BAXY Super King E-Rickshaw",
+      vehicle: vehicle || "Sargam Victor E-Rickshaw",
       enquiryType: enquiryType || "Vehicle Purchase",
       quantity: typeof quantity === "number" && quantity > 0 ? quantity : 1,
       preferredContact: preferredContact || "Phone Call",

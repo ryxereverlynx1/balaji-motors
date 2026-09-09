@@ -176,7 +176,8 @@ export async function generateEnquiryPdf(
 
       let imageRendered = false;
       const pngCandidates = [
-        path.join(process.cwd(), "public", "products", "baxy-super-king.png"),
+        path.join(process.cwd(), "public", "products", `${vehicleObj.slug}.png`),
+        path.join(process.cwd(), "public", "products", "sargam-victor.png"),
         path.join(process.cwd(), "public", "images", "rickshaw-red.webp"),
       ];
 

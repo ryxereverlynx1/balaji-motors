@@ -404,7 +404,7 @@ function ViewerLoadingOverlay() {
 }
 
 export default function ExplodedView({
-  vehicleName = "BAXY Super King E-Rickshaw",
+  vehicleName = "Sargam Victor Passenger E-Rickshaw",
   defaultAssembledImage = "/images/rickshaw-red.webp",
 }: ExplodedViewProps) {
   const { isHindi } = useLanguage();

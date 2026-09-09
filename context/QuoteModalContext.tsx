@@ -12,7 +12,7 @@ interface QuoteModalContextType {
 
 const QuoteModalContext = createContext<QuoteModalContextType>({
   isOpen: false,
-  preselectedVehicle: "BAXY Super King E-Rickshaw",
+  preselectedVehicle: "Sargam Victor Passenger E-Rickshaw",
   defaultEnquiryType: "Vehicle Purchase",
   openQuoteModal: () => {},
   closeQuoteModal: () => {},
@@ -20,7 +20,7 @@ const QuoteModalContext = createContext<QuoteModalContextType>({
 
 export function QuoteModalProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [preselectedVehicle, setPreselectedVehicle] = useState("BAXY Super King E-Rickshaw");
+  const [preselectedVehicle, setPreselectedVehicle] = useState("Sargam Victor Passenger E-Rickshaw");
   const [defaultEnquiryType, setDefaultEnquiryType] = useState("Vehicle Purchase");
 
   const openQuoteModal = (vehicle?: string, enquiryType?: string) => {

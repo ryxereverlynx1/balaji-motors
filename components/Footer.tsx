@@ -41,19 +41,19 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link
-                  href="/vehicles/baxy-super-king-passenger"
+                  href="/vehicles/sargam-victor-passenger"
                   className="hover:text-white transition-colors flex items-center justify-between group"
                 >
-                  <span>{language === "hi" ? "बैक्सी सुपर किंग ई-रिक्शा" : "BAXY Super King E-Rickshaw"}</span>
+                  <span>{language === "hi" ? "सरगम विक्टर ई-रिक्शा" : "Sargam Victor E-Rickshaw"}</span>
                   <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-brand-yellow" />
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/vehicles/baxy-cargo-express-loader"
+                  href="/vehicles/king-cargo-express-loader"
                   className="hover:text-white transition-colors flex items-center justify-between group"
                 >
-                  <span>{language === "hi" ? "बैक्सी कार्गो एक्सप्रेस ई-लोडर" : "BAXY Cargo Express E-Loader"}</span>
+                  <span>{language === "hi" ? "किंग कार्गो एक्सप्रेस ई-लोडर" : "King Cargo Express E-Loader"}</span>
                   <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-brand-yellow" />
                 </Link>
               </li>
@@ -94,6 +94,16 @@ export default function Footer() {
               <li>
                 <Link href="/finance" className="hover:text-white transition-colors">
                   {language === "hi" ? "लोन व आसान किश्तें" : "Finance & Easy Installments"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/vehicles/compare" className="hover:text-white transition-colors">
+                  {language === "hi" ? "मॉडलों की तुलना करें" : "Compare E-Rickshaw Models"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/happy-customers" className="hover:text-white transition-colors">
+                  {language === "hi" ? "खुशहाल ग्राहक व डिलीवरी" : "Happy Customers & Deliveries"}
                 </Link>
               </li>
               <li>

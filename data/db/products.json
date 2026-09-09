@@ -1,21 +1,21 @@
 [
   {
-    "id": "prod_baxy_super_king",
-    "slug": "baxy-super-king-passenger",
-    "name": "BAXY Super King E-Rickshaw",
-    "nameHi": "बैक्सी सुपर किंग ई-रिक्शा",
+    "id": "prod_sargam_victor",
+    "slug": "sargam-victor-passenger",
+    "name": "Sargam Victor Passenger E-Rickshaw",
+    "nameHi": "सरगम विक्टर पैसेंजर ई-रिक्शा",
     "categoryId": "cat_passenger",
     "categoryName": "Passenger Vehicle",
     "shortDescription": "Rugged tubular chassis, ergonomic driver cabin, and cushioned passenger bench seating optimized for city and suburban transit.",
     "shortDescriptionHi": "मजबूत ट्यूबलर चेसिस, आरामदायक ड्राइवर केबिन और शहर के सवारी रूटों के लिए गद्देदार पैसेंजर सीटें।",
-    "fullDescription": "Engineered specifically for heavy daily commercial mileage, the BAXY Super King passenger electric rickshaw provides drivers with low operational cost and passengers with a smooth, stable ride. Built with a reinforced steel chassis, reliable suspension, and high-efficiency electric drivetrain.",
-    "fullDescriptionHi": "भारी दैनिक व्यावसायिक आवागमन के लिए विशेष रूप से निर्मित, बैक्सी सुपर किंग ई-रिक्शा चालकों को अत्यंत कम संचालन खर्च और सवारियों को आरामदायक व स्थिर सफर देता है।",
-    "mainImage": "/images/rickshaw-red.webp",
+    "fullDescription": "Engineered specifically for heavy daily commercial mileage, the Sargam Victor passenger electric rickshaw provides drivers with low operational cost and passengers with a smooth, stable ride. Built with a reinforced steel chassis, reliable suspension, and high-efficiency electric drivetrain.",
+    "fullDescriptionHi": "भारी दैनिक व्यावसायिक आवागमन के लिए विशेष रूप से निर्मित, सरगम विक्टर ई-रिक्शा चालकों को अत्यंत कम संचालन खर्च और सवारियों को आरामदायक व स्थिर सफर देता है।",
+    "mainImage": "/images/SARGAM-VICTOR-BLUE-2.webp",
     "galleryImages": [
-      "/images/rickshaw-red.webp",
+      "/images/SARGAM-VICTOR-BLUE-2.webp",
+      "/images/Sargam-E-Ride.webp",
       "/images/rickshaw-blue.webp",
-      "/images/rickshaw-green.webp",
-      "/images/rickshaw-white.webp"
+      "/images/rickshaw-red.webp"
     ],
     "priceMode": "on_enquiry",
     "price": null,
@@ -27,7 +27,7 @@
     "specifications": [
       {
         "id": "spec_1_1",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Motor Type",
         "labelHi": "मोटर प्रकार",
         "value": "High Torque BLDC Electric Motor",
@@ -37,7 +37,7 @@
       },
       {
         "id": "spec_1_2",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Battery Chemistry",
         "labelHi": "बैटरी प्रकार",
         "value": "Lead-Acid / Advanced Lithium-Ion Option",
@@ -47,7 +47,7 @@
       },
       {
         "id": "spec_1_3",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Battery Capacity",
         "labelHi": "बैटरी क्षमता",
         "value": "Configurable upon enquiry",
@@ -57,7 +57,7 @@
       },
       {
         "id": "spec_1_4",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Estimated Range",
         "labelHi": "अनुमानित रेंज",
         "value": "80 - 110 km per single charge (estimated)",
@@ -67,7 +67,7 @@
       },
       {
         "id": "spec_1_5",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Charging Time",
         "labelHi": "चार्जिंग समय",
         "value": "4 - 8 Hours depending on battery system",
@@ -77,7 +77,7 @@
       },
       {
         "id": "spec_1_6",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Capacity (Seats / Payload)",
         "labelHi": "क्षमता (सीट / वजन)",
         "value": "Driver + 4 Passengers (Govt. Approved Spec)",
@@ -87,7 +87,7 @@
       },
       {
         "id": "spec_1_7",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Top Speed",
         "labelHi": "अधिकतम गति",
         "value": "25 km/h (CMVR Compliant)",
@@ -97,7 +97,7 @@
       },
       {
         "id": "spec_1_8",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Braking System",
         "labelHi": "ब्रेकिंग सिस्टम",
         "value": "Drum Brakes with Mechanical Parking Brake",
@@ -107,7 +107,7 @@
       },
       {
         "id": "spec_1_9",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Chassis Frame",
         "labelHi": "चेसिस फ्रेम",
         "value": "Heavy Duty Tubular Steel Frame",
@@ -117,7 +117,7 @@
       },
       {
         "id": "spec_1_10",
-        "productId": "prod_baxy_super_king",
+        "productId": "prod_sargam_victor",
         "label": "Warranty",
         "labelHi": "वारंटी",
         "value": "Manufacturer Warranty on Motor & Drivetrain",
@@ -130,20 +130,21 @@
     "updatedAt": "2026-01-01T00:00:00.000Z"
   },
   {
-    "id": "prod_baxy_cargo_express",
-    "slug": "baxy-cargo-express-loader",
-    "name": "BAXY Cargo Express E-Loader",
-    "nameHi": "बैक्सी कार्गो एक्सप्रेस ई-लोडर",
+    "id": "prod_king_cargo_express",
+    "slug": "king-cargo-express-loader",
+    "name": "King Cargo Express E-Loader",
+    "nameHi": "किंग कार्गो एक्सप्रेस ई-लोडर",
     "categoryId": "cat_cargo",
     "categoryName": "Cargo / Loader",
     "shortDescription": "Heavy payload open cargo deck with fold-down drop gates, reinforced rear leaf springs, and high-torque hill assist gearing.",
     "shortDescriptionHi": "मजबूत ओपन कार्गो डाला, झुकने वाले साइड गेट, हैवी लीफ स्प्रिंग सस्पेंशन और भारी माल ढुलाई गियरिंग।",
-    "fullDescription": "Purpose-built for distributors, mandi transporters, construction supply yards, and express cargo routes in Punjab. The BAXY Cargo Express loader offers a rugged steel load bed capable of handling substantial daily commercial tonnage with zero tailpipe emissions.",
-    "fullDescriptionHi": "पंजाब के व्यापारियों, मंडी आढ़तियों और हार्डवेयर सप्लायरों के लिए विशेष रूप से तैयार किया गया मजबूत इलेक्ट्रिक लोडर।",
-    "mainImage": "/products/baxy-cargo-express-loader.png",
+    "fullDescription": "Purpose-built for distributors, mandi transporters, construction supply yards, and express cargo routes in Punjab. The King Cargo Express loader offers a rugged steel load bed capable of handling substantial daily commercial tonnage with zero tailpipe emissions.",
+    "fullDescriptionHi": "पंजाब के व्यापारियों, मंडी आढ़तियों और हार्डवेयर सप्लायरों के लिए विशेष रूप से तैयार किया गया मजबूत किंग कार्गो इलेक्ट्रिक लोडर।",
+    "mainImage": "/images/rickshaw-green.webp",
     "galleryImages": [
-      "/products/baxy-cargo-express-loader.png",
-      "/products/baxy-cargo.png"
+      "/images/rickshaw-green.webp",
+      "/images/rickshaw-blue.webp",
+      "/images/rickshaw-red.webp"
     ],
     "priceMode": "on_enquiry",
     "price": null,
@@ -155,7 +156,7 @@
     "specifications": [
       {
         "id": "spec_2_1",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Motor Type",
         "labelHi": "मोटर प्रकार",
         "value": "High Torque Commercial BLDC Motor",
@@ -165,7 +166,7 @@
       },
       {
         "id": "spec_2_2",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Battery Chemistry",
         "labelHi": "बैटरी प्रकार",
         "value": "Heavy-Duty Deep Cycle / Lithium-Ion Option",
@@ -175,7 +176,7 @@
       },
       {
         "id": "spec_2_3",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Battery Capacity",
         "labelHi": "बैटरी क्षमता",
         "value": "Custom Heavy Commercial Capacity",
@@ -185,7 +186,7 @@
       },
       {
         "id": "spec_2_4",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Estimated Range",
         "labelHi": "अनुमानित रेंज",
         "value": "70 - 100 km per charge (payload dependent)",
@@ -195,7 +196,7 @@
       },
       {
         "id": "spec_2_5",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Charging Time",
         "labelHi": "चार्जिंग समय",
         "value": "5 - 8 Hours",
@@ -205,7 +206,7 @@
       },
       {
         "id": "spec_2_6",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Capacity (Seats / Payload)",
         "labelHi": "क्षमता (सीट / वजन)",
         "value": "Rated Payload up to 500 kg (Commercial Spec)",
@@ -215,7 +216,7 @@
       },
       {
         "id": "spec_2_7",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Top Speed",
         "labelHi": "अधिकतम गति",
         "value": "25 km/h",
@@ -225,7 +226,7 @@
       },
       {
         "id": "spec_2_8",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Braking System",
         "labelHi": "ब्रेकिंग सिस्टम",
         "value": "Reinforced Hydraulic / Mechanical Drum",
@@ -235,7 +236,7 @@
       },
       {
         "id": "spec_2_9",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Chassis Frame",
         "labelHi": "चेसिस फ्रेम",
         "value": "Reinforced Ladder Frame with Drop Gates",
@@ -245,7 +246,7 @@
       },
       {
         "id": "spec_2_10",
-        "productId": "prod_baxy_cargo_express",
+        "productId": "prod_king_cargo_express",
         "label": "Warranty",
         "labelHi": "वारंटी",
         "value": "Manufacturer Warranty on Motor & Drivetrain",
@@ -508,6 +509,95 @@
         "valueHi": "मोटर व ड्राइवट्रेन पर निर्माता वारंटी",
         "icon": "shield",
         "displayOrder": 10
+      }
+    ],
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "prod_mkb_deluxe_passenger",
+    "slug": "mkb-deluxe-passenger",
+    "name": "MKB Deluxe Passenger E-Rickshaw",
+    "nameHi": "एमकेबी डीलक्स पैसेंजर ई-रिक्शा",
+    "categoryId": "cat_passenger",
+    "categoryName": "Passenger Vehicle",
+    "shortDescription": "Heavy-duty electric passenger vehicle with heavy alloy wheels, cushioned premium rexine seats, and extended battery range.",
+    "shortDescriptionHi": "मजबूत अलॉय व्हील, प्रीमियम कुशन सीट और लंबी बैटरी रेंज वाला लोकप्रिय पैसेंजर ई-रिक्शा।",
+    "fullDescription": "The MKB Deluxe Passenger E-Rickshaw is engineered for reliable, non-stop passenger ferrying across Jalandhar and Punjab routes. It features an ultra-reinforced steel frame, long-lasting suspension, and low daily charging costs.",
+    "fullDescriptionHi": "जालंधर और पंजाब के सवारी रूटों पर बिना रुकावट लगातार चलने के लिए विशेष निर्मित एमकेबी डीलक्स ई-रिक्शा। मजबूत स्टील बॉडी और कम चार्जिंग खर्च।",
+    "mainImage": "/images/rickshaw-white.webp",
+    "galleryImages": [
+      "/images/rickshaw-white.webp",
+      "/images/rickshaw-blue.webp",
+      "/images/rickshaw-red.webp"
+    ],
+    "priceMode": "on_enquiry",
+    "price": null,
+    "currency": "INR",
+    "featured": true,
+    "status": "published",
+    "displayOrder": 5,
+    "model3dUrl": null,
+    "specifications": [
+      {
+        "id": "spec_5_1",
+        "productId": "prod_mkb_deluxe_passenger",
+        "label": "Motor Type",
+        "labelHi": "मोटर प्रकार",
+        "value": "High Torque Commercial BLDC Motor",
+        "valueHi": "हाई टॉर्क बीएलडीसी मोटर",
+        "icon": "zap",
+        "displayOrder": 1
+      },
+      {
+        "id": "spec_5_2",
+        "productId": "prod_mkb_deluxe_passenger",
+        "label": "Battery Chemistry",
+        "labelHi": "बैटरी प्रकार",
+        "value": "Lead-Acid / Advanced Lithium-Ion Option",
+        "valueHi": "लेड-एसिड / आधुनिक लिथियम-आयन विकल्प",
+        "icon": "battery",
+        "displayOrder": 2
+      },
+      {
+        "id": "spec_5_3",
+        "productId": "prod_mkb_deluxe_passenger",
+        "label": "Estimated Range",
+        "labelHi": "अनुमानित रेंज",
+        "value": "85 - 110 km per single charge",
+        "valueHi": "85 - 110 किमी प्रति सिंगल चार्ज",
+        "icon": "gauge",
+        "displayOrder": 3
+      },
+      {
+        "id": "spec_5_4",
+        "productId": "prod_mkb_deluxe_passenger",
+        "label": "Capacity (Seats / Payload)",
+        "labelHi": "क्षमता (सीट / वजन)",
+        "value": "Driver + 4 Passengers (CMVR Approved)",
+        "valueHi": "चालक + 4 सवारी (सरकारी अनुमोदित)",
+        "icon": "users",
+        "displayOrder": 4
+      },
+      {
+        "id": "spec_5_5",
+        "productId": "prod_mkb_deluxe_passenger",
+        "label": "Top Speed",
+        "labelHi": "अधिकतम गति",
+        "value": "25 km/h",
+        "valueHi": "25 किमी/घंटा",
+        "icon": "gauge",
+        "displayOrder": 5
+      },
+      {
+        "id": "spec_5_6",
+        "productId": "prod_mkb_deluxe_passenger",
+        "label": "Warranty",
+        "labelHi": "वारंटी",
+        "value": "Manufacturer Warranty on Motor & Controller",
+        "valueHi": "मोटर व कंट्रोलर पर निर्माता वारंटी",
+        "icon": "shield",
+        "displayOrder": 6
       }
     ],
     "createdAt": "2026-01-01T00:00:00.000Z",

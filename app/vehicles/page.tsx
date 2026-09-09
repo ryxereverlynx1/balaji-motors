@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "E-Rickshaw Catalogue Punjab",
     "Commercial Electric Loader",
     "Passenger E-Rickshaw Price",
-    "BAXY Three Wheeler Dealership",
+    "Sargam MKB King Dealership",
   ],
   alternates: {
     canonical: "https://balajimotors.ryxer.site/vehicles",

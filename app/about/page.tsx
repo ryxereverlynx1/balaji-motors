@@ -3,11 +3,12 @@ import AboutContent from "@/components/AboutContent";
 
 export const metadata: Metadata = {
   title: "About Balaji Motors | Authorized Electric Vehicle Dealership in Jalandhar",
-  description: "Learn about Balaji Motors, Jalandhar's trusted dealership for BAXY electric rickshaws and commercial cargo loaders. Dealership history, customer support, and genuine warranty.",
+  description: "Learn about Balaji Motors, Jalandhar's trusted dealership for Sargam, MKB, King and Balaji Motors electric rickshaws and commercial cargo loaders. Dealership history, customer support, and genuine warranty.",
   keywords: [
     "About Balaji Motors Jalandhar",
     "Electric Rickshaw Dealer History Punjab",
-    "BAXY Authorized Dealer Jalandhar",
+    "Sargam Authorized Dealer Jalandhar",
+    "MKB Dealership Punjab",
     "Commercial E-Rickshaw Dealership",
   ],
   alternates: {
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "About Balaji Motors | Electric Vehicle Dealership in Jalandhar",
-    description: "Learn about Balaji Motors, Jalandhar's trusted dealership for BAXY electric rickshaws and commercial cargo loaders. Dealership history, customer support, and genuine warranty.",
+    description: "Learn about Balaji Motors, Jalandhar's trusted dealership for Sargam, MKB, King and Balaji Motors electric rickshaws and commercial cargo loaders. Dealership history, customer support, and genuine warranty.",
     url: "https://balajimotors.ryxer.site/about",
     images: [
       {
@@ -36,7 +37,7 @@ const aboutJsonLd = {
   mainEntity: {
     "@type": "AutoDealer",
     name: "Balaji Motors",
-    description: "Authorized dealership for BAXY electric three-wheelers and commercial passenger rickshaws and cargo loaders in Jalandhar, Punjab.",
+    description: "Authorized dealership for Sargam, MKB, King and Balaji Motors commercial passenger rickshaws and cargo loaders in Jalandhar, Punjab.",
     foundingLocation: {
       "@type": "Place",
       name: "Jalandhar, Punjab, India",

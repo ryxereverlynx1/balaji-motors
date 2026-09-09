@@ -38,6 +38,7 @@ export default function Navbar() {
   const navItems = [
     { label: dict.nav.home, href: "/" },
     { label: dict.nav.vehicles, href: "/vehicles" },
+    { label: dict.nav.customers, href: "/happy-customers" },
     { label: dict.nav.services, href: "/services" },
     { label: dict.nav.finance, href: "/finance" },
     { label: dict.nav.about, href: "/about" },

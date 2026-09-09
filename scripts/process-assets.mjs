@@ -5,7 +5,7 @@ import sharp from "sharp";
 const root = process.cwd();
 const imgDir = path.join(root, "public", "images");
 const prodDir = path.join(root, "public", "products");
-const explodedDir = path.join(root, "public", "exploded", "baxy-super-king");
+const explodedDir = path.join(root, "public", "exploded", "sargam-victor");
 
 fs.mkdirSync(prodDir, { recursive: true });
 fs.mkdirSync(explodedDir, { recursive: true });
@@ -17,10 +17,10 @@ async function processImages() {
   const whiteSrc = path.join(imgDir, "rickshaw-white.webp");
 
   if (fs.existsSync(redSrc)) {
-    await sharp(redSrc).png({ quality: 90 }).toFile(path.join(prodDir, "baxy-super-king.png"));
+    await sharp(redSrc).png({ quality: 90 }).toFile(path.join(prodDir, "sargam-victor.png"));
   }
   if (fs.existsSync(blueSrc)) {
-    await sharp(blueSrc).png({ quality: 90 }).toFile(path.join(prodDir, "baxy-cargo.png"));
+    await sharp(blueSrc).png({ quality: 90 }).toFile(path.join(prodDir, "king-cargo.png"));
   }
   if (fs.existsSync(greenSrc)) {
     await sharp(greenSrc).png({ quality: 90 }).toFile(path.join(prodDir, "balaji-passenger.png"));

@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import { siteConfig } from "@/data/site";
 import { vehiclesData } from "@/data/vehicles";
@@ -12,6 +13,7 @@ import EnquiryForm from "@/components/EnquiryForm";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import ScrollReveal from "@/components/ScrollReveal";
 import ViewerFallback from "@/components/3d/ViewerFallback";
+import GoogleMapEmbed from "@/components/GoogleMapEmbed";
 import {
   ArrowRight,
   Phone,
@@ -24,6 +26,7 @@ import {
   CheckCircle,
   Navigation,
   Compass,
+  Star,
 } from "lucide-react";
 import { getGeneralWhatsAppUrl } from "@/lib/whatsapp";
 
@@ -54,7 +57,7 @@ const homeFaqJsonLd = {
       name: "What models of electric rickshaws are available at Balaji Motors?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "We offer BAXY Super King Passenger E-Rickshaws, BAXY Cargo Express Loaders, Balaji City Passenger Rickshaws, and Balaji Closed Delivery Vans.",
+        text: "We offer Sargam Victor Passenger E-Rickshaws, King Cargo Express Loaders, MKB Deluxe Rickshaws, Balaji City Passenger Rickshaws, and Balaji Closed Delivery Vans.",
       },
     },
     {
@@ -77,7 +80,7 @@ const homeFaqJsonLd = {
 };
 
 export default function HomePage() {
-  const { language, dict } = useLanguage();
+  const { language, dict, isHindi } = useLanguage();
   const { openQuoteModal } = useQuoteModal();
   const [featuredVehicles, setFeaturedVehicles] = React.useState(vehiclesData.filter((v) => v.featured));
   const explorerVehicle = featuredVehicles[0] || vehiclesData[0];
@@ -613,8 +616,116 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-white border-b border-brand-border">
+      <section className="py-16 sm:py-20 bg-brand-warmWhite border-b border-brand-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+              <div>
+                <div className="text-xs font-bold uppercase tracking-widest text-brand-red mb-2">
+                  {isHindi ? "सत्यापित डिलीवरी व समीक्षाएं" : "Customer Handover Stories"}
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-black text-brand-charcoal tracking-tight">
+                  {isHindi ? "हमारे खुशहाल ई-रिक्शा मालिक" : "Happy Customers Across Punjab"}
+                </h2>
+                <p className="text-xs sm:text-sm text-brand-muted mt-2 max-w-xl leading-relaxed">
+                  {isHindi
+                    ? "जालंधर, फगवाड़ा और कपूरथला के उन चालकों से मिलें जिन्होंने बालाजी मोटर्स पर भरोसा किया।"
+                    : "Real delivery handovers, verified owner-driver experiences, and on-road earnings testimonials."}
+                </p>
+              </div>
+
+              <Link
+                href="/happy-customers"
+                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-red hover:text-brand-darkRed transition-colors shrink-0"
+              >
+                <span>{isHindi ? "सभी ग्राहक कहानियां देखें" : "View All Customer Stories"}</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                name: isHindi ? "गुरप्रीत सिंह" : "Gurpreet Singh",
+                loc: isHindi ? "रामा मंडी, जालंधर" : "Rama Mandi, Jalandhar",
+                vehicle: isHindi ? "सरगम विक्टर पैसेंजर ई-रिक्शा" : "Sargam Victor Passenger E-Rickshaw",
+                quote: isHindi ? "बालाजी मोटर्स से लोन बहुत आसानी से पास हो गया और मात्र 2 दिन में गाड़ी मिल गई। अब रोज 100+ किमी आराम से चलता है।" : "Loan approval was so smooth and I got my Sargam Victor delivered in 2 days. 100+ km daily range without any hassle!",
+                image: "/images/SARGAM-VICTOR-BLUE-2.webp",
+                date: isHindi ? "अगस्त 2026" : "August 2026",
+              },
+              {
+                name: isHindi ? "सुरजीत कुमार" : "Surjit Kumar",
+                loc: isHindi ? "जीटी रोड, फगवाड़ा" : "GT Road, Phagwara",
+                vehicle: isHindi ? "किंग कार्गो एक्सप्रेस ई-लोडर" : "King Cargo Express E-Loader",
+                quote: isHindi ? "हम रोज सुबह जालंधर मंडी से फलों के क्रेट्स लाते हैं। 450 किलो वजन भी बिना किसी परेशानी के खींचता है।" : "We transport fruit crates from Jalandhar mandi every morning. The King Cargo loader carries 450 kg easily and saves huge fuel cost!",
+                image: "/images/rickshaw-green.webp",
+                date: isHindi ? "जुलाई 2026" : "July 2026",
+              },
+              {
+                name: isHindi ? "मनजीत सिंह" : "Manjit Singh",
+                loc: isHindi ? "सुल्तानपुर लोधी, कपूरथला" : "Sultanpur Lodhi, Kapurthala",
+                vehicle: isHindi ? "एमकेबी डीलक्स पैसेंजर ई-रिक्शा" : "MKB Deluxe Passenger E-Rickshaw",
+                quote: isHindi ? "अलॉय व्हील और आरामदायक सीटों की वजह से सवारियां बहुत पसंद करती हैं। आरटीओ पासिंग में भी पूरा सहयोग मिला।" : "Alloy wheels and comfortable seats make passengers love the ride. Balaji Motors helped completely with RTO passing and paperwork.",
+                image: "/images/rickshaw-white.webp",
+                date: isHindi ? "जून 2026" : "June 2026",
+              },
+            ].map((story, i) => (
+              <ScrollReveal key={i} delay={i * 100}>
+                <div className="bg-white border border-brand-border rounded-xl overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+                  <div>
+                    <div className="relative h-48 w-full bg-stone-100 overflow-hidden border-b border-brand-border">
+                      <Image
+                        src={story.image}
+                        alt={story.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                      <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                        {story.date}
+                      </div>
+                      <div className="absolute bottom-3 right-3 flex items-center gap-0.5 bg-black/70 backdrop-blur-xs px-2 py-0.5 rounded text-amber-400">
+                        {Array.from({ length: 5 }).map((_, s) => (
+                          <Star key={s} className="w-3 h-3 fill-amber-400" />
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-5 space-y-3">
+                      <div>
+                        <h3 className="text-base font-black text-brand-charcoal">{story.name}</h3>
+                        <p className="text-xs text-brand-muted flex items-center gap-1 mt-0.5">
+                          <MapPin className="w-3 h-3 text-brand-red shrink-0" />
+                          <span>{story.loc}</span>
+                        </p>
+                      </div>
+
+                      <div className="text-xs font-bold text-brand-red">
+                        {story.vehicle}
+                      </div>
+
+                      <p className="text-xs text-brand-charcoal italic bg-brand-warmWhite p-3 rounded-lg border border-brand-border/60 leading-relaxed">
+                        &ldquo;{story.quote}&rdquo;
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="px-5 py-3 bg-stone-50 border-t border-brand-border text-[11px] font-bold text-emerald-700 flex items-center justify-between">
+                    <span>✓ {isHindi ? "सत्यापित डिलीवरी" : "Verified Customer"}</span>
+                    <Link href="/happy-customers" className="text-brand-charcoal hover:text-brand-red transition-colors">
+                      {isHindi ? "विवरण देखें →" : "Read More →"}
+                    </Link>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-white border-b border-brand-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <ScrollReveal>
             <div className="bg-brand-cream border border-brand-border rounded-md p-5 sm:p-8 shadow-card flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="space-y-2 text-left">
@@ -652,6 +763,10 @@ export default function HomePage() {
                 </a>
               </div>
             </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={100}>
+            <GoogleMapEmbed height={380} />
           </ScrollReveal>
         </div>
       </section>

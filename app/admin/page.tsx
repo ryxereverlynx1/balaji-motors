@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import Link from "next/link";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { getDashboardStats, getActivities } from "@/lib/db";
@@ -15,6 +15,7 @@ import {
   ExternalLink,
   ShieldCheck,
   TrendingUp,
+  Users,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -42,12 +43,12 @@ export default async function AdminDashboardPage() {
       badge: "Public",
     },
     {
-      title: "Drafts / Review",
-      value: stats.draftProducts,
-      sub: "Unpublished / in progress",
-      icon: FileEdit,
-      color: "border-amber-200 text-amber-800 bg-amber-50/50",
-      badge: "Internal",
+      title: "Happy Customers",
+      value: (stats as any).totalCustomers || 0,
+      sub: "Delivery stories published",
+      icon: Users,
+      color: "border-blue-200 text-blue-800 bg-blue-50/50",
+      badge: "Testimonials",
     },
     {
       title: "Categories",
