@@ -15,7 +15,15 @@ import {
 import { siteConfig } from "@/data/site";
 import { getFinanceWhatsAppUrl } from "@/lib/whatsapp";
 
-export default function FinanceContent() {
+interface FinanceContentProps {
+  financeSettings?: {
+    interestRatePerAnnum: number;
+    minDownPaymentPercent: number;
+    minDownPaymentAmount?: number;
+  };
+}
+
+export default function FinanceContent({ financeSettings }: FinanceContentProps = {}) {
   const { language, dict } = useLanguage();
   const t = dict.financePage;
 
@@ -97,7 +105,7 @@ export default function FinanceContent() {
         </div>
 
         <ScrollReveal>
-          <LoanCalculator />
+          <LoanCalculator initialSettings={financeSettings} />
         </ScrollReveal>
 
         <div className="mb-16">

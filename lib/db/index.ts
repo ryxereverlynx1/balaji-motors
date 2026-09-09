@@ -11,8 +11,17 @@ import {
   ProductFilter,
   CustomerStoryRecord,
   CustomerFilter,
+  CustomerStatCard,
+  FinanceSettingsRecord,
 } from "./types";
-import { initialCategories, initialProducts, createDefaultAdmin, initialCustomers } from "./seed";
+import {
+  initialCategories,
+  initialProducts,
+  createDefaultAdmin,
+  initialCustomers,
+  initialCustomerStats,
+  initialFinanceSettings,
+} from "./seed";
 import { getAllLeads } from "../leads";
 import { getMongoDb } from "./mongodb";
 
@@ -21,6 +30,8 @@ interface DatabaseState {
   products: Map<string, ProductRecord>;
   admins: Map<string, AdminUserRecord>;
   customers: Map<string, CustomerStoryRecord>;
+  customerStats: Map<string, CustomerStatCard>;
+  financeSettings: FinanceSettingsRecord | null;
   activities: ActivityRecord[];
   isInitialized: boolean;
 }
@@ -30,6 +41,8 @@ const state: DatabaseState = {
   products: new Map(),
   admins: new Map(),
   customers: new Map(),
+  customerStats: new Map(),
+  financeSettings: null,
   activities: [],
   isInitialized: false,
 };
@@ -109,6 +122,17 @@ export async function ensureDatabaseInitialized() {
         await mongo.collection("customers").insertMany(cloned);
       }
 
+      const statCount = await mongo.collection("customer_stats").countDocuments();
+      if (statCount === 0) {
+        const cloned = initialCustomerStats.map((s) => ({ ...s }));
+        await mongo.collection("customer_stats").insertMany(cloned);
+      }
+
+      const finCount = await mongo.collection("finance_settings").countDocuments();
+      if (finCount === 0) {
+        await mongo.collection("finance_settings").insertOne({ ...initialFinanceSettings });
+      }
+
       const dbProds = await mongo
         .collection<ProductRecord>("products")
         .find({}, { projection: { _id: 0 } })
@@ -126,6 +150,14 @@ export async function ensureDatabaseInitialized() {
         .find({}, { projection: { _id: 0 } })
         .sort({ displayOrder: 1, createdAt: -1 })
         .toArray();
+      const dbStats = await mongo
+        .collection<CustomerStatCard>("customer_stats")
+        .find({}, { projection: { _id: 0 } })
+        .sort({ displayOrder: 1 })
+        .toArray();
+      const dbFin = await mongo
+        .collection<FinanceSettingsRecord>("finance_settings")
+        .findOne({ id: "finance_settings" }, { projection: { _id: 0 } });
       const dbActs = await mongo
         .collection<ActivityRecord>("activities")
         .find({}, { projection: { _id: 0 } })
@@ -144,6 +176,11 @@ export async function ensureDatabaseInitialized() {
 
       state.customers.clear();
       for (const cu of dbCusts) state.customers.set(cu.id, cu);
+
+      state.customerStats.clear();
+      for (const st of dbStats) state.customerStats.set(st.id, st);
+
+      state.financeSettings = dbFin || { ...initialFinanceSettings };
 
       state.activities = dbActs;
       state.isInitialized = true;
@@ -196,6 +233,26 @@ export async function ensureDatabaseInitialized() {
       state.customers.set(cust.id, cust);
     }
     writeJsonFile("customers.json", initialCustomers);
+  }
+
+  const storedStats = readJsonFile<CustomerStatCard[]>("customer_stats.json", []);
+  if (storedStats.length > 0) {
+    for (const s of storedStats) {
+      state.customerStats.set(s.id, s);
+    }
+  } else {
+    for (const s of initialCustomerStats) {
+      state.customerStats.set(s.id, s);
+    }
+    writeJsonFile("customer_stats.json", initialCustomerStats);
+  }
+
+  const storedFin = readJsonFile<FinanceSettingsRecord | null>("finance_settings.json", null);
+  if (storedFin) {
+    state.financeSettings = storedFin;
+  } else {
+    state.financeSettings = { ...initialFinanceSettings };
+    writeJsonFile("finance_settings.json", initialFinanceSettings);
   }
 
   state.activities = readJsonFile<ActivityRecord[]>("activities.json", []);
@@ -824,4 +881,188 @@ export async function deleteCustomer(id: string, adminEmail: string): Promise<bo
   });
 
   return true;
+}
+
+export async function getCustomerStats(): Promise<CustomerStatCard[]> {
+  await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      return await mongo
+        .collection<CustomerStatCard>("customer_stats")
+        .find({}, { projection: { _id: 0 } })
+        .sort({ displayOrder: 1 })
+        .toArray();
+    } catch {}
+  }
+
+  return Array.from(state.customerStats.values()).sort((a, b) => a.displayOrder - b.displayOrder);
+}
+
+export async function getCustomerStatById(id: string): Promise<CustomerStatCard | null> {
+  await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      return await mongo
+        .collection<CustomerStatCard>("customer_stats")
+        .findOne({ id }, { projection: { _id: 0 } });
+    } catch {}
+  }
+
+  return state.customerStats.get(id) || null;
+}
+
+export async function createCustomerStat(
+  data: Omit<CustomerStatCard, "id">,
+  adminEmail: string
+): Promise<CustomerStatCard> {
+  await ensureDatabaseInitialized();
+
+  const id = `stat_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  const record: CustomerStatCard = {
+    ...data,
+    id,
+    displayOrder: typeof data.displayOrder === "number" ? data.displayOrder : state.customerStats.size + 1,
+  };
+
+  state.customerStats.set(id, record);
+  writeJsonFile("customer_stats.json", Array.from(state.customerStats.values()));
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo.collection("customer_stats").insertOne({ ...record });
+    } catch {}
+  }
+
+  await logActivity({
+    adminEmail,
+    action: "create",
+    entityType: "settings",
+    entityId: id,
+    details: `Added customer stat card: ${record.title} (${record.value})`,
+  });
+
+  return record;
+}
+
+export async function updateCustomerStat(
+  id: string,
+  data: Partial<CustomerStatCard>,
+  adminEmail: string
+): Promise<CustomerStatCard | null> {
+  await ensureDatabaseInitialized();
+
+  const existing = await getCustomerStatById(id);
+  if (!existing) return null;
+
+  const updated: CustomerStatCard = {
+    ...existing,
+    ...data,
+    id,
+  };
+
+  state.customerStats.set(id, updated);
+  writeJsonFile("customer_stats.json", Array.from(state.customerStats.values()));
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo.collection("customer_stats").updateOne({ id }, { $set: updated });
+    } catch {}
+  }
+
+  await logActivity({
+    adminEmail,
+    action: "update",
+    entityType: "settings",
+    entityId: id,
+    details: `Updated customer stat card: ${updated.title}`,
+  });
+
+  return updated;
+}
+
+export async function deleteCustomerStat(id: string, adminEmail: string): Promise<boolean> {
+  await ensureDatabaseInitialized();
+
+  const existing = await getCustomerStatById(id);
+  if (!existing) return false;
+
+  state.customerStats.delete(id);
+  writeJsonFile("customer_stats.json", Array.from(state.customerStats.values()));
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo.collection("customer_stats").deleteOne({ id });
+    } catch {}
+  }
+
+  await logActivity({
+    adminEmail,
+    action: "delete",
+    entityType: "settings",
+    entityId: id,
+    details: `Deleted customer stat card: ${existing.title}`,
+  });
+
+  return true;
+}
+
+export async function getFinanceSettings(): Promise<FinanceSettingsRecord> {
+  await ensureDatabaseInitialized();
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      const doc = await mongo
+        .collection<FinanceSettingsRecord>("finance_settings")
+        .findOne({ id: "finance_settings" }, { projection: { _id: 0 } });
+      if (doc) return doc;
+    } catch {}
+  }
+
+  if (state.financeSettings) return state.financeSettings;
+  return { ...initialFinanceSettings };
+}
+
+export async function updateFinanceSettings(
+  data: Partial<FinanceSettingsRecord>,
+  adminEmail: string
+): Promise<FinanceSettingsRecord> {
+  await ensureDatabaseInitialized();
+
+  const current = await getFinanceSettings();
+  const updated: FinanceSettingsRecord = {
+    ...current,
+    ...data,
+    id: "finance_settings",
+    updatedAt: new Date().toISOString(),
+  };
+
+  state.financeSettings = updated;
+  writeJsonFile("finance_settings.json", updated);
+
+  const mongo = await getMongoDb();
+  if (mongo) {
+    try {
+      await mongo
+        .collection("finance_settings")
+        .updateOne({ id: "finance_settings" }, { $set: updated }, { upsert: true });
+    } catch {}
+  }
+
+  await logActivity({
+    adminEmail,
+    action: "update",
+    entityType: "settings",
+    entityId: "finance_settings",
+    details: `Updated finance settings: Interest ${updated.interestRatePerAnnum}% P.A., Min Down Payment ${updated.minDownPaymentPercent}%`,
+  });
+
+  return updated;
 }

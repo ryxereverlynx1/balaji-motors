@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { CategoryRecord, ProductRecord, SpecificationItem, AdminUserRecord, CustomerStoryRecord } from "./types";
+import { CategoryRecord, ProductRecord, SpecificationItem, AdminUserRecord, CustomerStoryRecord, CustomerStatCard, FinanceSettingsRecord } from "./types";
 
 export const initialCategories: CategoryRecord[] = [
   {
@@ -335,3 +335,54 @@ export const initialCustomers: CustomerStoryRecord[] = [
     updatedAt: "2026-05-05T10:00:00.000Z",
   },
 ];
+
+export const initialCustomerStats: CustomerStatCard[] = [
+  {
+    id: "stat_1",
+    value: "1000+",
+    valueHi: "1000+",
+    title: "Vehicles on Road",
+    titleHi: "सड़क पर गाड़ियां",
+    description: "Across Punjab",
+    descriptionHi: "पूरे पंजाब में",
+    displayOrder: 1,
+  },
+  {
+    id: "stat_2",
+    value: "98%",
+    valueHi: "98%",
+    title: "Loan Approval Rate",
+    titleHi: "आसान लोन पास",
+    description: "Easy paperwork",
+    descriptionHi: "न्यूनतम दस्तावेज",
+    displayOrder: 2,
+  },
+  {
+    id: "stat_3",
+    value: "4.9 ★",
+    valueHi: "4.9 ★",
+    title: "Customer Satisfaction",
+    titleHi: "ग्राहक संतुष्टि रेटिंग",
+    description: "Verified reviews",
+    descriptionHi: "सैकड़ों रेटिंग",
+    displayOrder: 3,
+  },
+  {
+    id: "stat_4",
+    value: "100%",
+    valueHi: "100%",
+    title: "Genuine Spare Support",
+    titleHi: "असली स्पेयर पार्ट्स",
+    description: "In-house workshop",
+    descriptionHi: "इन-हाउस वर्कशॉप",
+    displayOrder: 4,
+  },
+];
+
+export const initialFinanceSettings: FinanceSettingsRecord = {
+  id: "finance_settings",
+  interestRatePerAnnum: 10.5,
+  minDownPaymentPercent: 15,
+  minDownPaymentAmount: 20000,
+  updatedAt: "2026-01-01T00:00:00.000Z",
+};

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useLanguage } from "@/context/LanguageContext";
-import { CustomerStoryRecord } from "@/lib/db/types";
+import { CustomerStoryRecord, CustomerStatCard } from "@/lib/db/types";
 import { siteConfig } from "@/data/site";
 import {
   Users,
@@ -25,13 +25,16 @@ import { getGeneralWhatsAppUrl } from "@/lib/whatsapp";
 
 interface HappyCustomersContentProps {
   initialCustomers?: CustomerStoryRecord[];
+  initialStats?: CustomerStatCard[];
 }
 
 export default function HappyCustomersContent({
   initialCustomers = [],
+  initialStats = [],
 }: HappyCustomersContentProps) {
   const { language, isHindi } = useLanguage();
   const [customers, setCustomers] = useState<CustomerStoryRecord[]>(initialCustomers);
+  const [stats, setStats] = useState<CustomerStatCard[]>(initialStats);
   const [selectedVehicle, setSelectedVehicle] = useState<string>("all");
 
   useEffect(() => {
@@ -47,7 +50,18 @@ export default function HappyCustomersContent({
       } catch {}
     }
     loadCustomers();
-  }, []);
+
+    if (!initialStats || initialStats.length === 0) {
+      fetch("/api/customer-stats")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.stats && Array.isArray(data.stats)) {
+            setStats(data.stats);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [initialStats]);
 
   const vehicleFilters = [
     { id: "all", label: isHindi ? "सभी गाड़ियां" : "All Vehicles" },
@@ -82,42 +96,25 @@ export default function HappyCustomersContent({
               : "Meet the proud owner-operators and commercial businesses across Jalandhar and Punjab who rely on Balaji Motors for daily earnings and dependable transport."}
           </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
-            <div className="p-4 rounded-xl bg-white border border-brand-border space-y-1 shadow-xs">
-              <div className="text-2xl sm:text-3xl font-black text-brand-red font-mono">1000+</div>
-              <div className="text-xs font-bold text-brand-charcoal">
-                {isHindi ? "सड़क पर गाड़ियां" : "Vehicles on Road"}
-              </div>
-              <p className="text-[11px] text-brand-muted">{isHindi ? "पूरे पंजाब में" : "Across Punjab"}</p>
+          {stats.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+              {stats.map((st) => (
+                <div key={st.id} className="p-4 rounded-xl bg-white border border-brand-border space-y-1 shadow-xs">
+                  <div className="text-2xl sm:text-3xl font-black text-brand-charcoal font-mono">
+                    {isHindi && st.valueHi ? st.valueHi : st.value}
+                  </div>
+                  <div className="text-xs font-bold text-brand-charcoal">
+                    {isHindi && st.titleHi ? st.titleHi : st.title}
+                  </div>
+                  {(st.description || st.descriptionHi) && (
+                    <p className="text-[11px] text-brand-muted">
+                      {isHindi && st.descriptionHi ? st.descriptionHi : st.description}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
-
-            <div className="p-4 rounded-xl bg-white border border-brand-border space-y-1 shadow-xs">
-              <div className="text-2xl sm:text-3xl font-black text-brand-charcoal font-mono">98%</div>
-              <div className="text-xs font-bold text-brand-charcoal">
-                {isHindi ? "आसान लोन पास" : "Loan Approval Rate"}
-              </div>
-              <p className="text-[11px] text-brand-muted">{isHindi ? "न्यूनतम दस्तावेज" : "Easy paperwork"}</p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white border border-brand-border space-y-1 shadow-xs">
-              <div className="text-2xl sm:text-3xl font-black text-amber-500 font-mono flex items-center gap-1">
-                4.9
-                <Star className="w-4 h-4 fill-amber-500 inline" />
-              </div>
-              <div className="text-xs font-bold text-brand-charcoal">
-                {isHindi ? "ग्राहक संतुष्टि रेटिंग" : "Customer Satisfaction"}
-              </div>
-              <p className="text-[11px] text-brand-muted">{isHindi ? "सैकड़ों रेटिंग" : "Verified reviews"}</p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white border border-brand-border space-y-1 shadow-xs">
-              <div className="text-2xl sm:text-3xl font-black text-emerald-600 font-mono">100%</div>
-              <div className="text-xs font-bold text-brand-charcoal">
-                {isHindi ? "असली स्पेयर पार्ट्स" : "Genuine Spare Support"}
-              </div>
-              <p className="text-[11px] text-brand-muted">{isHindi ? "इन-हाउस वर्कशॉप" : "In-house workshop"}</p>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -201,14 +198,9 @@ export default function HappyCustomersContent({
                   </div>
                 </div>
 
-                <div className="p-4 px-6 bg-stone-50 border-t border-brand-border flex items-center justify-between text-xs font-bold text-brand-muted">
-                  <span className="flex items-center gap-1.5 text-emerald-700">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                    <span>{isHindi ? "ऑन-रोड प्रमाणित ग्राहक" : "Balaji Motors Owner"}</span>
-                  </span>
-                  <span className="text-[11px] text-brand-red group-hover:translate-x-1 transition-transform">
-                    {isHindi ? "विवरण देखें →" : "View Story →"}
-                  </span>
+                <div className="p-4 px-6 bg-stone-50 border-t border-brand-border flex items-center gap-1.5 text-xs font-bold text-emerald-700">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>{isHindi ? "ऑन-रोड प्रमाणित ग्राहक" : "Balaji Motors Owner"}</span>
                 </div>
               </div>
             </ScrollReveal>

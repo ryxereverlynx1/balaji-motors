@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import AdminLayout from "@/components/admin/AdminLayout";
-import { CustomerStoryRecord } from "@/lib/db/types";
+import { CustomerStoryRecord, CustomerStatCard } from "@/lib/db/types";
 import {
   Users,
   Search,
@@ -21,10 +21,15 @@ import {
   MapPin,
   Calendar,
   Sparkles,
+  BarChart3,
+  Hash,
 } from "lucide-react";
 
 export default function AdminCustomersPage() {
+  const [activeTab, setActiveTab] = useState<"stories" | "stats">("stories");
+
   const [customers, setCustomers] = useState<CustomerStoryRecord[]>([]);
+  const [stats, setStats] = useState<CustomerStatCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
@@ -53,18 +58,35 @@ export default function AdminCustomersPage() {
   const [isTranslating, setIsTranslating] = useState<Record<string, boolean>>({});
   const [isSaving, setIsSaving] = useState(false);
 
+  const [isStatModalOpen, setIsStatModalOpen] = useState(false);
+  const [editingStat, setEditingStat] = useState<CustomerStatCard | null>(null);
+  const [deleteModalStat, setDeleteModalStat] = useState<CustomerStatCard | null>(null);
+  const [statValue, setStatValue] = useState("");
+  const [statValueHi, setStatValueHi] = useState("");
+  const [statTitle, setStatTitle] = useState("");
+  const [statTitleHi, setStatTitleHi] = useState("");
+  const [statDesc, setStatDesc] = useState("");
+  const [statDescHi, setStatDescHi] = useState("");
+  const [statOrder, setStatOrder] = useState<number>(1);
+  const [isSavingStat, setIsSavingStat] = useState(false);
+
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/admin/customers");
-      if (res.ok) {
-        const data = await res.json();
+      const [resCust, resStats] = await Promise.all([
+        fetch("/api/admin/customers"),
+        fetch("/api/admin/customer-stats"),
+      ]);
+      if (resCust.ok) {
+        const data = await resCust.json();
         setCustomers(data.customers || []);
-      } else {
-        setMessage({ type: "error", text: "Failed to load customer stories." });
+      }
+      if (resStats.ok) {
+        const dataStats = await resStats.json();
+        setStats(dataStats.stats || []);
       }
     } catch {
-      setMessage({ type: "error", text: "Network error loading customer stories." });
+      setMessage({ type: "error", text: "Network error loading customer data." });
     } finally {
       setIsLoading(false);
     }
@@ -73,6 +95,110 @@ export default function AdminCustomersPage() {
   useEffect(() => {
     loadData();
   }, []);
+
+  const openCreateStatModal = () => {
+    setEditingStat(null);
+    setStatValue("");
+    setStatValueHi("");
+    setStatTitle("");
+    setStatTitleHi("");
+    setStatDesc("");
+    setStatDescHi("");
+    setStatOrder(stats.length + 1);
+    setIsStatModalOpen(true);
+  };
+
+  const openEditStatModal = (st: CustomerStatCard) => {
+    setEditingStat(st);
+    setStatValue(st.value);
+    setStatValueHi(st.valueHi || st.value);
+    setStatTitle(st.title);
+    setStatTitleHi(st.titleHi || "");
+    setStatDesc(st.description || "");
+    setStatDescHi(st.descriptionHi || "");
+    setStatOrder(st.displayOrder);
+    setIsStatModalOpen(true);
+  };
+
+  const handleSaveStat = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!statValue.trim() || !statTitle.trim()) {
+      setMessage({ type: "error", text: "Metric value and title are required." });
+      return;
+    }
+    setIsSavingStat(true);
+    const payload = {
+      value: statValue.trim(),
+      valueHi: statValueHi.trim() || statValue.trim(),
+      title: statTitle.trim(),
+      titleHi: statTitleHi.trim() || undefined,
+      description: statDesc.trim(),
+      descriptionHi: statDescHi.trim() || undefined,
+      displayOrder: Number(statOrder) || 1,
+    };
+
+    try {
+      if (editingStat) {
+        const res = await fetch(`/api/admin/customer-stats/${editingStat.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setStats((prev) =>
+            prev.map((s) => (s.id === editingStat.id ? data.stat : s)).sort((a, b) => a.displayOrder - b.displayOrder)
+          );
+          setMessage({ type: "success", text: "Stat card updated successfully." });
+          setIsStatModalOpen(false);
+        } else {
+          const err = await res.json();
+          setMessage({ type: "error", text: err.error || "Failed to update stat card." });
+        }
+      } else {
+        const res = await fetch("/api/admin/customer-stats", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setStats((prev) => [...prev, data.stat].sort((a, b) => a.displayOrder - b.displayOrder));
+          setMessage({ type: "success", text: "Stat card created successfully." });
+          setIsStatModalOpen(false);
+        } else {
+          const err = await res.json();
+          setMessage({ type: "error", text: err.error || "Failed to create stat card." });
+        }
+      }
+    } catch {
+      setMessage({ type: "error", text: "Network error saving stat card." });
+    } finally {
+      setIsSavingStat(false);
+    }
+  };
+
+  const handleDeleteStat = async () => {
+    if (!deleteModalStat) return;
+    setActionLoadingId(deleteModalStat.id);
+    try {
+      const res = await fetch(`/api/admin/customer-stats/${deleteModalStat.id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setStats((prev) => prev.filter((s) => s.id !== deleteModalStat.id));
+        setMessage({ type: "success", text: `"${deleteModalStat.title}" stat card removed.` });
+        setDeleteModalStat(null);
+      } else {
+        const err = await res.json();
+        setMessage({ type: "error", text: err.error || "Failed to delete stat card." });
+      }
+    } catch {
+      setMessage({ type: "error", text: "Network error deleting stat card." });
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
 
   const openCreateModal = () => {
     setEditingCustomer(null);
@@ -317,14 +443,25 @@ export default function AdminCustomersPage() {
             >
               <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin text-brand-red" : ""}`} />
             </button>
-            <button
-              type="button"
-              onClick={openCreateModal}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded bg-brand-red hover:bg-brand-darkRed text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Customer Story</span>
-            </button>
+            {activeTab === "stories" ? (
+              <button
+                type="button"
+                onClick={openCreateModal}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded bg-brand-red hover:bg-brand-darkRed text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Customer Story</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={openCreateStatModal}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded bg-brand-red hover:bg-brand-darkRed text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Stat Card</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -354,7 +491,36 @@ export default function AdminCustomersPage() {
           </div>
         )}
 
-        <div className="flex items-center gap-3 bg-white p-3 rounded-lg border border-brand-border shadow-xs">
+        <div className="flex border-b border-brand-border gap-6">
+          <button
+            type="button"
+            onClick={() => setActiveTab("stories")}
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-colors cursor-pointer ${
+              activeTab === "stories"
+                ? "border-brand-red text-brand-red"
+                : "border-transparent text-brand-muted hover:text-brand-charcoal"
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            <span>Customer Stories ({customers.length})</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("stats")}
+            className={`pb-3 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-colors cursor-pointer ${
+              activeTab === "stats"
+                ? "border-brand-red text-brand-red"
+                : "border-transparent text-brand-muted hover:text-brand-charcoal"
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span>Showcase Stat Cards ({stats.length})</span>
+          </button>
+        </div>
+
+        {activeTab === "stories" && (
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 bg-white p-3 rounded-lg border border-brand-border shadow-xs">
           <Search className="w-4 h-4 text-brand-muted shrink-0" />
           <input
             type="text"
@@ -505,6 +671,125 @@ export default function AdminCustomersPage() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+          </div>
+        )}
+
+        {activeTab === "stats" && (
+          <div className="space-y-6">
+            <div className="p-4 rounded-xl bg-brand-warmWhite border border-brand-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-sm font-black uppercase tracking-wider text-brand-charcoal flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4 text-brand-red" />
+                  <span>Public Showcase Metric Highlights</span>
+                </h2>
+                <p className="text-xs text-brand-muted mt-1 leading-relaxed">
+                  These highlight cards appear directly beneath the title on the Happy Customers page (/happy-customers). You can edit values, change titles, reorder, add new cards, or remove cards.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={openCreateStatModal}
+                className="shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded bg-brand-red hover:bg-brand-darkRed text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Stat Card</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {stats.map((st) => (
+                <div
+                  key={st.id}
+                  className="p-5 rounded-xl bg-white border border-brand-border shadow-card flex flex-col justify-between space-y-4 group hover:border-brand-charcoal/40 transition-all"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded bg-stone-100 text-stone-600 text-[10px] font-mono font-bold">
+                        Order #{st.displayOrder}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => openEditStatModal(st)}
+                          className="p-1.5 rounded hover:bg-stone-100 text-brand-charcoal transition-colors cursor-pointer"
+                          title="Edit Card"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDeleteModalStat(st)}
+                          className="p-1.5 rounded hover:bg-red-50 text-red-600 transition-colors cursor-pointer"
+                          title="Delete Card"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="text-3xl font-black text-brand-charcoal font-mono tracking-tight">
+                      {st.value}
+                    </div>
+                    {st.valueHi && st.valueHi !== st.value && (
+                      <div className="text-xs text-brand-muted font-mono font-bold">
+                        (हिन्दी: {st.valueHi})
+                      </div>
+                    )}
+
+                    <div className="text-xs font-bold text-brand-charcoal pt-1">
+                      {st.title}
+                    </div>
+                    {st.titleHi && (
+                      <div className="text-[11px] text-brand-muted">
+                        {st.titleHi}
+                      </div>
+                    )}
+
+                    {st.description && (
+                      <p className="text-[11px] text-brand-muted pt-1 border-t border-brand-border/60 leading-relaxed">
+                        {st.description}
+                        {st.descriptionHi && (
+                          <span className="block text-[10px] text-brand-muted/80">
+                            ({st.descriptionHi})
+                          </span>
+                        )}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="pt-2 border-t border-brand-border/60 flex items-center justify-between text-[11px]">
+                    <span className="text-brand-muted">Live on website</span>
+                    <button
+                      type="button"
+                      onClick={() => openEditStatModal(st)}
+                      className="text-brand-red hover:underline font-bold text-[11px] cursor-pointer"
+                    >
+                      Edit Card →
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {stats.length === 0 && (
+              <div className="p-12 text-center rounded-xl bg-white border border-dashed border-brand-border space-y-3">
+                <BarChart3 className="w-8 h-8 text-brand-muted mx-auto" />
+                <h3 className="text-sm font-bold text-brand-charcoal">No Stat Cards Configured</h3>
+                <p className="text-xs text-brand-muted max-w-sm mx-auto">
+                  Add your first highlight card to display on the Happy Customers page header.
+                </p>
+                <button
+                  type="button"
+                  onClick={openCreateStatModal}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded bg-brand-red text-white text-xs font-bold uppercase tracking-wider shadow-sm cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add First Card</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -810,6 +1095,203 @@ export default function AdminCustomersPage() {
                   className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
                 >
                   {actionLoadingId === deleteModalCustomer.id ? "Deleting..." : "Confirm Delete"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isStatModalOpen && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto">
+            <div className="bg-white rounded-xl shadow-2xl border border-brand-border max-w-lg w-full overflow-hidden my-8">
+              <div className="bg-brand-charcoal text-white p-5 flex items-center justify-between">
+                <div>
+                  <h2 className="text-base font-black tracking-tight">
+                    {editingStat ? "Edit Stat Card" : "Add Stat Card"}
+                  </h2>
+                  <p className="text-[11px] text-stone-300 mt-0.5">
+                    Configure metric value, title, and bilingual descriptions.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsStatModalOpen(false)}
+                  className="p-1 rounded hover:bg-white/10 text-stone-300 hover:text-white cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveStat} className="p-6 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1">
+                      Metric Value (EN) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={statValue}
+                      onChange={(e) => setStatValue(e.target.value)}
+                      placeholder="e.g. 1000+, 98%, 4.9 ★"
+                      className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal font-mono font-bold focus:outline-none focus:border-brand-red"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1">
+                      Metric Value (HI)
+                    </label>
+                    <input
+                      type="text"
+                      value={statValueHi}
+                      onChange={(e) => setStatValueHi(e.target.value)}
+                      placeholder="e.g. 1000+, 98%"
+                      className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal font-mono focus:outline-none focus:border-brand-red"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-bold uppercase tracking-wider text-brand-charcoal">
+                      Card Title (EN) *
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateField("statTitle", statTitle, setStatTitleHi)}
+                      disabled={isTranslating["statTitle"] || !statTitle.trim()}
+                      className="inline-flex items-center gap-1 text-[11px] text-brand-red hover:underline font-bold disabled:opacity-40 cursor-pointer"
+                    >
+                      <Languages className="w-3 h-3" />
+                      <span>{isTranslating["statTitle"] ? "Translating..." : "Auto-Translate to Hindi"}</span>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    value={statTitle}
+                    onChange={(e) => setStatTitle(e.target.value)}
+                    placeholder="e.g. Vehicles on Road"
+                    className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal font-semibold focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1">
+                    Card Title (Hindi)
+                  </label>
+                  <input
+                    type="text"
+                    value={statTitleHi}
+                    onChange={(e) => setStatTitleHi(e.target.value)}
+                    placeholder="e.g. सड़क पर गाड़ियां"
+                    className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-bold uppercase tracking-wider text-brand-charcoal">
+                      Subtitle / Description (EN)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateField("statDesc", statDesc, setStatDescHi)}
+                      disabled={isTranslating["statDesc"] || !statDesc.trim()}
+                      className="inline-flex items-center gap-1 text-[11px] text-brand-red hover:underline font-bold disabled:opacity-40 cursor-pointer"
+                    >
+                      <Languages className="w-3 h-3" />
+                      <span>{isTranslating["statDesc"] ? "Translating..." : "Auto-Translate to Hindi"}</span>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    value={statDesc}
+                    onChange={(e) => setStatDesc(e.target.value)}
+                    placeholder="e.g. Across Punjab"
+                    className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1">
+                    Subtitle / Description (Hindi)
+                  </label>
+                  <input
+                    type="text"
+                    value={statDescHi}
+                    onChange={(e) => setStatDescHi(e.target.value)}
+                    placeholder="e.g. पूरे पंजाब में"
+                    className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal mb-1">
+                    Display Order *
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    required
+                    value={statOrder}
+                    onChange={(e) => setStatOrder(parseInt(e.target.value) || 1)}
+                    className="w-full px-3 py-2 rounded bg-brand-warmWhite border border-brand-border text-xs text-brand-charcoal font-mono focus:outline-none focus:border-brand-red"
+                  />
+                </div>
+
+                <div className="pt-4 border-t border-brand-border flex items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsStatModalOpen(false)}
+                    className="px-4 py-2 rounded border border-brand-border text-xs font-bold text-brand-muted hover:text-brand-charcoal transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSavingStat}
+                    className="inline-flex items-center gap-2 px-5 py-2 rounded bg-brand-red hover:bg-brand-darkRed text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                  >
+                    {isSavingStat && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    <span>{editingStat ? "Save Changes" : "Create Stat Card"}</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {deleteModalStat && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-xl shadow-2xl border border-brand-border max-w-md w-full p-6 space-y-4">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto text-red-600">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <div className="text-center space-y-1">
+                <h3 className="text-base font-black text-brand-charcoal">
+                  Delete Stat Card?
+                </h3>
+                <p className="text-xs text-brand-muted leading-relaxed">
+                  Are you sure you want to remove the card &ldquo;<strong>{deleteModalStat.title} ({deleteModalStat.value})</strong>&rdquo;? It will no longer appear on the public website.
+                </p>
+              </div>
+              <div className="flex items-center justify-center gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setDeleteModalStat(null)}
+                  className="px-4 py-2 rounded border border-brand-border text-xs font-bold text-brand-muted hover:text-brand-charcoal transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteStat}
+                  disabled={actionLoadingId === deleteModalStat.id}
+                  className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                >
+                  {actionLoadingId === deleteModalStat.id ? "Deleting..." : "Confirm Delete"}
                 </button>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import FinanceContent from "@/components/FinanceContent";
+import { getFinanceSettings } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "E-Rickshaw Loan, EMI Calculator & Subsidy Guidance",
@@ -60,14 +61,16 @@ const faqJsonLd = {
   ],
 };
 
-export default function FinancePage() {
+export default async function FinancePage() {
+  const financeSettings = await getFinanceSettings();
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <FinanceContent />
+      <FinanceContent financeSettings={financeSettings} />
     </>
   );
 }

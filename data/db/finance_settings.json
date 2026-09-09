@@ -1,0 +1,7 @@
+{
+  "id": "finance_settings",
+  "interestRatePerAnnum": 10.5,
+  "minDownPaymentPercent": 15,
+  "minDownPaymentAmount": 20000,
+  "updatedAt": "2026-01-01T00:00:00.000Z"
+}

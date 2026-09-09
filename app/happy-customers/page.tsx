@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import HappyCustomersContent from "@/components/HappyCustomersContent";
-import { getCustomers } from "@/lib/db";
+import { getCustomers, getCustomerStats } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "Happy Customers & Vehicle Deliveries | Balaji Motors Jalandhar",
@@ -33,6 +33,7 @@ export const metadata: Metadata = {
 
 export default async function HappyCustomersPage() {
   const initialCustomers = await getCustomers();
+  const initialStats = await getCustomerStats();
 
   const customerJsonLd = {
     "@context": "https://schema.org",
@@ -66,7 +67,7 @@ export default async function HappyCustomersPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(customerJsonLd) }}
       />
-      <HappyCustomersContent initialCustomers={initialCustomers} />
+      <HappyCustomersContent initialCustomers={initialCustomers} initialStats={initialStats} />
     </>
   );
 }

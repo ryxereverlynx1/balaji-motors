@@ -104,3 +104,22 @@ export interface CustomerFilter {
   featuredOnly?: boolean;
   search?: string;
 }
+
+export interface CustomerStatCard {
+  id: string;
+  value: string;
+  valueHi?: string;
+  title: string;
+  titleHi?: string;
+  description: string;
+  descriptionHi?: string;
+  displayOrder: number;
+}
+
+export interface FinanceSettingsRecord {
+  id: string;
+  interestRatePerAnnum: number;
+  minDownPaymentPercent: number;
+  minDownPaymentAmount: number;
+  updatedAt: string;
+}

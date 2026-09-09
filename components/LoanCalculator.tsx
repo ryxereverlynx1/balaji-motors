@@ -1,20 +1,56 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLanguage } from "@/context/LanguageContext";
-import { Calculator, IndianRupee, Clock, Percent, ShieldCheck, ArrowRight, MessageSquare, Sparkles } from "lucide-react";
+import { Calculator, IndianRupee, Clock, Percent, ShieldCheck, ArrowRight, MessageSquare, Sparkles, Lock } from "lucide-react";
 import { siteConfig } from "@/data/site";
 
-export default function LoanCalculator() {
+interface LoanCalculatorProps {
+  initialSettings?: {
+    interestRatePerAnnum: number;
+    minDownPaymentPercent: number;
+    minDownPaymentAmount?: number;
+  };
+}
+
+export default function LoanCalculator({ initialSettings }: LoanCalculatorProps = {}) {
   const { isHindi } = useLanguage();
 
   const [price, setPrice] = useState<number>(165000);
   const [downPayment, setDownPayment] = useState<number>(35000);
   const [tenureMonths, setTenureMonths] = useState<number>(24);
-  const [interestRate, setInterestRate] = useState<number>(11.5);
+  const [interestRate, setInterestRate] = useState<number>(initialSettings?.interestRatePerAnnum ?? 10.5);
+  const [minDownPaymentPct, setMinDownPaymentPct] = useState<number>(initialSettings?.minDownPaymentPercent ?? 15);
+  const [minDownPaymentAmt, setMinDownPaymentAmt] = useState<number>(initialSettings?.minDownPaymentAmount ?? 20000);
 
-  const maxDownPayment = Math.max(10000, price - 20000);
-  const actualDownPayment = Math.min(downPayment, maxDownPayment);
+  useEffect(() => {
+    if (!initialSettings) {
+      fetch("/api/finance-settings")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.settings) {
+            if (typeof data.settings.interestRatePerAnnum === "number") {
+              setInterestRate(data.settings.interestRatePerAnnum);
+            }
+            if (typeof data.settings.minDownPaymentPercent === "number") {
+              setMinDownPaymentPct(data.settings.minDownPaymentPercent);
+            }
+            if (typeof data.settings.minDownPaymentAmount === "number") {
+              setMinDownPaymentAmt(data.settings.minDownPaymentAmount);
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  }, [initialSettings]);
+
+  const calculatedMinDownPayment = useMemo(() => {
+    const fromPct = Math.round(price * (minDownPaymentPct / 100));
+    return Math.max(fromPct, minDownPaymentAmt || 0);
+  }, [price, minDownPaymentPct, minDownPaymentAmt]);
+
+  const maxDownPayment = Math.max(calculatedMinDownPayment, price - 20000);
+  const actualDownPayment = Math.max(calculatedMinDownPayment, Math.min(downPayment, maxDownPayment));
 
   const { principal, monthlyEmi, dailyCost, totalInterest, totalPayment, principalPct, interestPct } = useMemo(() => {
     const p = Math.max(10000, price - actualDownPayment);
@@ -57,15 +93,18 @@ export default function LoanCalculator() {
 
   const handlePriceChange = (val: number) => {
     setPrice(val);
-    if (downPayment > val - 20000) {
-      setDownPayment(Math.max(15000, Math.round((val * 0.2) / 5000) * 5000));
+    const newMin = Math.max(Math.round(val * (minDownPaymentPct / 100)), minDownPaymentAmt || 0);
+    if (downPayment < newMin) {
+      setDownPayment(newMin);
+    } else if (downPayment > val - 20000) {
+      setDownPayment(newMin);
     }
   };
 
   const shareWhatsApp = () => {
     const text = isHindi
-      ? `नमस्ते बालाजी मोटर्स! मैंने आपकी वेबसाइट पर ई-रिक्शा लोन ईएमआई चेक किया:\n• वाहन मूल्य: ${formatInr(price)}\n• डाउन पेमेंट: ${formatInr(actualDownPayment)}\n• लोन राशि: ${formatInr(principal)}\n• समय अवधि: ${tenureMonths} महीने\n• अनुमानित ब्याज दर: ${interestRate}%\n• अनुमानित मासिक ईएमआई: ${formatInr(monthlyEmi)}/महीना (लगभग ₹${dailyCost}/दिन)\nकृपया मुझे लोन प्रक्रिया और आवश्यक दस्तावेजों की जानकारी दें।`
-      : `Hello Balaji Motors! I checked the E-Rickshaw Loan EMI calculator on your website:\n• Vehicle Price: ${formatInr(price)}\n• Down Payment: ${formatInr(actualDownPayment)}\n• Loan Principal: ${formatInr(principal)}\n• Tenure: ${tenureMonths} Months\n• Est. Interest Rate: ${interestRate}%\n• Est. Monthly EMI: ${formatInr(monthlyEmi)}/month (~₹${dailyCost}/day)\nPlease guide me regarding loan sanction and documents.`;
+      ? `नमस्ते बालाजी मोटर्स! मैंने आपकी वेबसाइट पर ई-रिक्शा लोन ईएमआई चेक किया:\n• वाहन मूल्य: ${formatInr(price)}\n• डाउन पेमेंट: ${formatInr(actualDownPayment)} (न्यूनतम ${minDownPaymentPct}%)\n• लोन राशि: ${formatInr(principal)}\n• समय अवधि: ${tenureMonths} महीने\n• नियत वार्षिक ब्याज दर: ${interestRate.toFixed(1)}% P.A.\n• अनुमानित मासिक ईएमआई: ${formatInr(monthlyEmi)}/महीना (लगभग ₹${dailyCost}/दिन)\nकृपया मुझे लोन प्रक्रिया और आवश्यक दस्तावेजों की जानकारी दें।`
+      : `Hello Balaji Motors! I checked the E-Rickshaw Loan EMI calculator on your website:\n• Vehicle Price: ${formatInr(price)}\n• Down Payment: ${formatInr(actualDownPayment)} (Min ${minDownPaymentPct}%)\n• Loan Principal: ${formatInr(principal)}\n• Tenure: ${tenureMonths} Months\n• Dealership Fixed Interest: ${interestRate.toFixed(1)}% P.A.\n• Est. Monthly EMI: ${formatInr(monthlyEmi)}/month (~₹${dailyCost}/day)\nPlease guide me regarding loan sanction and documents.`;
 
     const cleanPhone = siteConfig.whatsappNumber;
     const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
@@ -149,17 +188,17 @@ export default function LoanCalculator() {
             </div>
             <input
               type="range"
-              min={15000}
+              min={calculatedMinDownPayment}
               max={maxDownPayment}
-              step={5000}
+              step={2000}
               value={actualDownPayment}
               onChange={(e) => setDownPayment(Number(e.target.value))}
               className="w-full accent-brand-red cursor-pointer h-2 bg-stone-200 rounded-lg"
             />
             <div className="flex justify-between text-[11px] font-semibold text-brand-muted font-mono">
-              <span>₹15,000</span>
-              <span>{formatInr(Math.round(maxDownPayment / 2))}</span>
-              <span>{formatInr(maxDownPayment)}</span>
+              <span>{isHindi ? `न्यूनतम: ${formatInr(calculatedMinDownPayment)}` : `Min: ${formatInr(calculatedMinDownPayment)}`}</span>
+              <span>{formatInr(Math.round((calculatedMinDownPayment + maxDownPayment) / 2))}</span>
+              <span>{isHindi ? `अधिकतम: ${formatInr(maxDownPayment)}` : `Max: ${formatInr(maxDownPayment)}`}</span>
             </div>
           </div>
 
@@ -200,29 +239,33 @@ export default function LoanCalculator() {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="p-4 rounded-xl bg-gradient-to-r from-brand-warmWhite to-brand-cream border border-brand-border space-y-2 shadow-xs">
             <div className="flex items-center justify-between">
-              <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-charcoal flex items-center gap-1.5">
-                <Percent className="w-4 h-4 text-brand-red" />
-                <span>{isHindi ? "अनुमानित वार्षिक ब्याज दर (% p.a.)" : "Interest Rate (% p.a.)"}</span>
-              </label>
-              <span className="text-base sm:text-lg font-black text-brand-charcoal font-mono">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-brand-red/10 border border-brand-red/20 flex items-center justify-center text-brand-red">
+                  <Percent className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-brand-charcoal flex items-center gap-1.5">
+                    <span>{isHindi ? "वार्षिक ब्याज दर (नियत)" : "Annual Interest Rate (Fixed P.A.)"}</span>
+                    <Lock className="w-3 h-3 text-brand-muted" />
+                  </div>
+                  <span className="text-[11px] text-brand-muted block">
+                    {isHindi ? "डीलशिप द्वारा निर्धारित" : "Dealership standard rate"}
+                  </span>
+                </div>
+              </div>
+              <span className="text-xl sm:text-2xl font-black text-brand-charcoal font-mono">
                 {interestRate.toFixed(1)}%
               </span>
             </div>
-            <input
-              type="range"
-              min={8.5}
-              max={18.0}
-              step={0.25}
-              value={interestRate}
-              onChange={(e) => setInterestRate(Number(e.target.value))}
-              className="w-full accent-brand-red cursor-pointer h-2 bg-stone-200 rounded-lg"
-            />
-            <div className="flex justify-between text-[11px] font-semibold text-brand-muted font-mono">
-              <span>8.5% (Best Bank)</span>
-              <span>11.5% (Typical)</span>
-              <span>18.0% (NBFC)</span>
+            <div className="flex items-center gap-1.5 pt-1 text-[11px] text-emerald-700 font-semibold border-t border-brand-border/60">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span>
+                {isHindi
+                  ? "बालाजी मोटर्स आधिकारिक बैंक व एनबीएफसी पार्टनर्स द्वारा अनुमोदित दर"
+                  : "Approved rate with official banking & commercial financier partners"}
+              </span>
             </div>
           </div>
         </div>
