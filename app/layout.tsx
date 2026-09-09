@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Balaji Motors | Electric Rickshaw Dealership in Jalandhar",
     description: "Reliable commercial electric three-wheelers, passenger e-rickshaws, and electric cargo loaders with finance and service support in Jalandhar.",
-    locale: "hi_IN",
+    locale: "en_IN",
     type: "website",
     siteName: "Balaji Motors",
     url: "https://balajimotors.ryxer.site",
@@ -64,9 +64,13 @@ export const metadata: Metadata = {
     ],
   },
   icons: {
-    icon: "/icon.png",
-    shortcut: "/favicon.ico",
-    apple: "/icon.png",
+    icon: [
+      { url: "/logo.png", sizes: "any" },
+      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
   robots: {
     index: true,
@@ -89,6 +93,7 @@ const websiteJsonLd = {
   name: "Balaji Motors",
   alternateName: ["Balaji Motors Jalandhar", "BM Jalandhar"],
   url: "https://balajimotors.ryxer.site",
+  image: "https://balajimotors.ryxer.site/logo.png",
 };
 
 const localBusinessJsonLd = {
@@ -98,6 +103,8 @@ const localBusinessJsonLd = {
   legalName: siteConfig.legalName,
   description: siteConfig.tagline,
   url: "https://balajimotors.ryxer.site",
+  logo: "https://balajimotors.ryxer.site/logo.png",
+  image: "https://balajimotors.ryxer.site/logo.png",
   telephone: siteConfig.primaryPhone,
   email: siteConfig.email,
   address: {
@@ -139,8 +146,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="hi" className={`${fontSans.variable} ${fontDevanagari.variable}`}>
+    <html lang="en" className={`${fontSans.variable} ${fontDevanagari.variable}`}>
       <head>
+        <link rel="icon" href="/logo.png" sizes="any" />
+        <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}

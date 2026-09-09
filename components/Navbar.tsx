@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/data/site";
 import { useLanguage } from "@/context/LanguageContext";
@@ -59,26 +60,36 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-2">
-            <Link href="/" className="group flex flex-col shrink min-w-0">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="text-lg sm:text-2xl font-black tracking-tight text-brand-charcoal uppercase group-hover:text-brand-red transition-colors truncate">
-                  BALAJI MOTORS
+            <Link href="/" className="group flex items-center gap-2 sm:gap-2.5 shrink-0 whitespace-nowrap">
+              <Image
+                src="/logo.png"
+                alt="Balaji Motors"
+                width={36}
+                height={36}
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-contain shrink-0 shadow-xs border border-brand-red/20"
+                priority
+              />
+              <div className="flex flex-col shrink-0 whitespace-nowrap">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span className="text-base sm:text-xl lg:text-base xl:text-xl font-black tracking-tight text-brand-charcoal uppercase group-hover:text-brand-red transition-colors whitespace-nowrap">
+                    BALAJI MOTORS
+                  </span>
+                  <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-brand-yellow shadow-xs shrink-0" />
+                </div>
+                <span className="text-[8px] sm:text-[9.5px] tracking-wideUpper uppercase text-brand-muted font-bold -mt-0.5 whitespace-nowrap">
+                  JALANDHAR • E-RICKSHAWS
                 </span>
-                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-brand-yellow shadow-xs shrink-0" />
               </div>
-              <span className="text-[9px] sm:text-[10px] tracking-wideUpper uppercase text-brand-muted font-bold -mt-0.5 truncate">
-                JALANDHAR • E-RICKSHAWS
-              </span>
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 shrink min-w-0">
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`relative px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
+                    className={`relative px-2 xl:px-3 py-1.5 text-[11px] xl:text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-colors ${
                       isActive
                         ? "text-brand-red font-extrabold"
                         : "text-brand-charcoal hover:text-brand-red"
@@ -86,27 +97,15 @@ export default function Navbar() {
                   >
                     <span>{item.label}</span>
                     {isActive && (
-                      <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-brand-red rounded-full" />
+                      <span className="absolute bottom-0 left-2 right-2 xl:left-3 xl:right-3 h-0.5 bg-brand-red rounded-full" />
                     )}
                   </Link>
                 );
               })}
             </nav>
 
-            <div className="hidden sm:flex items-center gap-3">
-              <div className="inline-flex items-center p-0.5 rounded-full bg-brand-cream border border-brand-border shadow-xs text-[11px] font-bold">
-                <button
-                  type="button"
-                  onClick={() => setLanguage("hi")}
-                  className={`px-2.5 py-1 rounded-full transition-all ${
-                    isHindi
-                      ? "bg-brand-red text-white shadow-xs"
-                      : "text-brand-charcoal hover:text-brand-red"
-                  }`}
-                  aria-label="Switch to Hindi"
-                >
-                  हिन्दी
-                </button>
+            <div className="hidden sm:flex items-center gap-2 xl:gap-3 shrink-0">
+              <div className="inline-flex items-center p-0.5 rounded-full bg-brand-cream border border-brand-border shadow-xs text-[11px] font-bold shrink-0">
                 <button
                   type="button"
                   onClick={() => setLanguage("en")}
@@ -119,37 +118,40 @@ export default function Navbar() {
                 >
                   EN
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setLanguage("hi")}
+                  className={`px-2.5 py-1 rounded-full transition-all ${
+                    isHindi
+                      ? "bg-brand-red text-white shadow-xs"
+                      : "text-brand-charcoal hover:text-brand-red"
+                  }`}
+                  aria-label="Switch to Hindi"
+                >
+                  Hindi
+                </button>
               </div>
 
               <a
                 href={`tel:${siteConfig.primaryPhone}`}
-                className="hidden xl:flex items-center gap-1.5 text-xs font-bold text-brand-charcoal hover:text-brand-red px-2 py-1 transition-colors"
+                className="hidden 2xl:flex items-center gap-1.5 text-xs font-bold text-brand-charcoal hover:text-brand-red px-2 py-1 transition-colors whitespace-nowrap shrink-0"
               >
-                <Phone className="w-3.5 h-3.5 text-brand-red" />
+                <Phone className="w-3.5 h-3.5 text-brand-red shrink-0" />
                 <span>{siteConfig.displayPhone}</span>
               </a>
 
               <button
                 type="button"
                 onClick={() => openQuoteModal()}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] active:translate-y-0.5 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm group cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 xl:px-4 py-1.5 xl:py-2 rounded bg-brand-red hover:bg-brand-darkRed active:scale-[0.98] active:translate-y-0.5 text-white text-[11px] xl:text-xs font-bold uppercase tracking-wider transition-all shadow-sm group cursor-pointer whitespace-nowrap shrink-0"
               >
                 <span>{dict.nav.getQuote}</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform shrink-0" />
               </button>
             </div>
 
             <div className="flex lg:hidden items-center gap-1.5 sm:gap-2 shrink-0">
               <div className="inline-flex sm:hidden items-center p-0.5 rounded-full bg-brand-cream border border-brand-border text-[9px] sm:text-[10px] font-bold">
-                <button
-                  type="button"
-                  onClick={() => setLanguage("hi")}
-                  className={`px-1.5 sm:px-2 py-0.5 rounded-full ${
-                    isHindi ? "bg-brand-red text-white" : "text-brand-charcoal"
-                  }`}
-                >
-                  हिन्दी
-                </button>
                 <button
                   type="button"
                   onClick={() => setLanguage("en")}
@@ -158,6 +160,15 @@ export default function Navbar() {
                   }`}
                 >
                   EN
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLanguage("hi")}
+                  className={`px-1.5 sm:px-2 py-0.5 rounded-full ${
+                    isHindi ? "bg-brand-red text-white" : "text-brand-charcoal"
+                  }`}
+                >
+                  Hindi
                 </button>
               </div>
 
@@ -202,18 +213,9 @@ export default function Navbar() {
             <div className="flex items-center justify-between px-2 pb-2 border-b border-brand-border">
               <span className="text-xs font-bold uppercase tracking-wide text-brand-muted flex items-center gap-1.5">
                 <Globe className="w-3.5 h-3.5 text-brand-red" />
-                <span>भाषा / Language</span>
+                <span>Language</span>
               </span>
               <div className="inline-flex items-center p-0.5 rounded-full bg-brand-cream border border-brand-border text-xs font-bold">
-                <button
-                  type="button"
-                  onClick={() => setLanguage("hi")}
-                  className={`px-3 py-1 rounded-full transition-all ${
-                    isHindi ? "bg-brand-red text-white" : "text-brand-charcoal"
-                  }`}
-                >
-                  हिन्दी
-                </button>
                 <button
                   type="button"
                   onClick={() => setLanguage("en")}
@@ -222,6 +224,15 @@ export default function Navbar() {
                   }`}
                 >
                   English
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLanguage("hi")}
+                  className={`px-3 py-1 rounded-full transition-all ${
+                    isHindi ? "bg-brand-red text-white" : "text-brand-charcoal"
+                  }`}
+                >
+                  Hindi
                 </button>
               </div>
             </div>

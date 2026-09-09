@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       preferredContact,
       companyName,
       notes,
-      language = "hi",
+      language = "en",
       hp_company_url,
     } = body;
 

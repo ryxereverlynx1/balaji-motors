@@ -9,7 +9,7 @@ export const en = {
     getQuote: "Get a Quote",
     callUs: "Call Showroom",
     showroomAddress: "Showroom: Near Hotel Regent Park, Avtar Nagar Road, Jalandhar",
-    switchLanguage: "हिन्दी",
+    switchLanguage: "Hindi",
   },
   hero: {
     badge: "Balaji Motors • Jalandhar",

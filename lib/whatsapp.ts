@@ -6,7 +6,7 @@ export function createWhatsAppUrl(messageText: string): string {
   return `https://wa.me/${cleanPhone}?text=${encoded}`;
 }
 
-export function getVehicleWhatsAppUrl(vehicleName: string, lang: "hi" | "en" = "hi"): string {
+export function getVehicleWhatsAppUrl(vehicleName: string, lang: "hi" | "en" = "en"): string {
   if (lang === "hi") {
     const text = `नमस्ते बालाजी मोटर्स, मुझे ${vehicleName} में रुचि है। कृपया जालंधर शोरूम में इसकी ऑन-रोड कीमत, बैटरी विकल्प और डाउन पेमेंट की जानकारी साझा करें।`;
     return createWhatsAppUrl(text);
@@ -15,7 +15,7 @@ export function getVehicleWhatsAppUrl(vehicleName: string, lang: "hi" | "en" = "
   return createWhatsAppUrl(text);
 }
 
-export function getFinanceWhatsAppUrl(vehicleName?: string, lang: "hi" | "en" = "hi"): string {
+export function getFinanceWhatsAppUrl(vehicleName?: string, lang: "hi" | "en" = "en"): string {
   if (lang === "hi") {
     const vText = vehicleName ? ` (${vehicleName})` : "";
     const text = `नमस्ते बालाजी मोटर्स, मुझे ई-रिक्शा के लिए कमर्शियल लोन, डाउन पेमेंट और आसान किश्तों (EMI) की जानकारी चाहिए${vText}।`;
@@ -26,7 +26,7 @@ export function getFinanceWhatsAppUrl(vehicleName?: string, lang: "hi" | "en" = 
   return createWhatsAppUrl(text);
 }
 
-export function getServiceWhatsAppUrl(lang: "hi" | "en" = "hi"): string {
+export function getServiceWhatsAppUrl(lang: "hi" | "en" = "en"): string {
   if (lang === "hi") {
     const text = "नमस्ते बालाजी मोटर्स, मुझे अपने ई-रिक्शा की सर्विस, बैटरी टेस्टिंग या असली स्पेयर पार्ट्स के बारे में पूछना है।";
     return createWhatsAppUrl(text);
@@ -35,7 +35,7 @@ export function getServiceWhatsAppUrl(lang: "hi" | "en" = "hi"): string {
   return createWhatsAppUrl(text);
 }
 
-export function getGeneralWhatsAppUrl(lang: "hi" | "en" = "hi"): string {
+export function getGeneralWhatsAppUrl(lang: "hi" | "en" = "en"): string {
   if (lang === "hi") {
     const text = "नमस्ते बालाजी मोटर्स, मैं आपके जालंधर शोरूम में उपलब्ध इलेक्ट्रिक थ्री-व्हीलर्स के बारे में जानकारी चाहता हूँ।";
     return createWhatsAppUrl(text);

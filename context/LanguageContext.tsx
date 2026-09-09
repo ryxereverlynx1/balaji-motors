@@ -10,46 +10,46 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   toggleLanguage: () => void;
-  dict: typeof hi;
+  dict: typeof en;
   isHindi: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  language: "hi",
+  language: "en",
   setLanguage: () => {},
   toggleLanguage: () => {},
-  dict: hi,
-  isHindi: true,
+  dict: en,
+  isHindi: false,
 });
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("hi");
+  const [language, setLanguageState] = useState<Language>("en");
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("bm_lang");
+      const saved = localStorage.getItem("bm_lang_v2");
       if (saved === "en" || saved === "hi") {
         setLanguageState(saved);
         document.documentElement.lang = saved;
       } else {
-        localStorage.setItem("bm_lang", "hi");
-        document.documentElement.lang = "hi";
+        localStorage.setItem("bm_lang_v2", "en");
+        document.documentElement.lang = "en";
       }
     } catch {
-      document.documentElement.lang = "hi";
+      document.documentElement.lang = "en";
     }
   }, []);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     try {
-      localStorage.setItem("bm_lang", lang);
+      localStorage.setItem("bm_lang_v2", lang);
       document.documentElement.lang = lang;
     } catch {}
   };
 
   const toggleLanguage = () => {
-    const nextLang: Language = language === "hi" ? "en" : "hi";
+    const nextLang: Language = language === "en" ? "hi" : "en";
     setLanguage(nextLang);
   };
 
